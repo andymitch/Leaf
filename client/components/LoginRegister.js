@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
-import {Button, StyleSheet, Text, View, TextInput, Switch, Image, TouchableHighlight} from 'react-native'
+import {Button, StyleSheet, Text, View, TextInput, Switch, Image, TouchableHighlight, StatusBar, ImageBackground} from 'react-native'
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons'
 import {faUserCircle, faLock, faLeaf} from '@fortawesome/free-solid-svg-icons'
 import {styles} from '../style';
 
 export default class LoginRegister extends Component {
+    static navigationOptions = {
+        header: null
+    }
+
     state = {
         newUser: false,
         hidePassword: true,
@@ -96,26 +100,30 @@ export default class LoginRegister extends Component {
 
     render(){
         const otherForm = this.state.newUser ? 'login' : 'register'
-
         return(
-            <View style={styles.login}>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', bottom: -10}}>
-                    <Text>DemBoiz present</Text>
-                    <View style={styles.passwordInput}>
-                        <Icon icon={faLeaf} size={70}/>
-                        <Text style={{fontWeight: 'bold', marginLeft: 10}}>Leaf</Text>
+            <View style={styles.container}>
+                <StatusBar hidden={true}/>
+                <ImageBackground source={require('../assets/img/leaf_background.jpg')} style={{width: '100%', height: '100%'}}>
+                    <View style={styles.login}>
+                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', bottom: -10}}>
+                            <Text>DemBoiz present</Text>
+                            <View style={styles.passwordInput}>
+                                <Icon icon={faLeaf} size={70}/>
+                                <Text style={{fontWeight: 'bold', marginLeft: 10}}>Leaf</Text>
+                            </View>
+                            <Text style={{fontStyle: 'italic'}}>aka Bootleg Vine!</Text>
+                            <Text> </Text>
+                        </View>
+                        <this.Form/>
+                        <View style={{flex: 1, justifyContent: 'center'}}>
+                            <Button style={styles.btn} title="Login"/>
+                            <View style={[styles.passwordInput,{width: 200, justifyContent: 'center'}]}>
+                                <Text style={{margin: 10, width: 60}} onPress={() => this.setState(prevState => ({newUser: !prevState.newUser}))}>{otherForm}</Text>
+                                <Text style={{margin: 10}}>forgot password?</Text>
+                            </View>
+                        </View>
                     </View>
-                    <Text style={{fontStyle: 'italic'}}>aka Bootleg Vine!</Text>
-                    <Text> </Text>
-                </View>
-                <this.Form/>
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                    <Button style={styles.btn} title="Login"/>
-                    <View style={[styles.passwordInput,{width: 200, justifyContent: 'center'}]}>
-                        <Text style={{margin: 10, width: 60}} onPress={() => this.setState(prevState => ({newUser: !prevState.newUser}))}>{otherForm}</Text>
-                        <Text style={{margin: 10}}>forgot password?</Text>
-                    </View>
-                </View>
+                </ImageBackground>
             </View>
         )
     }
