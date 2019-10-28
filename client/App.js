@@ -4,7 +4,7 @@ import {createStackNavigator} from 'react-navigation-stack'
 
 // AUTHENTICATION COMPONENTS AND TOKENS
 import LoginRegister from './components/LoginRegister'
-//import ForgotPassword from './components/ForgotPassword'
+import ForgotPassword from './components/ForgotPassword'
 
 //AUTH TOKEN
 import {AUTH_TOKEN} from './components/LoginRegister'
@@ -18,16 +18,10 @@ import Camera from './components/Camera'
 //import FullSearch from './components/FullSearch'
 
 
-// AUTHENTICATION NAVIGATION
-const AuthNav = createStackNavigator({
+// ROOT NAVIGATION
+const Nav = createStackNavigator({
   LoginRegister: {screen: LoginRegister},
-  //ForgotPass: {screen: ForgotPassword},
-},{
-  headerMode: 'none'
-});
-
-// MAIN APP NAVIGATION
-const HomeNav = createStackNavigator({
+  ForgotPass: {screen: ForgotPassword},
   //Feed: Feed,
   Camera: Camera,
   //Messages: Messages,
@@ -38,17 +32,10 @@ const HomeNav = createStackNavigator({
   },*/
   //FullSearch: FullSearch
 },{
+  initialRouteName: 'LoginRegister',
   headerMode: 'none'
 });
 
-// ROOT NAVIGATION
-const AppNav = createSwitchNavigator({
-  Auth: AuthNav,
-  Home: HomeNav,
-},{
-  initialRouteName: 'Auth'
-});
-
 // EXPORT APP
-const AppContainer = createAppContainer(AppNav)
+const AppContainer = createAppContainer(Nav)
 export default class App extends Component{ render(){ return <AppContainer/> } }

@@ -209,7 +209,7 @@ export default class LoginRegister extends Component {
         const otherForm = this.state.newUser ? 'login' : 'register' // LOGIN/REGISTER TEXT LINK
         const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
         const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true
-        
+         
         if(AUTH_TOKEN){
             this.props.navigation.navigate('Home')
             return null
@@ -234,7 +234,7 @@ export default class LoginRegister extends Component {
                             <Button style={styles.btn} title={loginBtn} disabled={disableBtn} onPress={() => this.login()}/>
                             <View style={[styles.passwordInput,{width: 200, justifyContent: 'center'}]}>
                                 <Text style={{margin: 10, width: 60}} onPress={() => this.setState(prevState => ({newUser: !prevState.newUser}))}>{otherForm}</Text>
-                                <Text style={{margin: 10}} onPress={() => {/* GOTO forgotPassword */}}>forgot password?</Text>
+                                <Text style={{margin: 10}} onPress={() => {console.log('forgot password'); this.props.navigation.push('ForgotPass')}}>forgot password?</Text>
                             </View>
                         </View>
                     </View>
