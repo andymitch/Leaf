@@ -33,23 +33,6 @@ export default class LoginRegister extends Component {
         phone: '',
         password: '',
         again_password: '',
-<<<<<<< HEAD
-        forgot_password: false,
-        recovery_email: '',
-        show_registration: true
-    }
-
-    _renderRegistration() {
-      const otherForm = this.state.newUser ? 'login' : 'register'
-      if(this.state.show_registration){
-        return(
-          <Text style={{margin: 10, width: 60}} onPress={() => this.setState(prevState => ({newUser: !prevState.newUser}))}>{otherForm}</Text>
-        );
-      }
-      else{
-        return null;
-      }
-=======
         passStrength: 'grey', // WILL CHANGE TO RED OR GREEN WHEN INPUT CHANGES
         againPassStrength: 'grey'
     }
@@ -64,7 +47,6 @@ export default class LoginRegister extends Component {
             if(pass.match(validPass) && pass === this.state.password) this.setState({againPassStrength: 'limegreen', goodAgainPass: true})
             else this.setState({againPassStrength: 'red', goodAgainPass: false})
         }
->>>>>>> f08f54c7d15ad2c3f16120534e096a54ebb2f518
     }
 
     validateEmailPhone = str => {
@@ -131,14 +113,6 @@ export default class LoginRegister extends Component {
 
     // RETURNS EITHER LOGIN OR REGISTER VIEW
     Form = () => {
-<<<<<<< HEAD
-        const eyecon = this.state.hidePassword ? faEye : faEyeSlash
-        if (this.state.forgot_password)return(
-          
-        )
-
-        if(this.state.newUser)return(
-=======
         const eyecon = this.state.hidePassword ? faEye : faEyeSlash // EYE/EYESLASH ICON
         const checkUsername = this.state.goodUsername ? faCheckCircle : faTimesCircle
         const checkUsernameColor = this.state.goodUsername ? 'dodgerblue' : '#999'
@@ -146,7 +120,6 @@ export default class LoginRegister extends Component {
         const checkEmailPhoneColor = this.state.goodEmailPhone ? 'dodgerblue' : '#999'
 
         if(this.state.newUser) return(
->>>>>>> f08f54c7d15ad2c3f16120534e096a54ebb2f518
             <View style={{flex: 2, justifyContent: 'center'}}>
                 <Text>Register</Text>
                 <TextInput
@@ -186,16 +159,12 @@ export default class LoginRegister extends Component {
                         placeholder='Password'
                         placeholderTextColor='#999'
                         returnKeyType='next'
-<<<<<<< HEAD
-                        textContentType='password'
-                    />
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
-                        <Icon icon={eyecon} style={{color: 'gray'}} size={24}/>
-=======
                         textContentType='password'/>
                     <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
                         <Icon icon={eyecon} style={{color: '#999'}} size={24}/>
->>>>>>> f08f54c7d15ad2c3f16120534e096a54ebb2f518
+                        textContentType='password'/>
+                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
+                        <Icon icon={eyecon} style={{color: '#999'}} size={24}/>
                     </TouchableHighlight>
                 </View>
                 <TextInput
@@ -229,14 +198,10 @@ export default class LoginRegister extends Component {
                         placeholder='Password'
                         placeholderTextColor='#999'
                         returnKeyType='go'
-<<<<<<< HEAD
-                        textContentType='password'
-                    />
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
-=======
                         textContentType='password'/>
                     <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
->>>>>>> f08f54c7d15ad2c3f16120534e096a54ebb2f518
+                        textContentType='password'/>
+                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
                         <Icon icon={eyecon} style={{color: 'gray'}} size={24}/>
                     </TouchableHighlight>
                 </View>
@@ -246,10 +211,10 @@ export default class LoginRegister extends Component {
 
     //LOGIN/REGISTER CONTAINER
     render(){
-<<<<<<< HEAD
-        const otherFormForgotPass = this.state.forgot_password ? 'return to Login' : 'forgot password?'
-        return(
-=======
+        const otherForm = this.state.newUser ? 'login' : 'register' // LOGIN/REGISTER TEXT LINK
+        const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
+        const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true
+
         const otherForm = this.state.newUser ? 'login' : 'register' // LOGIN/REGISTER TEXT LINK
         const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
         const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true
@@ -258,7 +223,6 @@ export default class LoginRegister extends Component {
             this.props.navigation.navigate('Home')
             return null
         }else return(
->>>>>>> f08f54c7d15ad2c3f16120534e096a54ebb2f518
             <View style={styles.container}>
                 <StatusBar hidden={true}/>
                 <ImageBackground source={require('../assets/img/leaf_background.jpg')} style={{width: '100%', height: '100%'}}>
@@ -278,13 +242,9 @@ export default class LoginRegister extends Component {
                         <View style={{flex: 1, justifyContent: 'center'}}>
                             <Button style={styles.btn} title={loginBtn} disabled={disableBtn} onPress={() => this.login()}/>
                             <View style={[styles.passwordInput,{width: 200, justifyContent: 'center'}]}>
-<<<<<<< HEAD
-                                {this._renderRegistration()}
-                                <Text style={{margin: 10}} onPress={() => this.setState(prevState => ({forgot_password: !prevState.forgot_password, show_registration : !prevState.show_registration}))}>{otherFormForgotPass}</Text>
-=======
                                 <Text style={{margin: 10, width: 60}} onPress={() => this.setState(prevState => ({newUser: !prevState.newUser}))}>{otherForm}</Text>
                                 <Text style={{margin: 10}} onPress={() => {/* GOTO forgotPassword */}}>forgot password?</Text>
->>>>>>> f08f54c7d15ad2c3f16120534e096a54ebb2f518
+
                             </View>
                         </View>
                     </View>
