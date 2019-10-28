@@ -140,7 +140,7 @@ export default class LoginRegister extends Component {
                     <Icon icon={checkUsername} style={{color: checkUsernameColor}} size={20}/>
                 </TouchableHighlight>
                 <TextInput
-                    onChangeText={email_phone => this.validateEmailPhone(email_phone)} 
+                    onChangeText={email_phone => this.validateEmailPhone(email_phone)}
                     style={styles.input}
                     placeholder='Email or Phone'
                     placeholderTextColor='#999'
@@ -160,7 +160,10 @@ export default class LoginRegister extends Component {
                         placeholderTextColor='#999'
                         returnKeyType='next'
                         textContentType='password'/>
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}> 
+                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
+                        <Icon icon={eyecon} style={{color: '#999'}} size={24}/>
+                        textContentType='password'/>
+                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
                         <Icon icon={eyecon} style={{color: '#999'}} size={24}/>
                     </TouchableHighlight>
                 </View>
@@ -196,9 +199,11 @@ export default class LoginRegister extends Component {
                         placeholderTextColor='#999'
                         returnKeyType='go'
                         textContentType='password'/>
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}> 
+                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
+                        textContentType='password'/>
+                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
                         <Icon icon={eyecon} style={{color: 'gray'}} size={24}/>
-                    </TouchableHighlight> 
+                    </TouchableHighlight>
                 </View>
             </View>
         )
@@ -229,7 +234,7 @@ export default class LoginRegister extends Component {
                         </View>
 
                         <this.Form/>
-                        
+
                         <View style={{flex: 1, justifyContent: 'center'}}>
                             <Button style={styles.btn} title={loginBtn} disabled={disableBtn} onPress={() => this.login()}/>
                             <View style={[styles.passwordInput,{width: 200, justifyContent: 'center'}]}>
