@@ -162,9 +162,6 @@ export default class LoginRegister extends Component {
                         textContentType='password'/>
                     <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
                         <Icon icon={eyecon} style={{color: '#999'}} size={24}/>
-                        textContentType='password'/>
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
-                        <Icon icon={eyecon} style={{color: '#999'}} size={24}/>
                     </TouchableHighlight>
                 </View>
                 <TextInput
@@ -198,8 +195,6 @@ export default class LoginRegister extends Component {
                         placeholder='Password'
                         placeholderTextColor='#999'
                         returnKeyType='go'
-                        textContentType='password'/>
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
                         textContentType='password'/>
                     <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
                         <Icon icon={eyecon} style={{color: 'gray'}} size={24}/>
