@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native'
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'green',
+      backgroundColor: 'cadetblue',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -39,6 +39,18 @@ const styles = StyleSheet.create({
       right: 0,
       bottom: 7,
       margin: 10,
+    },
+    check_username: {
+      position: 'absolute',
+      right: 0,
+      margin: 12,
+      bottom: 158
+    },
+    check_emailPhone: {
+      position: 'absolute',
+      right: 0,
+      margin: 12,
+      bottom: 107
     }
 });
 
