@@ -1,21 +1,54 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, View, ImageBackground, StatusBar} from 'react-native';
+import React, {Component} from 'react'
 import {createAppContainer, createSwitchNavigator} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
-import LoginRegister from './components/LoginRegister';
-import {styles} from './style'
+
+// AUTHENTICATION COMPONENTS AND TOKENS
+import LoginRegister from './components/LoginRegister'
+//import ForgotPassword from './components/ForgotPassword'
+
+//AUTH TOKEN
+import {AUTH_TOKEN} from './components/LoginRegister'
+
+// MAIN APP COMPONENTS
+//import Feed from './components/Feed'
+import Camera from './components/Camera'
+//import Messages from './components/Messages'
+//import Settings from './components/Settings'
+//import Profile from './components/Profile'
+//import FullSearch from './components/FullSearch'
 
 
+// AUTHENTICATION NAVIGATION
+const AuthNav = createStackNavigator({
+  LoginRegister: {screen: LoginRegister},
+  //ForgotPass: {screen: ForgotPassword},
+},{
+  headerMode: 'none'
+});
+
+// MAIN APP NAVIGATION
+const HomeNav = createStackNavigator({
+  //Feed: Feed,
+  Camera: Camera,
+  //Messages: Messages,
+  //Settings: Settings,
+  /*Profile: {
+    Screen: Profile,
+    Path: 
+  },*/
+  //FullSearch: FullSearch
+},{
+  headerMode: 'none'
+});
+
+// ROOT NAVIGATION
+const AppNav = createSwitchNavigator({
+  Auth: AuthNav,
+  Home: HomeNav,
+},{
+  initialRouteName: 'Auth'
+});
+
+// EXPORT APP
+const AppContainer = createAppContainer(AppNav)
 export default class App extends Component{ render(){ return <AppContainer/> } }
-
-const AuthenticationNavigator = createStackNavigator({
-  Login: LoginRegister,
-  //ForgotPassword: ForgotPasswordScreen,
-});
-
-const AppNavigator = createSwitchNavigator({
-  Auth: AuthenticationNavigator,
-  //Home: HomeScreen,
-});
-
-const AppContainer = createAppContainer(AppNavigator);
