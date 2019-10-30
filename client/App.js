@@ -34,7 +34,7 @@ const HomeNav = createStackNavigator({
   //Settings: Settings,
   /*Profile: {
     Screen: Profile,
-    Path: 
+    Path:
   },*/
   //FullSearch: FullSearch
 },{
