@@ -6,7 +6,7 @@ import Axios from 'axios'
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons'
 import {faLeaf, faTimesCircle, faCheckCircle} from '@fortawesome/free-solid-svg-icons'
-import {styles} from '../style'
+import {styles} from '../styles/style'
 
 //REGEX
 const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
@@ -81,7 +81,7 @@ export default class LoginRegister extends Component {
                 }).then(res => {
                     console.log('registered and logged in'),
                     AUTH_TOKEN = res.data,
-                    this.props.navigation.navigate('Home')
+                    this.props.navigation.push('CameraView')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }else{
                 await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/register', {
@@ -93,7 +93,7 @@ export default class LoginRegister extends Component {
                 }).then(res => {
                     console.log('registered and logged in'),
                     AUTH_TOKEN = res.data,
-                    this.props.navigation.navigate('Home')
+                    this.props.navigation.push('CameraView')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }
         }else{
@@ -106,7 +106,7 @@ export default class LoginRegister extends Component {
             .then(res => {
                 console.log('logged in'),
                 AUTH_TOKEN = res.data.token,
-                this.props.navigation.navigate('Home')
+                this.props.navigation.push('CameraView')
             }).catch(err => console.log('Problem Logging in: ' + err));
         }
     }
