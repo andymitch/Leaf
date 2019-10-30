@@ -6,7 +6,7 @@ import Axios from 'axios'
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons'
 import {faLeaf, faTimesCircle, faCheckCircle} from '@fortawesome/free-solid-svg-icons'
-import {styles} from '../style'
+import {styles} from '../styles/style'
 
 //REGEX
 const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
@@ -81,7 +81,7 @@ export default class LoginRegister extends Component {
                 }).then(res => {
                     console.log('registered and logged in'),
                     AUTH_TOKEN = res.data,
-                    this.props.navigation.navigate('Home')
+                    this.props.navigation.push('CameraView')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }else{
                 await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/register', {
@@ -93,7 +93,7 @@ export default class LoginRegister extends Component {
                 }).then(res => {
                     console.log('registered and logged in'),
                     AUTH_TOKEN = res.data,
-                    this.props.navigation.navigate('Home')
+                    this.props.navigation.push('CameraView')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }
         }else{
@@ -106,7 +106,7 @@ export default class LoginRegister extends Component {
             .then(res => {
                 console.log('logged in'),
                 AUTH_TOKEN = res.data.token,
-                this.props.navigation.navigate('Home')
+                this.props.navigation.push('CameraView')
             }).catch(err => console.log('Problem Logging in: ' + err));
         }
     }
@@ -162,9 +162,6 @@ export default class LoginRegister extends Component {
                         textContentType='password'/>
                     <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
                         <Icon icon={eyecon} style={{color: '#999'}} size={24}/>
-                        textContentType='password'/>
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
-                        <Icon icon={eyecon} style={{color: '#999'}} size={24}/>
                     </TouchableHighlight>
                 </View>
                 <TextInput
@@ -200,8 +197,6 @@ export default class LoginRegister extends Component {
                         returnKeyType='go'
                         textContentType='password'/>
                     <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
-                        textContentType='password'/>
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
                         <Icon icon={eyecon} style={{color: 'gray'}} size={24}/>
                     </TouchableHighlight>
                 </View>
@@ -214,11 +209,7 @@ export default class LoginRegister extends Component {
         const otherForm = this.state.newUser ? 'login' : 'register' // LOGIN/REGISTER TEXT LINK
         const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
         const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true
-
-        const otherForm = this.state.newUser ? 'login' : 'register' // LOGIN/REGISTER TEXT LINK
-        const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
-        const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true
-
+         
         if(AUTH_TOKEN){
             this.props.navigation.navigate('Home')
             return null
@@ -243,8 +234,7 @@ export default class LoginRegister extends Component {
                             <Button style={styles.btn} title={loginBtn} disabled={disableBtn} onPress={() => this.login()}/>
                             <View style={[styles.passwordInput,{width: 200, justifyContent: 'center'}]}>
                                 <Text style={{margin: 10, width: 60}} onPress={() => this.setState(prevState => ({newUser: !prevState.newUser}))}>{otherForm}</Text>
-                                <Text style={{margin: 10}} onPress={() => {/* GOTO forgotPassword */}}>forgot password?</Text>
-
+                                <Text style={{margin: 10}} onPress={() => {console.log('forgot password'); this.props.navigation.push('ForgotPass')}}>forgot password?</Text>
                             </View>
                         </View>
                     </View>

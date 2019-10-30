@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, StyleSheet, Text, View, TextInput, Switch, Image, TouchableHighlight, StatusBar, ImageBackground} from 'react-native'
-import {styles} from '../style';
+import {styles} from '../styles/style';
 
 
 export default class ForgotPassword extends Component{
@@ -22,7 +22,7 @@ state = {
             returnKeyType='done'
             textContentType='emailAddress'
         />
-        <Button style={styles.btn} title="Submit"/>
+        <Button style={styles.btn} title="Submit" onPress={() => this.props.navigation.pop()}/>
       </View>
     )
   }
