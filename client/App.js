@@ -12,6 +12,7 @@ import ForgotPassword from './components/ForgotPassword'
 // MAIN APP COMPONENTS
 //import Feed from './components/Feed'
 import CameraView from './components/CameraView'
+import CameraPreview from './components/CameraPreview'
 //import Messages from './components/Messages'
 //import Settings from './components/Settings'
 //import Profile from './components/Profile'
@@ -24,6 +25,7 @@ const Nav = createStackNavigator({
   ForgotPass: {screen: ForgotPassword},
   //Feed: Feed,
   CameraView: CameraView,
+  CameraPreview: CameraPreview,
   //Messages: Messages,
   //Settings: Settings,
   //Profile: {screen: Profile, path: },

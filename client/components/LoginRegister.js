@@ -2,11 +2,13 @@ import React, {Component} from 'react'
 import {Button, Text, View, TextInput, TouchableHighlight, StatusBar, ImageBackground} from 'react-native'
 import Axios from 'axios'
 
-//ICONS, STYLES
+//ICONS, STYLES, ANIMATIONS
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons'
 import {faLeaf, faTimesCircle, faCheckCircle} from '@fortawesome/free-solid-svg-icons'
 import {styles} from '../styles/style'
+import * as Animatable from 'react-native-animatable'
+//MyCustomComponent = Animatable.createAnimatableComponent(MyCustomComponent)
 
 //REGEX
 const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
@@ -36,6 +38,19 @@ export default class LoginRegister extends Component {
         passStrength: 'grey', // WILL CHANGE TO RED OR GREEN WHEN INPUT CHANGES
         againPassStrength: 'grey'
     }
+
+    /*this.shakeAnimation = new Animated.Value(0)
+
+    startShake = () => {
+        Animated.sequence([
+          Animated.timing(this.shakeAnimation, {toValue: 10, duration: 100, useNativeDriver: true}),
+          Animated.timing(this.shakeAnimation, {toValue: -10, duration: 100, useNativeDriver: true}),
+          Animated.timing(this.shakeAnimation, {toValue: 10, duration: 100, useNativeDriver: true}),
+          Animated.timing(this.shakeAnimation, {toValue: 0, duration: 100, useNativeDriver: true})
+        ]).start();
+    }*/
+    
+     
 
     validatePassword = (pass, isAgain) => {
         if(!isAgain){
@@ -99,9 +114,8 @@ export default class LoginRegister extends Component {
         }else{
             console.log('requesting...')
             await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/login', {
-                //username: this.state.username,
-                //password: this.state.password
-                token: null
+                username: this.state.username,
+                password: this.state.password
             })
             .then(res => {
                 console.log('logged in'),

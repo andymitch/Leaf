@@ -2,11 +2,14 @@ import React from 'react'
 import {View, Text, Dimensions, TouchableOpacity} from 'react-native'
 import {Camera} from 'expo-camera'
 import * as Permissions from 'expo-permissions'
+import Axios from 'axios'
 
 import Toolbar from './CameraToolbar'
 import Gallery from './CameraGallery'
 //AUTH TOKEN
 import {AUTH_TOKEN} from './LoginRegister'
+Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
+
 //ICONS, STYLES
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons'
@@ -30,7 +33,11 @@ export default class CameraPage extends React.Component {
     setFlashMode = (flashMode) => this.setState({ flashMode });
     setCameraType = (cameraType) => this.setState({ cameraType });
     handleCaptureIn = () => this.setState({ capturing: true });
-    handleCaptureOut = () => {if(this.state.capturing) this.camera.stopRecording()};
+    handleCaptureOut = () => {
+        if(this.state.capturing){
+            this.camera.stopRecording()
+        }
+    };
     handleShortCapture = async () => {
         const photoData = await this.camera.takePictureAsync();
         this.setState({ capturing: false, captures: [photoData, ...this.state.captures] })
@@ -52,11 +59,15 @@ export default class CameraPage extends React.Component {
         this.setState({ hasCameraPermission });
     };
 
+    componentDidUpdate(){
+        if(this.state.captures.length > 0) this.props.navigation.push('CameraPreview',{image: this.state.captures[0]})
+    }
+
     render(){
         const { hasCameraPermission, flashMode, cameraType, capturing, captures } = this.state;
 
-        if(hasCameraPermission === null) return <View/>;
-        else if(hasCameraPermission === false) return <Text>Access to camera has been denied.</Text>;
+        if(hasCameraPermission === null) return <View/>
+        if(hasCameraPermission === false) return <Text>Access to camera has been denied.</Text>
         return(
             <React.Fragment>
                 <View>

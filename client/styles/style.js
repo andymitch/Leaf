@@ -44,13 +44,13 @@ const styles = StyleSheet.create({
       position: 'absolute',
       right: 0,
       margin: 12,
-      bottom: 158
+      bottom: 165
     },
     check_emailPhone: {
       position: 'absolute',
       right: 0,
       margin: 12,
-      bottom: 107
+      bottom: 115
     }
 });
 
