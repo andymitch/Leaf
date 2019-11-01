@@ -14,7 +14,7 @@ state = {
   render() {
     return(
       <View style={styles.container}>
-        <View style={{zIndex: 1,top: 100,justifyContent: "flex-start"}}>
+        <View style={{zIndex: 1,top: 100,alignSelf: "flex-start"}}>
             <TouchableOpacity onPress={() => this.props.navigation.pop()}>
                 <Icon icon={faArrowLeft} style={{color: 'white'}} size={30}/>
             </TouchableOpacity>
