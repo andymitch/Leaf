@@ -1,0 +1,1 @@
+1. Password disappears after clicking show password icon twice
