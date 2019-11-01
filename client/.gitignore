@@ -7,7 +7,7 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.orig.*
-*/package-lock*
+*package-lock*
 *.DS_Store
 web-build/
 web-report/
