@@ -3,12 +3,7 @@ let Bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('./config.json');
 
-event = {
-  username: "jwtRegister",
-  password: "jwt",
-  email: "jwt@register.com"
-}
-let start = exports.handler = async (event, context) => {
+exports.handler = async (event, context) => {
   console.log("Trying to connect to database");
   
   const client = new Client({
@@ -71,5 +66,3 @@ let start = exports.handler = async (event, context) => {
   });
   
   };
-
-  start(event)

@@ -1,5 +1,6 @@
 const {Client} = require('pg')
 let Bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const config = require('./config.json');
 
 exports.handler = async (event, context) => {
@@ -44,9 +45,12 @@ exports.handler = async (event, context) => {
   // Compare the cleartext password to the hashed password
   // If they are a match, return primary key
   if (Bcrypt.compareSync(event.password, savedPassword)) {
+    const token = jwt.sign({
+      data: primaryKey
+    }, config.secret, { expiresIn: '7d' });
       response = {
         statusCode: 200,
-        body: JSON.stringify(primaryKey),
+        body: token,
     };
   }
   // Otherwise, return nothing.
