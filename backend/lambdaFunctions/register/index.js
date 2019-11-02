@@ -1,8 +1,14 @@
 const {Client} = require('pg');
 let Bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const config = require('./config.json');
 
-exports.handler = async (event, context) => {
+event = {
+  username: "jwtRegister",
+  password: "jwt",
+  email: "jwt@register.com"
+}
+let start = exports.handler = async (event, context) => {
   console.log("Trying to connect to database");
   
   const client = new Client({
@@ -26,14 +32,14 @@ exports.handler = async (event, context) => {
   // If user signs up with email, set query string appropriately
   if (event.email != null) {
     console.log("email");
-    query = 'INSERT INTO users(username, password, email) VALUES($1, $2, $3)' //Default query with variable values
+    query = 'INSERT INTO users(username, password, email) VALUES($1, $2, $3) RETURNING id' //Default query with variable values
     values = [event.username, hashedPassword, event.email] //Insert these values into above variables
   }
   
   // If user signs up with phone, set query string appropriately
   else {
     console.log("phone");
-    query = 'INSERT INTO users(username, password, phoneNumber) VALUES($1, $2, $3)';
+    query = 'INSERT INTO users(username, password, phoneNumber) VALUES($1, $2, $3) RETURNING id';
     values = [event.username, hashedPassword, event.phone];
   }
 
@@ -42,9 +48,13 @@ exports.handler = async (event, context) => {
     console.log("test")
     console.log(res)
     client.end();
+    primaryKey = res.rows[0].id;
+    const token = jwt.sign({
+      data: primaryKey
+    }, config.secret, { expiresIn: '7d' });
     const response = { //Return 201 code which means new resource was succesfully created
         statusCode: 201,
-        body: JSON.stringify("Success!"),
+        body: token,
     };
   console.log(response);
   return response;
@@ -61,3 +71,5 @@ exports.handler = async (event, context) => {
   });
   
   };
+
+  start(event)
