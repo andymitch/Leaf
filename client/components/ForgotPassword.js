@@ -13,14 +13,14 @@ state = {
 
   render() {
     return(
-      <View style={styles.container}>
-        <View style={{zIndex: 1,top: 100,alignSelf: "flex-start"}}>
-            <TouchableOpacity onPress={() => this.props.navigation.pop()}>
+      <View style={[styles.container,{flexDirection: "column"},]}>
+        <ImageBackground source={require('../assets/img/leaf_background.jpg')} style={{width: '100%', height: '100%'}}>
+        <View style={{zIndex: 1,top:50,alignSelf: "flex-start"}}>
+            <TouchableOpacity onPress={() => this.props.navigation.pop()} style={{backgroundColor: 'red'}}>
                 <Icon icon={faArrowLeft} style={{color: 'white'}} size={30}/>
             </TouchableOpacity>
         </View>
-        <ImageBackground source={require('../assets/img/leaf_background.jpg')} style={{width: '100%', height: '100%'}}>
-          <View style={[styles.login,{width: 300}]}>
+          <View style={[styles.login,{width: 300},{marginRight: 50}]}>
             <Text>Enter your recovery e-mail address:</Text>
             <TextInput
                 onChangeText={recovery_email => this.setState({recovery_email: recovery_email})}
