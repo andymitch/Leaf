@@ -49,8 +49,8 @@ export default class LoginRegister extends Component {
           Animated.timing(this.shakeAnimation, {toValue: 0, duration: 100, useNativeDriver: true})
         ]).start();
     }*/
-    
-     
+
+
 
     validatePassword = (pass, isAgain) => {
         if(!isAgain){
@@ -228,7 +228,7 @@ export default class LoginRegister extends Component {
         const otherForm = this.state.newUser ? 'login' : 'register' // LOGIN/REGISTER TEXT LINK
         const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
         const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true
-         
+
         if(AUTH_TOKEN){
             this.props.navigation.navigate('Home')
             return null
