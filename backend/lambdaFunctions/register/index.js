@@ -49,7 +49,8 @@ exports.handler = async (event, context) => {
     }, config.secret, { expiresIn: '7d' });
     const response = { //Return 201 code which means new resource was succesfully created
         statusCode: 201,
-        body: token,
+        body: "Success",
+        "token": token
     };
   console.log(response);
   return response;
