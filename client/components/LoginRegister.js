@@ -49,8 +49,8 @@ export default class LoginRegister extends Component {
           Animated.timing(this.shakeAnimation, {toValue: 0, duration: 100, useNativeDriver: true})
         ]).start();
     }*/
-    
-     
+
+
 
     validatePassword = (pass, isAgain) => {
         if(!isAgain){
@@ -75,12 +75,9 @@ export default class LoginRegister extends Component {
         this.setState({username: str})
         console.log(str)
         if(str.match(validUsername)){
-            /*
             await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/check-username', {username: str})
-            .then(res => this.setState({goodUsername: res.data}))
+            .then(res => {console.log(res.data.body); this.setState({goodUsername: res.data.body})})
             .catch(err => console.log(err));
-            */
-           this.setState({goodUsername: true})
         }else this.setState({goodUsername: false})
     }
 
@@ -94,8 +91,8 @@ export default class LoginRegister extends Component {
                     phone: this.state.email_phone,
                     password: this.state.password
                 }).then(res => {
-                    console.log('registered and logged in'),
-                    AUTH_TOKEN = res.data,
+                    console.log('registered and logged in')
+                    AUTH_TOKEN = res.data.token
                     this.props.navigation.push('CameraView')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }else{
@@ -106,22 +103,30 @@ export default class LoginRegister extends Component {
                     phone:  null,
                     password: this.state.password
                 }).then(res => {
-                    console.log('registered and logged in'),
-                    AUTH_TOKEN = res.data,
+                    console.log('registered and logged in')
+                    AUTH_TOKEN = res.data.token
                     this.props.navigation.push('CameraView')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }
         }else{
-            console.log('requesting...')
+            AUTH_TOKEN = 'testing_token'
+            this.props.navigation.push('CameraView')
+            /*
+            console.log(`requesting...\nusername: ${this.state.username}\npassword: ${this.state.password}\n`)
             await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/login', {
                 username: this.state.username,
                 password: this.state.password
-            })
-            .then(res => {
-                console.log('logged in'),
-                AUTH_TOKEN = res.data.token,
-                this.props.navigation.push('CameraView')
+            }).then(res => {
+                AUTH_TOKEN = res.data.token
+                if(AUTH_TOKEN){
+                    console.log('logged in with token: ' + AUTH_TOKEN)
+                    this.props.navigation.push('CameraView')
+                }else{
+                    console.log('token: ' + AUTH_TOKEN)
+                    alert('Incorrect username and password combination')
+                }
             }).catch(err => console.log('Problem Logging in: ' + err));
+            */
         }
     }
 
@@ -193,7 +198,7 @@ export default class LoginRegister extends Component {
             <View style={{flex: 2, justifyContent: 'center'}}>
                 <Text>Login</Text>
                 <TextInput
-                    onChangeText={name => this.setState({name: name})}
+                    onChangeText={username => this.setState({username: username})}
                     style={styles.input}
                     autoCapitalize='none'
                     placeholder='Username'
@@ -223,7 +228,7 @@ export default class LoginRegister extends Component {
         const otherForm = this.state.newUser ? 'login' : 'register' // LOGIN/REGISTER TEXT LINK
         const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
         const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true
-         
+
         if(AUTH_TOKEN){
             this.props.navigation.navigate('Home')
             return null

@@ -20,14 +20,13 @@ export default StyleSheet.create({
         width: winWidth,
         position: 'absolute',
         left: 0,
-        top: winHeight-(winWidth*2)-100,
         right: 0,
-        bottom: 0,
+        top: 70-(winWidth/2),
     },
     bottomToolbar: {
         width: winWidth,
         position: 'absolute',
-        height: 100,
+        height: winWidth-120,
         bottom: 0,
         backgroundColor: 'black'
     },
