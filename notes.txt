@@ -1,1 +1,4 @@
 1. Password disappears after clicking show password icon twice
+2. usernames should be lowercase
+3. front camera captures mirrored image
+4. login will take (username, email, or phone) and password
