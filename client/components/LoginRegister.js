@@ -109,6 +109,7 @@ export default class LoginRegister extends Component {
                 }).catch(err => console.log('Problem Registering: ' + err));
             }
         }else{
+            //FOR THE SAKE OF TESTING
             AUTH_TOKEN = 'testing_token'
             this.props.navigation.push('CameraView')
             /*
