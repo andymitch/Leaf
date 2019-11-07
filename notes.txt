@@ -2,3 +2,4 @@
 2. usernames should be lowercase
 3. front camera captures mirrored image
 4. login will take (username, email, or phone) and password
+5. optional private posts are seen by followers, all else are seen by everyone (ie. geolocation feed)

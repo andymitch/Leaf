@@ -51,6 +51,9 @@ const styles = StyleSheet.create({
       right: 0,
       margin: 12,
       bottom: 115
+    },
+    locBtn: {
+      position: 'absolute'
     }
 });
 

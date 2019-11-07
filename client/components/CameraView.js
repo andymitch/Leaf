@@ -51,14 +51,14 @@ export default class CameraPage extends React.Component {
 
     async componentDidMount(){
         //if(!AUTH_TOKEN) this.props.navigation.navigate('LoginRegister')
-        const camera = await Permissions.askAsync(Permissions.CAMERA);
-        const audio = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-        const hasCameraPermission = (camera.status === 'granted' && audio.status === 'granted');
-        this.setState({hasCameraPermission});
+        const camera = await Permissions.askAsync(Permissions.CAMERA)
+        const audio = await Permissions.askAsync(Permissions.AUDIO_RECORDING)
+        const hasCameraPermission = (camera.status === 'granted' && audio.status === 'granted')
+        this.setState({hasCameraPermission})
     };
 
     render(){
-        const {hasCameraPermission, flashMode, cameraType, capturing, capture} = this.state;
+        const {hasCameraPermission, flashMode, cameraType, capturing} = this.state
 
         if(hasCameraPermission === null) return <View/>
         if(hasCameraPermission === false) return <Text>Access to camera has been denied.</Text>
