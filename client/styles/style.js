@@ -30,6 +30,16 @@ const styles = StyleSheet.create({
       padding: 10,
       color: 'black'
     },
+    inputCenter: {
+      textAlign: 'center',
+      borderBottomColor: 'gray',
+      borderBottomWidth: 1,
+      height: 40,
+      width: 200,
+      marginBottom: 10,
+      padding: 10,
+      color: 'black'
+    },
     passwordInput: {
       flexDirection: 'row',
       alignItems: 'center'

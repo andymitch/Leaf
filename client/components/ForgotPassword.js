@@ -67,31 +67,15 @@ export default class ForgotPassword extends Component{
             </TouchableOpacity>
         </View>
           <View style={[styles.login,{width: 300},{marginRight: 50}]}>
-            <Text>Enter your recovery e-mail address:</Text>
+            <Text>Enter e-mail or phone #</Text>
             <TextInput
                 onChangeText={email_phone => this.validateEmailPhone(email_phone)}
-                style={styles.input}
+                style={styles.inputCenter}
                 autoCapitalize='none'
-                placeholder='e-mail address'
+                placeholder='Email or phone'
                 placeholderTextColor='#999'
                 returnKeyType='done'
-                textContentType='emailAddress'
-            />
-            <Button style={styles.btn} title="Submit" onPress={() => this.submit()}/>
-          </View>
-          <View style={styles.container}>
-            <Text> OR </Text>
-          </View>
-          <View style={[styles.login,{width: 300},{marginRight: 50}]}>
-            <Text>Enter your recovery phone number:</Text>
-            <TextInput
-                onChangeText={email_phone => this.validateEmailPhone(email_phone)}
-                style={styles.input}
-                autoCapitalize='none'
-                placeholder='Phone Number'
-                placeholderTextColor='#999'
-                returnKeyType='done'
-                textContentType='telephoneNumber'
+                textContentType='none'
             />
             <Button style={styles.btn} title="Submit" onPress={() => this.submit()}/>
           </View>
