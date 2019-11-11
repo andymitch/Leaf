@@ -1,14 +1,11 @@
 import React from 'react'
-import {View, Text, Dimensions, TouchableOpacity} from 'react-native'
+import {View, Text, TouchableOpacity, Modal, Animated} from 'react-native'
 import {Camera} from 'expo-camera'
 import * as Permissions from 'expo-permissions'
-import Axios from 'axios'
+import * as ImagePicker from 'expo-image-picker'
 
 import Toolbar from './CameraToolbar'
-import Gallery from './CameraGallery'
-//AUTH TOKEN
-import {AUTH_TOKEN} from './LoginRegister'
-Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
+//import Preview from './CameraPreview'
 
 //ICONS, STYLES
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
@@ -21,41 +18,47 @@ const {FlashMode: CameraFlashModes} = Camera.Constants
 export default class CameraPage extends React.Component {
     camera = null;
     state = {
-        capture: null,
         capturing: null,
-        isVideo: false,
         hasCameraPermission: null,
         cameraType: Camera.Constants.Type.back,
         flashMode: Camera.Constants.FlashMode.off,
     };
 
-    setFlashMode = (flashMode) => this.setState({ flashMode });
-    setCameraType = (cameraType) => this.setState({ cameraType });
-    handleCaptureIn = () => this.setState({ capturing: true });
+    setFlashMode = (flashMode) => this.setState({flashMode});
+    setCameraType = (cameraType) => this.setState({cameraType});
+    handleCaptureIn = () => this.setState({capturing: true});
     handleCaptureOut = () => {if(this.state.capturing) this.camera.stopRecording()};
     handleShortCapture = async () => {
         const photoData = await this.camera.takePictureAsync()
-        this.setState({ capturing: false, capture: photoData, isVideo: false})
+        this.setState({ capturing: false})
+        this.props.navigation.push('CameraPreview', {media: photoData, isVideo: false})
     };
     handleLongCapture = async () => {
         const videoData = await this.camera.recordAsync()
-        this.setState({ capturing: false, capture: videoData, isVideo: true})
+        this.setState({ capturing: false})
+        this.props.navigation.push('CameraPreview', {media: videoData, isVideo: true})
+    };
+
+    fromCameraRoll = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          aspect: [1, 1],
+        });
+        console.log(result)
+        if(!result.cancelled)
+            this.props.navigation.push('CameraPreview', {media: result, isVideo: result.type === 'video'})
     };
 
     async componentDidMount(){
-        if(!AUTH_TOKEN) this.props.navigation.navigate('LoginRegister')
-        const camera = await Permissions.askAsync(Permissions.CAMERA);
-        const audio = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-        const hasCameraPermission = (camera.status === 'granted' && audio.status === 'granted');
-        this.setState({ hasCameraPermission });
+        //if(!AUTH_TOKEN) this.props.navigation.navigate('LoginRegister')
+        const camera = await Permissions.askAsync(Permissions.CAMERA)
+        const audio = await Permissions.askAsync(Permissions.AUDIO_RECORDING)
+        const hasCameraPermission = (camera.status === 'granted' && audio.status === 'granted')
+        this.setState({hasCameraPermission})
     };
 
-    componentDidUpdate(){
-        if(this.state.capture) this.props.navigation.push('CameraPreview',{media: this.state.capture, isVideo: this.state.isVideo})
-    }
-
     render(){
-        const { hasCameraPermission, flashMode, cameraType, capturing, capture } = this.state;
+        const {hasCameraPermission, flashMode, cameraType, capturing} = this.state
 
         if(hasCameraPermission === null) return <View/>
         if(hasCameraPermission === false) return <Text>Access to camera has been denied.</Text>
@@ -81,9 +84,8 @@ export default class CameraPage extends React.Component {
                     />
                 </View>
 
-                {/*captures.length > 0 && <Gallery captures={captures}/>*/}
-
                 <Toolbar
+                    fromCameraRoll={this.fromCameraRoll}
                     capturing={capturing}
                     flashMode={flashMode}
                     cameraType={cameraType}

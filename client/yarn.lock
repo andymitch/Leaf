@@ -2090,6 +2090,11 @@ expo-font@~7.0.0:
   dependencies:
     fontfaceobserver "^2.1.0"
 
+expo-image-picker@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-7.0.0.tgz#e4a5a52bd6f9655f75ecf3cc866aa9bb0c99e24b"
+  integrity sha512-LeGdAqbeuB2KsT369ns1kDtCGbyDCmY2gIFlf/rsD3+UmagRFX9emZLGPEnUNdCWXoctSejjFwxDnCUtpvL6yw==
+
 expo-keep-awake@~7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-7.0.0.tgz#131f56bc1ed8dd66e64a159afd7eaef26939d929"
@@ -2100,7 +2105,7 @@ expo-linear-gradient@~7.0.0:
   resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-7.0.1.tgz#86b8f22cb76fb1594cce6527c22e3182c7e98b6c"
   integrity sha512-YJsvA7nx8sMcV1+XhIsqT5+tyHhJi87AxgFW4fBlvUr9gAXhPMvUwkNMPPIkyOpKiEMPuQ7yWS29qwZdOHBGFQ==
 
-expo-location@~7.0.0:
+expo-location@^7.0.0, expo-location@~7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/expo-location/-/expo-location-7.0.0.tgz#de5818f828354c681a173471e4dc25ec795a9b42"
   integrity sha512-7iWg0j6+DXeO/bVLJEbGBmvebPSbIJNOewfHoyhvdo+13Q7L94SflcggT349WbqNsFJHVcAGC6Unr8VvXcUDbw==

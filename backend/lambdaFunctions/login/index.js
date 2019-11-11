@@ -50,7 +50,8 @@ exports.handler = async (event, context) => {
     }, config.secret, { expiresIn: '7d' });
       response = {
         statusCode: 200,
-        body: token,
+        body: "Success",
+        "token":token,
     };
   }
   // Otherwise, return nothing.
@@ -62,6 +63,7 @@ exports.handler = async (event, context) => {
   }
   
   console.log("End Query and Connection");
+  
   console.log(response);
   
   return response;

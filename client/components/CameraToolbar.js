@@ -5,26 +5,22 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import { View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 
 import styles from '../styles/styles';
+import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
+import { faImages } from '@fortawesome/free-solid-svg-icons';
 
 const {Type: CameraTypes} = Camera.Constants
 
 export default ({ 
     capturing = false, 
-    cameraType = CameraTypes.back, 
-    flashMode = CameraFlashModes.off, 
-    setFlashMode, setCameraType, 
-    onCaptureIn, onCaptureOut, onLongCapture, onShortCapture, 
+    cameraType = CameraTypes.back,
+    onCaptureIn, onCaptureOut, onLongCapture, onShortCapture, fromCameraRoll, setCameraType
 }) => (
     <Grid style={styles.bottomToolbar}>
         <Row>
             <Col style={styles.alignCenter}>
-                {/*<TouchableOpacity onPress={() => setFlashMode(flashMode === CameraFlashModes.on ? CameraFlashModes.off : CameraFlashModes.on)}>
-                    <Ionicons
-                        name={flashMode == CameraFlashModes.on ? "md-flash" : 'md-flash-off'}
-                        color="white"
-                        size={30}
-                    />
-                </TouchableOpacity>*/}
+                <TouchableWithoutFeedback onPress={fromCameraRoll}>
+                    <Icon icon={faImages} style={{color: 'white'}} size={30}/>
+                </TouchableWithoutFeedback>
             </Col>
             <Col size={2} style={styles.alignCenter}>
                 <TouchableWithoutFeedback

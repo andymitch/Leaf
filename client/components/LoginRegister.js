@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
-import {Button, Text, View, TextInput, TouchableHighlight, StatusBar, ImageBackground} from 'react-native'
+import {Button, Text, View, TextInput, TouchableHighlight, StatusBar, ImageBackground, TouchableOpacity} from 'react-native'
 import Axios from 'axios'
 
 //ICONS, STYLES, ANIMATIONS
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons'
-import {faLeaf, faTimesCircle, faCheckCircle} from '@fortawesome/free-solid-svg-icons'
+import {faLeaf, faTimesCircle, faCheckCircle, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
 import {styles} from '../styles/style'
 import * as Animatable from 'react-native-animatable'
 //MyCustomComponent = Animatable.createAnimatableComponent(MyCustomComponent)
@@ -14,7 +14,7 @@ import * as Animatable from 'react-native-animatable'
 const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
 const validEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
 const validPhone = /(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})/g
-const validUsername = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{4,29}$/igm
+const validUsername = /^[a-z][a-z0-9_]{4,18}$/gm
 
 //AUTH TOKEN
 export let AUTH_TOKEN = null
@@ -109,6 +109,7 @@ export default class LoginRegister extends Component {
                 }).catch(err => console.log('Problem Registering: ' + err));
             }
         }else{
+            //FOR THE SAKE OF TESTING
             AUTH_TOKEN = 'testing_token'
             this.props.navigation.push('CameraView')
             /*
@@ -140,7 +141,12 @@ export default class LoginRegister extends Component {
 
         if(this.state.newUser) return(
             <View style={{flex: 2, justifyContent: 'center'}}>
-                <Text>Register</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Text>Register</Text>
+                    <TouchableOpacity onPress={() => {alert('Username: 4-18 characters starting with a letter using ONLY lowercase, numeric, and underscore values.\n\nEmail or phone number: must be valid.\n\nPassword: At least 8 characters requiring one uppercase, one lowercase, and one numeric. Special characters are allowed.')}}>
+                        <Icon icon={faInfoCircle} size={15} style={{margin: 5, color: '#999'}}/>
+                    </TouchableOpacity>
+                </View>
                 <TextInput
                     onChangeText={name => this.setState({name: name})}
                     style={styles.input}
