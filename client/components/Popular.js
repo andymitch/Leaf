@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import {View, FlatList, Text, Button, ActivityIndicator} from 'react-native'
+import {View, FlatList, Text, ActivityIndicator} from 'react-native'
 
 import Axios from 'axios'
 import {AUTH_TOKEN} from './LoginRegister'
 Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
 
-export default class Feed extends Component{
+export default class Popular extends Component{
     state = {
         feed: [],
         isLoading: true
@@ -40,7 +40,7 @@ export default class Feed extends Component{
             return(
                 <View style={{flex: 1}}>
                     <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-                        <Text>Local Feed</Text>
+                        <Text>What's Da Happ's</Text>
                     </View>
                 </View>
             )

@@ -30,12 +30,12 @@ export default class CameraView extends React.Component {
     handleShortCapture = async () => {
         const photoData = await this.camera.takePictureAsync()
         this.setState({ capturing: false})
-        this.props.navigation.push('CameraPreview', {media: photoData, isVideo: false})
+        this.props.navigation.push('Preview', {media: photoData, isVideo: false})
     };
     handleLongCapture = async () => {
         const videoData = await this.camera.recordAsync()
         this.setState({ capturing: false})
-        this.props.navigation.push('CameraPreview', {media: videoData, isVideo: true})
+        this.props.navigation.push('Preview', {media: videoData, isVideo: true})
     };
 
     fromCameraRoll = async () => {
@@ -47,7 +47,7 @@ export default class CameraView extends React.Component {
               });
               console.log(result)
               if(!result.cancelled)
-                  this.props.navigation.push('CameraPreview', {media: result, isVideo: result.type === 'video'})
+                  this.props.navigation.push('Preview', {media: result, isVideo: result.type === 'video'})
         }
     };
 

@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import {View, FlatList, Text, Button, ActivityIndicator} from 'react-native'
+import {View, FlatList, Text, ActivityIndicator} from 'react-native'
 
 import Axios from 'axios'
 import {AUTH_TOKEN} from './LoginRegister'
 Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
 
-export default class Feed extends Component{
+export default class MyFeed extends Component{
     state = {
         feed: [],
         isLoading: true

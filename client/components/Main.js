@@ -14,12 +14,19 @@ import Settings from './Settings'
 import Profile from './Profile'
 import Search from './Search'
 
+// AUTH TOKEN, logout if token expires
+import {AUTH_TOKEN, logout} from './LoginRegister'
+
 
 export default class Main extends Component{
     state = {
         page: 'Feed',
         notiNotify: 5,
         messageNotify: 5
+    }
+
+    componentDidMount(){
+        if(!AUTH_TOKEN) this.props.navigation.navigate('Login')
     }
 
     notifyBadge = count => {
@@ -55,7 +62,7 @@ export default class Main extends Component{
                         </Button>
                     </Left>
                     <Body>
-                        <Text style={{fontSize: 20, fontWeight: 'bold'}}>VIRO</Text>
+                        <Text style={{fontSize: 20, fontWeight: 'bold'}}>LEAF</Text>
                     </Body>
                     <Right>
                         <Button transparent onPress={() => this.setState({page: 'Settings'})}>

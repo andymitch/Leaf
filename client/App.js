@@ -6,6 +6,7 @@ import {createStackNavigator} from 'react-navigation-stack'
 import LoginRegister from './components/LoginRegister'
 import ForgotPassword from './components/ForgotPassword'
 import CameraView from './components/CameraView'
+import CameraPreview from './components/CameraPreview'
 import Main from './components/Main'
 
 // HIDE WARNINGS
@@ -13,13 +14,15 @@ console.disableYellowBox = true
 
 // ROOT NAVIGATION
 const rootNav = createStackNavigator({
-  LoginRegister: LoginRegister,
-  ForgotPass: ForgotPassword,
+  Login: LoginRegister,
+  Forgot: ForgotPassword,
   Camera: CameraView,
+  Preview: CameraPreview,
   Main: Main
 },{
   initialRouteName: 'Main',
-  headerMode: 'none'
+  headerMode: 'none',
+  mode: 'modal'
 });
 
 // EXPORT APP
