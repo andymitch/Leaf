@@ -7,8 +7,6 @@ import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons'
 import {faLeaf, faTimesCircle, faCheckCircle, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
 import {styles} from '../styles/style'
-import * as Animatable from 'react-native-animatable'
-//MyCustomComponent = Animatable.createAnimatableComponent(MyCustomComponent)
 
 //REGEX
 const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
@@ -38,19 +36,6 @@ export default class LoginRegister extends Component {
         passStrength: 'grey', // WILL CHANGE TO RED OR GREEN WHEN INPUT CHANGES
         againPassStrength: 'grey'
     }
-
-    /*this.shakeAnimation = new Animated.Value(0)
-
-    startShake = () => {
-        Animated.sequence([
-          Animated.timing(this.shakeAnimation, {toValue: 10, duration: 100, useNativeDriver: true}),
-          Animated.timing(this.shakeAnimation, {toValue: -10, duration: 100, useNativeDriver: true}),
-          Animated.timing(this.shakeAnimation, {toValue: 10, duration: 100, useNativeDriver: true}),
-          Animated.timing(this.shakeAnimation, {toValue: 0, duration: 100, useNativeDriver: true})
-        ]).start();
-    }*/
-
-
 
     validatePassword = (pass, isAgain) => {
         if(!isAgain){
@@ -93,7 +78,7 @@ export default class LoginRegister extends Component {
                 }).then(res => {
                     console.log('registered and logged in')
                     AUTH_TOKEN = res.data.token
-                    this.props.navigation.push('CameraView')
+                    this.props.navigation.navigate('Home')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }else{
                 await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/register', {
@@ -105,13 +90,13 @@ export default class LoginRegister extends Component {
                 }).then(res => {
                     console.log('registered and logged in')
                     AUTH_TOKEN = res.data.token
-                    this.props.navigation.push('CameraView')
+                    this.props.navigation.navigate('Home')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }
         }else{
             //FOR THE SAKE OF TESTING
             AUTH_TOKEN = 'testing_token'
-            this.props.navigation.push('CameraView')
+            this.props.navigation.navigate('Home')
             /*
             console.log(`requesting...\nusername: ${this.state.username}\npassword: ${this.state.password}\n`)
             await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/login', {
@@ -121,7 +106,7 @@ export default class LoginRegister extends Component {
                 AUTH_TOKEN = res.data.token
                 if(AUTH_TOKEN){
                     console.log('logged in with token: ' + AUTH_TOKEN)
-                    this.props.navigation.push('CameraView')
+                    this.props.navigation.push('Feed')
                 }else{
                     console.log('token: ' + AUTH_TOKEN)
                     alert('Incorrect username and password combination')

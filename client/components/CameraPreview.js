@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Image, TouchableOpacity, Dimensions, Text, TextInput, Switch} from 'react-native'
+import {View, Image, TouchableOpacity, Dimensions, Text, TextInput, Switch, ToastAndroid} from 'react-native'
 import {Video} from 'expo-av'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
@@ -13,7 +13,7 @@ Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faArrowLeft, faPaperPlane, faMicrophone, faMicrophoneSlash, faMapMarkerAlt, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
 import styles from '../styles/styles'
-import {passwordInput, locBtn} from '../styles/style'
+import {locBtn} from '../styles/style'
 const {width: winWidth, height: winHeight} = Dimensions.get('window')
 
 export default class Preview extends Component{
@@ -73,6 +73,20 @@ export default class Preview extends Component{
         }else alert('Leaf needs permission to use location services.')
     }
 
+    upload = async isVideo => {
+        let uploadData = new FormData()
+        if(isVideo) uploadData.append('media', {type: 'image/jpg', uri: this.state.media.uri})
+        else uploadData.append('media', {type: 'video/mp4', uri: this.state.media.uri})
+
+        await fetch('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/upload', {method: 'post', body: uploadData})
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err))
+
+        if(isVideo) ToastAndroid.show('Video posted!', ToastAndroid.SHORT)
+        else ToastAndroid.show('Image posted!', ToastAndroid.SHORT)
+        this.props.navigation.goBack()
+    }
+
     render(){
         const isVideo = this.props.navigation.getParam('isVideo', false)
         return(
@@ -129,7 +143,7 @@ export default class Preview extends Component{
                                     this.setState({private: isPrivate})
                                 }}
                             />
-                            <TouchableOpacity onPress={() => console.log('IMAGE POSTED')}>
+                            <TouchableOpacity onPress={() => this.upload(isVideo)}>
                                 <Icon icon={faPaperPlane} style={{color: 'white', marginRight: 20}} size={40}/>
                             </TouchableOpacity>
                         </View>
