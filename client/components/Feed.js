@@ -16,7 +16,7 @@ export default class Feed extends Component{
                 <Content>
                     <Tabs tabBarPosition='top'>
                         <Tab heading={
-                            <TabHeading style={{backgroundColor: 'gainsboro'}}>
+                            <TabHeading style={{backgroundColor: 'white'}}>
                                 <Text style={{marginRight: 5}}>My Feed</Text>
                                 <Icon icon={faStream}/>
                             </TabHeading>}
@@ -24,7 +24,7 @@ export default class Feed extends Component{
                             <MyFeed/>
                         </Tab>
                         <Tab heading={
-                            <TabHeading style={{backgroundColor: 'gainsboro'}}>
+                            <TabHeading style={{backgroundColor: 'white'}}>
                                 <Text style={{marginRight: 5}}>Popular</Text>
                                 <Icon icon={faFire}/>
                             </TabHeading>}

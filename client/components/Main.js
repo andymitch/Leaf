@@ -55,7 +55,7 @@ export default class Main extends Component{
         return(
             <Container>
                 <StatusBar hidden/>
-                <Header style={{backgroundColor: 'gainsboro'}}>
+                <Header style={{backgroundColor: 'white'}}>
                     <Left>
                         <Button transparent onPress={() => this.setState({page: 'Profile'})}>
                             <Icon icon={faUserCircle} size={30}/>
@@ -74,7 +74,7 @@ export default class Main extends Component{
                     {this.renderPage()}
                 </Content>
                 <Footer>
-                    <FooterTab style={{backgroundColor: 'gainsboro', borderTopColor: 'darkgrey', borderTopWidth: 1}}>
+                    <FooterTab style={{backgroundColor: 'white', borderTopColor: 'darkgrey', borderTopWidth: 1}}>
                         <Button onPress={() => this.setState({page: 'Feed'})}>
                             <Icon icon={faHome} size={30}/>
                         </Button>
@@ -82,7 +82,7 @@ export default class Main extends Component{
                             <Icon icon={faSearch} size={30}/>
                         </Button>
                         <Button onPress={() => this.props.navigation.push('Camera')}>
-                            <View style={{borderRadius: 50, borderWidth: 1, shadowColor: "#000", shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderColor: 'darkgrey', width: 70, height: 70, justifyContent: 'center', alignItems: 'center', backgroundColor: 'gainsboro'}}>
+                            <View style={{borderRadius: 50, borderWidth: 1, shadowColor: "#000", shadowOffset: {width: 0,height: 2}, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5, borderColor: 'darkgrey', width: 70, height: 70, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
                                 <Icon icon={faVideo} size={30}/>
                             </View>
                         </Button>
