@@ -8,7 +8,7 @@ import {AUTH_TOKEN} from './components/LoginRegister'
 // AUTHENTICATION COMPONENTS AND TOKENS
 import LoginRegister from './components/LoginRegister'
 import ForgotPassword from './components/ForgotPassword'
-
+import Post from './components/Post'
 // MAIN APP COMPONENTS
 //import Feed from './components/Feed'
 import CameraView from './components/CameraView'

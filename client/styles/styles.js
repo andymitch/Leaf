@@ -1,6 +1,8 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width: winWidth, height: winHeight } = Dimensions.get('window');
+const padding = 12;
+const profileImageSize = 36;
 
 export default StyleSheet.create({
     inline: {
@@ -49,16 +51,16 @@ export default StyleSheet.create({
         backgroundColor: "red",
         borderColor: "transparent",
     },
-    galleryContainer: { 
-        bottom: 100 
+    galleryContainer: {
+        bottom: 100
     },
-    galleryImageContainer: { 
-        width: 75, 
-        height: 75, 
-        marginRight: 5 
+    galleryImageContainer: {
+        width: 75,
+        height: 75,
+        marginRight: 5
     },
-    galleryImage: { 
-        width: 75, 
-        height: 75 
-    }
+    galleryImage: {
+        width: 75,
+        height: 75
+    },
 });
