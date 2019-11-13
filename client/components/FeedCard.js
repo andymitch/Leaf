@@ -3,10 +3,10 @@ import React from 'react';
 import { TouchableHighlight, TouchableOpacity, Image, StyleSheet, Text, View, Dimensions } from 'react-native';
 import {Video} from 'expo-av';
 //import {faHeart} from '@fortawesome/free-regular-svg-icons'
-import {faHeart, faVolumeMute} from '@fortawesome/free-solid-svg-icons'
+import {faHeart, faVolumeMute, faVolumeUp} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon as FAIcon} from '@fortawesome/react-native-fontawesome'
 const mute = faVolumeMute
-const ic = faHeart
+const heart = faHeart
 const profileImageSize = 36;
 const padding = 12;
 const {width: winWidth} = Dimensions.get('window')
@@ -33,6 +33,7 @@ export default class FeedCard extends React.Component {
     const imgH = imageHeight || this.state.height;
     const aspect = imgW / imgH || 1;
     const whichColor = this.state.color ? '#f20a0a' : '#000000'
+    const muteIcon = this.state.mute ? faVolumeUp : faVolumeMute
 
     return (
       <View>
@@ -61,12 +62,12 @@ export default class FeedCard extends React.Component {
               <View style={{right: 0}}>
                 <View style={styles.row}>
                   <TouchableOpacity style={{paddingRight: 20}} onPress ={ () => this.setState(prev => ({mute: !prev.mute}))}>
-                    <FAIcon size={26} icon={mute}></FAIcon>
+                    <FAIcon size={26} icon={muteIcon}></FAIcon>
                   </TouchableOpacity>
-                  <View style={{flexDirection: 'column'}}>
+                  <View>
                     <Text style={[styles.text, {justifyContent:'center'}]}>{likes}</Text>
                     <TouchableOpacity onPress={() => this.setState(prev => ({color: !prev.color}))}>
-                      <FAIcon icon={ic} color={whichColor} size={26}></FAIcon>
+                      <FAIcon icon={heart} color={whichColor} size={26}></FAIcon>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -79,10 +80,6 @@ export default class FeedCard extends React.Component {
     );
   }
 }
-
-//const Metadata = ({ name, description, likes }) => (
-
-//);
 
 const Header = ({ name, image, location}) => (
   <View style={[styles.row, styles.padding]}>
@@ -97,13 +94,6 @@ const Header = ({ name, image, location}) => (
 
 );
 
-//const Icon = ({ name, likes }) => (
-
-//);
-
-//const IconBar = ({description, likes}) => (
-
-//);
 
 const styles = StyleSheet.create({
   text: { fontWeight: '600' },
