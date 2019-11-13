@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Button, Text, View, TextInput, TouchableHighlight, StatusBar, ImageBackground, TouchableOpacity} from 'react-native'
+import {setItemAsync, getItemAsync, deleteItemAsync} from 'expo-secure-store'
 import Axios from 'axios'
 
 //ICONS, STYLES, ANIMATIONS
@@ -7,8 +8,6 @@ import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons'
 import {faLeaf, faTimesCircle, faCheckCircle, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
 import {styles} from '../styles/style'
-import * as Animatable from 'react-native-animatable'
-//MyCustomComponent = Animatable.createAnimatableComponent(MyCustomComponent)
 
 //REGEX
 const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
@@ -18,6 +17,10 @@ const validUsername = /^[a-z][a-z0-9_]{4,18}$/gm
 
 //AUTH TOKEN
 export let AUTH_TOKEN = null
+export const logout = async () => {
+    await deleteItemAsync('token')
+}
+
 
 //AUTH COMPONENT
 export default class LoginRegister extends Component {
@@ -39,18 +42,10 @@ export default class LoginRegister extends Component {
         againPassStrength: 'grey'
     }
 
-    /*this.shakeAnimation = new Animated.Value(0)
-
-    startShake = () => {
-        Animated.sequence([
-          Animated.timing(this.shakeAnimation, {toValue: 10, duration: 100, useNativeDriver: true}),
-          Animated.timing(this.shakeAnimation, {toValue: -10, duration: 100, useNativeDriver: true}),
-          Animated.timing(this.shakeAnimation, {toValue: 10, duration: 100, useNativeDriver: true}),
-          Animated.timing(this.shakeAnimation, {toValue: 0, duration: 100, useNativeDriver: true})
-        ]).start();
-    }*/
-
-
+    componentWillMount = async () => {
+        await getItemAsync('token').then(res => AUTH_TOKEN = res).catch(err => console.log(err))
+        if(AUTH_TOKEN) this.props.navigation.goBack()
+    }
 
     validatePassword = (pass, isAgain) => {
         if(!isAgain){
@@ -93,7 +88,8 @@ export default class LoginRegister extends Component {
                 }).then(res => {
                     console.log('registered and logged in')
                     AUTH_TOKEN = res.data.token
-                    this.props.navigation.push('CameraView')
+                    setItemAsync('token', res.data.token)
+                    this.props.navigation.goBack()
                 }).catch(err => console.log('Problem Registering: ' + err));
             }else{
                 await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/register', {
@@ -105,13 +101,15 @@ export default class LoginRegister extends Component {
                 }).then(res => {
                     console.log('registered and logged in')
                     AUTH_TOKEN = res.data.token
-                    this.props.navigation.push('CameraView')
+                    setItemAsync('token', res.data.token)
+                    this.props.navigation.goBack()
                 }).catch(err => console.log('Problem Registering: ' + err));
             }
         }else{
             //FOR THE SAKE OF TESTING
-            AUTH_TOKEN = 'testing_token'
-            this.props.navigation.push('CameraView')
+            //AUTH_TOKEN = 'testing_token'
+            console.log('from Login: ' + AUTH_TOKEN)
+            this.props.navigation.goBack()
             /*
             console.log(`requesting...\nusername: ${this.state.username}\npassword: ${this.state.password}\n`)
             await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/login', {
@@ -121,7 +119,7 @@ export default class LoginRegister extends Component {
                 AUTH_TOKEN = res.data.token
                 if(AUTH_TOKEN){
                     console.log('logged in with token: ' + AUTH_TOKEN)
-                    this.props.navigation.push('CameraView')
+                    this.props.navigation.push('Feed')
                 }else{
                     console.log('token: ' + AUTH_TOKEN)
                     alert('Incorrect username and password combination')
@@ -235,10 +233,7 @@ export default class LoginRegister extends Component {
         const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
         const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true
 
-        if(AUTH_TOKEN){
-            this.props.navigation.navigate('Home')
-            return null
-        }else return(
+        return(
             <View style={styles.container}>
                 <StatusBar hidden={true}/>
                 <ImageBackground source={require('../assets/img/leaf_background.jpg')} style={{width: '100%', height: '100%'}}>
@@ -259,7 +254,7 @@ export default class LoginRegister extends Component {
                             <Button style={styles.btn} title={loginBtn} disabled={disableBtn} onPress={() => this.login()}/>
                             <View style={[styles.passwordInput,{width: 200, justifyContent: 'center'}]}>
                                 <Text style={{margin: 10, width: 60}} onPress={() => this.setState(prevState => ({newUser: !prevState.newUser}))}>{otherForm}</Text>
-                                <Text style={{margin: 10}} onPress={() => {console.log('forgot password'); this.props.navigation.push('ForgotPass')}}>forgot password?</Text>
+                                <Text style={{margin: 10}} onPress={() => this.props.navigation.push('Forgot')}>forgot password?</Text>
                             </View>
                         </View>
                     </View>

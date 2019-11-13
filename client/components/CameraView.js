@@ -1,11 +1,10 @@
 import React from 'react'
-import {View, Text, TouchableOpacity, Modal, Animated} from 'react-native'
+import {View, Text, TouchableOpacity} from 'react-native'
 import {Camera} from 'expo-camera'
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
 
 import Toolbar from './CameraToolbar'
-//import Preview from './CameraPreview'
 
 //ICONS, STYLES
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
@@ -15,7 +14,7 @@ import styles from '../styles/styles'
 
 const {FlashMode: CameraFlashModes} = Camera.Constants
 
-export default class CameraPage extends React.Component {
+export default class CameraView extends React.Component {
     camera = null;
     state = {
         capturing: null,
@@ -31,22 +30,25 @@ export default class CameraPage extends React.Component {
     handleShortCapture = async () => {
         const photoData = await this.camera.takePictureAsync()
         this.setState({ capturing: false})
-        this.props.navigation.push('CameraPreview', {media: photoData, isVideo: false})
+        this.props.navigation.push('Preview', {media: photoData, isVideo: false})
     };
     handleLongCapture = async () => {
         const videoData = await this.camera.recordAsync()
         this.setState({ capturing: false})
-        this.props.navigation.push('CameraPreview', {media: videoData, isVideo: true})
+        this.props.navigation.push('Preview', {media: videoData, isVideo: true})
     };
 
     fromCameraRoll = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          aspect: [1, 1],
-        });
-        console.log(result)
-        if(!result.cancelled)
-            this.props.navigation.push('CameraPreview', {media: result, isVideo: result.type === 'video'})
+        const roll = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+        if(roll.status === 'granted'){
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                aspect: [1, 1],
+              });
+              console.log(result)
+              if(!result.cancelled)
+                  this.props.navigation.push('Preview', {media: result, isVideo: result.type === 'video'})
+        }
     };
 
     async componentDidMount(){
