@@ -18,7 +18,7 @@ console.disableYellowBox = true
 // ROOT NAVIGATION
 const rootNav = createStackNavigator({
   Login: LoginRegister,
-  Forgot: FeedCard,
+  Forgot: ForgotPassword,
   Camera: CameraView,
   Preview: CameraPreview,
   Main: Main
