@@ -5,7 +5,6 @@ import {Video} from 'expo-av';
 //import {faHeart} from '@fortawesome/free-regular-svg-icons'
 import {faHeart, faVolumeMute, faVolumeUp} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon as FAIcon} from '@fortawesome/react-native-fontawesome'
-const mute = faVolumeMute
 const heart = faHeart
 const profileImageSize = 36;
 const padding = 12;
@@ -13,7 +12,7 @@ const {width: winWidth} = Dimensions.get('window')
 
 export default class FeedCard extends React.Component {
   state = {
-    mute : false,
+    mute : true,
     color : false
   };
 
@@ -26,19 +25,34 @@ export default class FeedCard extends React.Component {
     }
   }
 
-  render() {
-    const { likes, profile, location, content, caption, imageWidth, imageHeight, name, text} = this.props;
+  componentWillUnmount() {
+    if (this.video) {
+      this.video.unloadAsync();
+    }
+  }
 
-    const imgW = imageWidth || this.state.width;
-    const imgH = imageHeight || this.state.height;
+  play = () => {
+    this.video.playAsync()
+  }
+
+  pause = () => {
+    this.video.pauseAsync()
+  }
+
+  render() {
+    const {likes, profile, location, content, caption, imageWidth, imageHeight, name} = this.props;
+
+    const imgW = imageWidth || winWidth;
+    const imgH = imageHeight || winWidth;
     const aspect = imgW / imgH || 1;
     const whichColor = this.state.color ? '#f20a0a' : '#000000'
     const muteIcon = this.state.mute ? faVolumeUp : faVolumeMute
 
     return (
       <View>
-        <Header image={{ uri: 'http://placehold.it/120x120&text=image1' }} name={name} location={location} />
+        <Header image={{uri: profile}} name={name} location={location} />
         <Video
+          ref={ref => {this.video = ref}}
           resizeMode="contain"
           style={{
             backgroundColor: '#D8D8D8',
@@ -49,9 +63,9 @@ export default class FeedCard extends React.Component {
           volume={3.0}
           isMuted={this.state.mute}
           resizeMode="cover"
-          shouldPlay
+          shouldPlay={false}
           isLooping
-          source={{ uri: content }}
+          source={{uri: content}}
         />
         <View style={styles.padding}>
           <View style={styles.row}>
@@ -64,7 +78,7 @@ export default class FeedCard extends React.Component {
                   <TouchableOpacity style={{paddingRight: 20}} onPress ={ () => this.setState(prev => ({mute: !prev.mute}))}>
                     <FAIcon size={26} icon={muteIcon}></FAIcon>
                   </TouchableOpacity>
-                  <View>
+                  <View style={{flexDirection: 'row'}}>
                     <Text style={[styles.text, {justifyContent:'center'}]}>{likes}</Text>
                     <TouchableOpacity onPress={() => this.setState(prev => ({color: !prev.color}))}>
                       <FAIcon icon={heart} color={whichColor} size={26}></FAIcon>
@@ -74,7 +88,6 @@ export default class FeedCard extends React.Component {
               </View>
             </View>
           </View>
-          <Text style={styles.text}>{name}</Text>
         </View>
       </View>
     );

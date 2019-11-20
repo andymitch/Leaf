@@ -26,7 +26,7 @@ export default class Main extends Component{
     }
 
     componentDidMount(){
-        if(!AUTH_TOKEN) this.props.navigation.navigate('Login')
+        if(!AUTH_TOKEN) this.props.navigation.goBack()
     }
 
     notifyBadge = count => {

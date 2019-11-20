@@ -21,6 +21,7 @@ export const logout = async () => {
     await deleteItemAsync('token')
 }
 
+let baseState = null
 
 //AUTH COMPONENT
 export default class LoginRegister extends Component {
@@ -41,6 +42,7 @@ export default class LoginRegister extends Component {
         passStrength: 'grey', // WILL CHANGE TO RED OR GREEN WHEN INPUT CHANGES
         againPassStrength: 'grey'
     }
+    baseState = this.state
 
     componentWillMount = async () => {
         await getItemAsync('token').then(res => AUTH_TOKEN = res).catch(err => console.log(err))
@@ -89,7 +91,8 @@ export default class LoginRegister extends Component {
                     console.log('registered and logged in')
                     AUTH_TOKEN = res.data.token
                     setItemAsync('token', res.data.token)
-                    this.props.navigation.goBack()
+                    this.setState(baseState)
+                    this.props.navigation.push('Main')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }else{
                 await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/register', {
@@ -102,14 +105,17 @@ export default class LoginRegister extends Component {
                     console.log('registered and logged in')
                     AUTH_TOKEN = res.data.token
                     setItemAsync('token', res.data.token)
-                    this.props.navigation.goBack()
+                    this.setState(baseState)
+                    this.props.navigation.push('Main')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }
         }else{
             //FOR THE SAKE OF TESTING
-            //AUTH_TOKEN = 'testing_token'
+            AUTH_TOKEN = 'testing_token'
             console.log('from Login: ' + AUTH_TOKEN)
-            this.props.navigation.goBack()
+            this.setState(baseState)
+            if(AUTH_TOKEN) this.props.navigation.push('Main')
+            else alert('incorrect login')
             /*
             console.log(`requesting...\nusername: ${this.state.username}\npassword: ${this.state.password}\n`)
             await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/login', {
@@ -148,6 +154,7 @@ export default class LoginRegister extends Component {
                 <TextInput
                     onChangeText={name => this.setState({name: name})}
                     style={styles.input}
+                    autoCompleteType='name'
                     autoCapitalize='words'
                     placeholder='Name'
                     placeholderTextColor='#999'
@@ -165,6 +172,7 @@ export default class LoginRegister extends Component {
                 <TextInput
                     onChangeText={email_phone => this.validateEmailPhone(email_phone)}
                     style={styles.input}
+                    autoCompleteType='email'
                     placeholder='Email or Phone'
                     placeholderTextColor='#999'
                     autoCapitalize='none'
@@ -206,6 +214,7 @@ export default class LoginRegister extends Component {
                     style={styles.input}
                     autoCapitalize='none'
                     placeholder='Username'
+                    autoCompleteType='username'
                     placeholderTextColor='#999'
                     returnKeyType='next'
                     textContentType='username'/>
@@ -213,6 +222,7 @@ export default class LoginRegister extends Component {
                     <TextInput
                         onChangeText={password => this.setState({password: password})}
                         style={styles.input}
+                        autoCompleteType='password'
                         autoCapitalize='none'
                         secureTextEntry={this.state.hidePassword}
                         placeholder='Password'

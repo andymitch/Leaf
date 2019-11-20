@@ -11,9 +11,10 @@ Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
 //STYLES AND ICONS
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
-import {faArrowLeft, faPaperPlane, faMicrophone, faMicrophoneSlash, faMapMarkerAlt, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
+import {faArrowLeft, faPaperPlane, faVolumeUp, faVolumeMute, faMapMarkerAlt, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
 import styles from '../styles/styles'
 import {locBtn} from '../styles/style'
+
 const {width: winWidth, height: winHeight} = Dimensions.get('window')
 
 export default class Preview extends Component{
@@ -27,7 +28,7 @@ export default class Preview extends Component{
     }
 
     muteBtn = isVideo => {
-        const muteIcon = this.state.mute ? faMicrophone : faMicrophoneSlash
+        const muteIcon = this.state.mute ? faVolumeUp : faVolumeMute
         if(isVideo){
             return(
                 <TouchableOpacity onPress={() => this.setState(prev => ({mute: !prev.mute}))}>

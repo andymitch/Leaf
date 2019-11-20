@@ -23,7 +23,7 @@ const rootNav = createStackNavigator({
   Preview: CameraPreview,
   Main: Main
 },{
-  initialRouteName: 'Main',
+  initialRouteName: 'Login',
   headerMode: 'none',
   mode: 'modal'
 });
