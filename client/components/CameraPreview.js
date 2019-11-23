@@ -78,6 +78,8 @@ export default class Preview extends Component{
         let uploadData = new FormData()
         if(isVideo) uploadData.append('media', {type: 'image/jpg', uri: this.state.media.uri})
         else uploadData.append('media', {type: 'video/mp4', uri: this.state.media.uri})
+        uploadDate.append('location', {type: 'text', this.state.location})
+        uploadDate.append('caption', {type: 'text', this.state.caption})
 
         await fetch('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/upload', {method: 'post', body: uploadData})
         .then(res => console.log(res.data))
