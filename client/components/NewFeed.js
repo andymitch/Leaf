@@ -89,29 +89,37 @@ export default class Feed extends Component {
             likes: 12
         }],
         index: 0,
-        blured: false
+        blurred: false
     }
 
     onSwipe = (gName, gState) => {
         console.log('swiping: ' + gName)
-        if (gName === swipeDirections.SWIPE_UP)
-            if (this.state.index < this.state.items.length - 1)
+        if (gName === swipeDirections.SWIPE_UP) {
+            if (this.state.index < this.state.items.length - 1) {
                 this._transition.show(
-                    this.renderContent(this.state.index+1),
+                    this.renderContent(this.state.index + 1),
                     SlideUp
                 )
                 this.setState(prev => ({ index: prev.index + 1 }))
-        if (gName === swipeDirections.SWIPE_DOWN)
-            if (this.state.index > 0)
+            }
+        }
+        if (gName === swipeDirections.SWIPE_DOWN) {
+            if (this.state.index > 0) {
+                console.log('test')
                 this._transition.show(
-                    this.renderContent(this.state.index-1),
+                    this.renderContent(this.state.index - 1),
                     SlideDown
                 )
                 this.setState(prev => ({ index: prev.index - 1 }))
+            }
+        }
     }
 
     renderContent = (index) => {
-        if(this.state.blured) return null
+        if (this.state.blurred) {
+            console.log('blured')
+            return null
+        }
         const config = {
             velocityThreshold: 0.3,
             directionalOffsetThreshold: 80
@@ -129,12 +137,14 @@ export default class Feed extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <NavigationEvents
-                    onWillFocus={() => this.setState({blured: false})}
-                    onDidBlur={() => this.setState({blured: true})}
+                    onWillFocus={() => this.setState({ blurred: false })}
+                    onDidBlur={() => this.setState({ blurred: true })}
                 />
-                <Transition ref={(node) => { this._transition = node; }}>
-                    {this.renderContent(this.state.index)}
-                </Transition>
+                <View style={{ flex: 1 }}>
+                    <Transition ref={(node) => { this._transition = node; }}>
+                        {this.renderContent(this.state.index)}
+                    </Transition>
+                </View>
             </View>
         )
     }

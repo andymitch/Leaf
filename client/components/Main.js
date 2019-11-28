@@ -107,5 +107,4 @@ export default createMaterialBottomTabNavigator({
     activeColor: '#444',
     inactiveColor: 'black',
     barStyle: { backgroundColor: 'black' }
-
 })

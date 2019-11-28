@@ -4,6 +4,7 @@ import { Camera } from 'expo-camera'
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
 import { LinearGradient } from 'expo-linear-gradient'
+import { NavigationEvents } from 'react-navigation'
 
 import CameraTimer from './CameraTimer'
 
@@ -22,7 +23,8 @@ export default class CameraView extends React.Component {
         capturing: false,
         hasCameraPermission: null,
         cameraType: Camera.Constants.Type.back,
-        flashMode: Camera.Constants.FlashMode.off
+        flashMode: Camera.Constants.FlashMode.off,
+        blurred: false
     };
 
     setFlashMode = flashMode => this.setState({ flashMode })
@@ -56,7 +58,20 @@ export default class CameraView extends React.Component {
         const audio = await Permissions.askAsync(Permissions.AUDIO_RECORDING)
         const hasCameraPermission = (camera.status === 'granted' && audio.status === 'granted')
         this.setState({ hasCameraPermission })
-    };
+    }
+
+    renderCamera = (cameraType, flashMode) => {
+        if(this.state.blurred) return null
+        return(
+            <Camera
+                type={cameraType}
+                flashMode={flashMode}
+                style={{ backgroundColor: 'transparent', height: winHeight, width: winWidth, left: 0, right: 0, top: 0, position: 'absolute' }}
+                ref={camera => this.camera = camera}
+                ratio={'18:9'}
+            />
+        )
+    }
 
     render() {
         const { hasCameraPermission, flashMode, cameraType, capturing } = this.state
@@ -65,6 +80,10 @@ export default class CameraView extends React.Component {
         if (hasCameraPermission === false) return <Text>Access to camera has been denied.</Text>
         return (
             <View style={{ flex: 1, flexDirection: 'column', height: winHeight }}>
+                <NavigationEvents
+                    onWillFocus={() => this.setState({ blurred: false })}
+                    onDidBlur={() => this.setState({ blurred: true })}
+                />
 
                 <View style={[styles.inline, { zIndex: 1, backgroundColor: 'transparent' }]}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Main')}>
@@ -75,14 +94,8 @@ export default class CameraView extends React.Component {
                     </TouchableOpacity>
                 </View>
 
-                <Camera
-                    type={cameraType}
-                    flashMode={flashMode}
-                    style={{ backgroundColor: 'transparent', height: winHeight, width: winWidth, left: 0, right: 0, top: 0, position: 'absolute' }}
-                    ref={camera => this.camera = camera}
-                    ratio={'18:9'}
-                />
-
+                {this.renderCamera(cameraType, flashMode)}
+                
                 <LinearGradient
                     colors={['rgba(0,0,0,0)','rgba(0,0,0,.8)', 'rgba(0,0,0,1)']}
                     style={{ flexDirection: 'row', justifyContent: 'space-around', position: 'absolute', bottom: 0, width: winWidth, height: 100, alignItems: 'center' }}>
