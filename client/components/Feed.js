@@ -64,11 +64,9 @@ class FeedContent extends Component{
     handleViewableItemsChanged = props => {
         const viewable = props.viewableItems || []
         const changed = props.changed
-        console.log(viewable.length, changed.length)
         changed.forEach(item => {
             const cell = this.cellRefs[item.index]
             if(cell){
-                console.log(item)
                 if(item.isViewable){
                     console.log('play')
                     cell.play()
@@ -81,7 +79,6 @@ class FeedContent extends Component{
     }
 
     renderItem = ({item}) => {
-        console.log('rendering item')
         this.handleViewableItemsChanged({changed: this.state.feed})
         return(
             <View style={{flex: 1}}>
