@@ -1,10 +1,11 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Dimensions } from 'react-native'
+import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Dimensions, Platform, StatusBar } from 'react-native'
 import { Camera } from 'expo-camera'
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
 import { LinearGradient } from 'expo-linear-gradient'
 import { NavigationEvents } from 'react-navigation'
+import MovToMp4 from "react-native-mov-to-mp4"
 
 import CameraTimer from './CameraTimer'
 
@@ -37,7 +38,16 @@ export default class CameraView extends React.Component {
         } else {
             this.setState({ capturing: true })
             await this.camera.recordAsync({ maxDuration: 10 })
-                .then(file => this.props.navigation.push('Preview', { uri: file.uri }))
+                .then(file => {
+                    if(Platform.OS === 'ios'){
+                        var filename = Date.now().toString();
+                        MovToMp4.convertMovToMp4(file.uri, filename + ".mp4", function(results) {
+                            //here you can upload the video...
+                            console.log(results);
+                        });
+                    }
+                    this.props.navigation.push('Preview', { uri: file.uri })
+                })
                 .catch(err => console.log('OH NO: ' + err))
         }
     }
@@ -84,7 +94,7 @@ export default class CameraView extends React.Component {
                     onWillFocus={() => this.setState({ blurred: false })}
                     onDidBlur={() => this.setState({ blurred: true })}
                 />
-
+                <StatusBar hidden/>
                 <View style={[styles.inline, { zIndex: 1, backgroundColor: 'transparent' }]}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Main')}>
                         <Icon icon={faTimes} style={{ color: 'white' }} size={30} />

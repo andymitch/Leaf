@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, Dimensions, Text, TextInput, ToastAndroid } from 'react-native'
+import { View, TouchableOpacity, Dimensions, Text, TextInput, ToastAndroid, StatusBar } from 'react-native'
 import { Video } from 'expo-av'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import { LinearGradient } from 'expo-linear-gradient'
+import MovToMp4 from "react-native-mov-to-mp4"
 
 //AUTH TOKEN, AXIOS
 import Axios from 'axios'
@@ -73,13 +74,15 @@ export default class Preview extends Component {
 
     upload = async () => {
         let uploadData = new FormData()
+        
+        /*
         uploadData.append('media', { type: 'video/mp4', uri: this.state.uri })
         uploadData.append('location', this.state.location)
         uploadData.append('caption', this.state.caption)
         await fetch('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/upload', { method: 'post', body: uploadData })
             .then(res => console.log(res.data))
             .catch(err => console.log(err))
-
+        */
         ToastAndroid.show('Video posted!', ToastAndroid.SHORT)
         this.props.navigation.goBack()
     }
@@ -87,6 +90,7 @@ export default class Preview extends Component {
     render() {
         return (
             <View style={{ flex: 1, flexDirection: 'column', alignContent: 'space-between' }}>
+                <StatusBar hidden/>
                 <View style={[styles.inline, { zIndex: 1 }]}>
                     <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                         <Icon icon={faArrowLeft} style={{ color: 'white' }} size={30} />

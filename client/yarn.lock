@@ -9852,6 +9852,11 @@ react-native-keyboard-aware-scroll-view@0.9.1:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
+react-native-mov-to-mp4@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-mov-to-mp4/-/react-native-mov-to-mp4-0.2.1.tgz#f1af883aa951b55bf94a1419a6df129d7feac5ef"
+  integrity sha1-8a+IOqlRtVv5ShQZpt8SnX/qxe8=
+
 react-native-paper@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-3.2.1.tgz#8b3f4b8ce36ca471aba3fa7407194afe8595cd35"
