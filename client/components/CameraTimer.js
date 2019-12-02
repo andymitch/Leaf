@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Dimensions, StyleSheet, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import Svg, { Defs, LinearGradient, Stop, Path } from "react-native-svg"
 import Animated, { Easing } from "react-native-reanimated"
 import { timing } from "react-native-redash"

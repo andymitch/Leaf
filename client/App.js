@@ -6,9 +6,9 @@ import {createStackNavigator} from 'react-navigation-stack'
 import LoginRegister from './components/LoginRegister'
 import ForgotPassword from './components/ForgotPassword'
 // MAIN APP COMPONENTS
-import Camera from './components/Camera'
 import Preview from './components/Preview'
 import Main from './components/Main'
+import ChatView from './components/ChatView'
 
 // HIDE WARNINGS
 console.disableYellowBox = true
@@ -17,9 +17,9 @@ console.disableYellowBox = true
 const rootNav = createStackNavigator({
   Login: LoginRegister,
   Forgot: ForgotPassword,
-  //Camera: Camera,
   Preview: Preview,
-  Main: Main
+  Main: Main,
+  Chat: ChatView
 },{
   initialRouteName: 'Login',
   headerMode: 'none',

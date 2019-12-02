@@ -109,7 +109,7 @@ class FeedContent extends Component {
 
     renderPlay = () => {
         if (this.state.play) return null
-        return <Icon icon={faPlay} size={200} style={{ color: 'rgba(0,0,0,.2)', left: (winWidth/2)-80 }} />
+        return <Icon icon={faPlay} size={200} style={{ color: 'rgba(0,0,0,.2)', left: (winWidth / 2) - 80 }} />
     }
 
     render() {
@@ -179,6 +179,31 @@ export default class Feed extends Component {
         this.getFeed(true, 'following')
     }
 
+    getFeed = async (refresh, from) => {
+        this.setState({ isLoading: true })
+        // FOR TESTING PURPOSES
+        if (from === 'popular') {
+            if (refresh) this.setState({ popular: popFeed })
+            else this.setState(prev => ({ popular: [...prev.popular, ...popFeed] }))
+        } else {
+            if (refresh) this.setState({ following: folFeed })
+            else this.setState(prev => ({ following: [...prev.following, ...folFeed] }))
+        }
+        this.setState({ isLoading: false })
+        /*
+        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed`, { params: { from: from } })
+            .then(res => {
+                if (from === 'popular') {
+                    if (refresh) this.setState({ popular: res.data, isLoading: false })
+                    else this.setState(prev => ({ popular: [...prev.popular, ...res.data], isLoading: false }))
+                } else {
+                    if (refresh) this.setState({ following: res.data, isLoading: false })
+                    else this.setState(prev => ({ following: [...prev.following, ...res.data], isLoading: false }))
+                }
+            }).catch(err => console.log(err))
+        */
+    }
+
     onSwipe = gName => {
         if (gName === swipeDirections.SWIPE_UP) {
             if (this.state.onPopular) {
@@ -215,48 +240,6 @@ export default class Feed extends Component {
         }
     }
 
-    getFeed = async (refresh, from) => {
-        this.setState({ isLoading: true })
-        // FOR TESTING PURPOSES
-        if (from === 'popular') {
-            if (refresh) this.setState({ popular: popFeed })
-            else this.setState(prev => ({ popular: [...prev.popular, ...popFeed] }))
-        } else {
-            if (refresh) this.setState({ following: folFeed })
-            else this.setState(prev => ({ following: [...prev.following, ...folFeed] }))
-        }
-        this.setState({ isLoading: false })
-        /*
-        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed`, { params: { from: from } })
-            .then(res => {
-                if (from === 'popular') {
-                    if (refresh) this.setState({ popular: res.data, isLoading: false })
-                    else this.setState(prev => ({ popular: [...prev.popular, ...res.data], isLoading: false }))
-                } else {
-                    if (refresh) this.setState({ following: res.data, isLoading: false })
-                    else this.setState(prev => ({ following: [...prev.following, ...res.data], isLoading: false }))
-                }
-            }).catch(err => console.log(err))
-        */
-    }
-
-    renderContent = (index, pop) => {
-        const config = { velocityThreshold: 0.3, directionalOffsetThreshold: 80 }
-        if (pop) {
-            return (
-                <GestureRecognizer onSwipe={this.onSwipe} config={config} style={{ flex: 1, backgroundColor: 'black' }}>
-                    <FeedContent like={this.like} onPopular={true} index={index} {...this.state.popular[index]} />
-                </GestureRecognizer>
-            )
-        } else {
-            return (
-                <GestureRecognizer onSwipe={this.onSwipe} config={config} style={{ flex: 1, backgroundColor: 'black' }}>
-                    <FeedContent like={this.like} onPopular={false} index={index} {...this.state.following[index]} />
-                </GestureRecognizer>
-            )
-        }
-    }
-
     goBack = () => { this.setState({ gotoFollowing: false, gotoLeaderboard: false }) }
 
     like = (isPopular, index, liked) => {
@@ -279,6 +262,23 @@ export default class Feed extends Component {
                 <ActivityIndicator size='large' color='blue' animated />
             </View>
         )
+    }
+
+    renderContent = (index, pop) => {
+        const config = { velocityThreshold: 0.3, directionalOffsetThreshold: 80 }
+        if (pop) {
+            return (
+                <GestureRecognizer onSwipe={this.onSwipe} config={config} style={{ flex: 1, backgroundColor: 'black' }}>
+                    <FeedContent like={this.like} onPopular={true} index={index} {...this.state.popular[index]} />
+                </GestureRecognizer>
+            )
+        } else {
+            return (
+                <GestureRecognizer onSwipe={this.onSwipe} config={config} style={{ flex: 1, backgroundColor: 'black' }}>
+                    <FeedContent like={this.like} onPopular={false} index={index} {...this.state.following[index]} />
+                </GestureRecognizer>
+            )
+        }
     }
 
     render() {
