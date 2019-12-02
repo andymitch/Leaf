@@ -1,6 +1,4 @@
-import React, { Component } from 'react'
-import { View, Text, StatusBar } from 'react-native'
-import { Container, Content, Footer, Header, FooterTab, Button, Badge } from 'native-base'
+import React from 'react'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
 
 // ICONS
@@ -8,18 +6,15 @@ import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
 import { faUserCircle, faHome, faSearch, faVideo, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
 // COMPONENTS
-import Feed from './NewFeed'
+import Feed from './Feed'
 import Messages from './Messages'
 import Profile from './Profile'
 import Search from './Search'
 import Camera from './Camera'
-// AUTH TOKEN, logout if token expires
-import { AUTH_TOKEN, logout } from './LoginRegister'
-
 
 
 const getTabBarIcon = (navigation, focused) => {
-    const tint = focused ? 'gainsboro' : 'white'
+    const tint = focused ? 'white' : '#ddd'
     switch (navigation.state.routeName) {
         case 'Home': return <Icon icon={faHome} size={30} color={tint} />
         case 'Search': return <Icon icon={faSearch} size={30} color={tint} />
