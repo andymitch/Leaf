@@ -282,6 +282,7 @@ export default class Feed extends Component {
     }
 
     render() {
+        if(this.state.isLoading) return this.loading()
         if (this.state.blurred) return (
             <View>
                 <NavigationEvents
@@ -353,7 +354,7 @@ export default class Feed extends Component {
                         </View>
                     </LinearGradient>
                     <Transition ref={(node) => { this._transition = node; }}>
-                        {this.state.isLoading ? this.loading() : this.renderContent(0, false)}
+                        {this.renderContent(0, false)}
                     </Transition>
                 </View>
             </View>

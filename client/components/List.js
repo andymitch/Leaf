@@ -15,6 +15,28 @@ import { AUTH_TOKEN } from './LoginRegister'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
+const _items = [{
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'BillyBob',
+    points: 1032
+}, {
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'BobbyBoi',
+    points: 435
+}, {
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'Fineas',
+    points: 231
+}, {
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'DemBoiz',
+    points: 56
+}, {
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'idk',
+    points: 18
+}]
+
 class Avatar extends Component {
     render() {
         return (
@@ -59,38 +81,19 @@ class Following extends Component {
 
 export default class List extends Component {
     state = {
-        items: [{
-            profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-            name: 'BillyBob',
-            points: 1032
-        }, {
-            profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-            name: 'BobbyBoi',
-            points: 435
-        }, {
-            profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-            name: 'Fineas',
-            points: 231
-        }, {
-            profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-            name: 'DemBoiz',
-            points: 56
-        }, {
-            profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-            name: 'idk',
-            points: 18
-        }],
+        items: [],
         isLoading: true
     }
 
     async componentDidMount() {
+        this.setState({ items: _items, isLoading: false })
         /*
         if (this.props.leaderboard) {
-            await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/leaderboard`, {})
+            await Axios.post(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/leaderboard`, {})
                 .then(res => this.setState({ items: res.data }))
                 .catch(err => console.log(err))
         } else {
-            await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/following`, {})
+            await Axios.post(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/following`, {})
                 .then(res => this.setState({ items: res.data }))
                 .catch(err => console.log(err))
         }
