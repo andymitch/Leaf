@@ -5,14 +5,10 @@ import {createStackNavigator} from 'react-navigation-stack'
 // COMPONENTS
 import LoginRegister from './components/LoginRegister'
 import ForgotPassword from './components/ForgotPassword'
-import FeedCard from './components/FeedCard'
-import Settings from './components/Settings'
-import ChangePass from './components/ChangePass'
 // MAIN APP COMPONENTS
-//import Feed from './components/Feed'
-import CameraView from './components/CameraView'
-import CameraPreview from './components/CameraPreview'
+import Preview from './components/Preview'
 import Main from './components/Main'
+import ChatView from './components/ChatView'
 
 // HIDE WARNINGS
 console.disableYellowBox = true
@@ -20,11 +16,10 @@ console.disableYellowBox = true
 // ROOT NAVIGATION
 const rootNav = createStackNavigator({
   Login: LoginRegister,
-  Forgot: Settings,
-  Camera: CameraView,
-  Preview: CameraPreview,
+  Forgot: ForgotPassword,
+  Preview: Preview,
   Main: Main,
-  ChangePass: ChangePass
+  Chat: ChatView
 },{
   initialRouteName: 'Login',
   headerMode: 'none',

@@ -1,13 +1,13 @@
-import React, {Component} from 'react'
-import {Button, Text, View, TextInput, TouchableHighlight, StatusBar, ImageBackground, TouchableOpacity} from 'react-native'
-import {setItemAsync, getItemAsync, deleteItemAsync} from 'expo-secure-store'
+import React, { Component } from 'react'
+import { Button, Text, View, TextInput, TouchableHighlight, StatusBar, ImageBackground, TouchableOpacity } from 'react-native'
+import { setItemAsync, getItemAsync, deleteItemAsync } from 'expo-secure-store'
 import Axios from 'axios'
 
 //ICONS, STYLES, ANIMATIONS
-import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
-import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons'
-import {faLeaf, faTimesCircle, faCheckCircle, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
-import {styles} from '../styles/style'
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons'
+import { faLeaf, faTimesCircle, faCheckCircle, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { styles } from '../styles/style'
 
 //REGEX
 const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
@@ -46,41 +46,42 @@ export default class LoginRegister extends Component {
 
     componentWillMount = async () => {
         await getItemAsync('token').then(res => AUTH_TOKEN = res).catch(err => console.log(err))
-        if(AUTH_TOKEN) this.props.navigation.goBack()
+        console.log('token pre-login: ' + AUTH_TOKEN)
+        if (AUTH_TOKEN) this.props.navigation.push('Main')
     }
 
     validatePassword = (pass, isAgain) => {
-        if(!isAgain){
-            this.setState({password: pass})
-            if(pass.match(validPass)) this.setState({passStrength: 'limegreen', goodPass: true})
-            else this.setState({passStrength: 'red', goodPass: false})
-        }else{
-            this.setState({again_password: pass})
-            if(pass.match(validPass) && pass === this.state.password) this.setState({againPassStrength: 'limegreen', goodAgainPass: true})
-            else this.setState({againPassStrength: 'red', goodAgainPass: false})
+        if (!isAgain) {
+            this.setState({ password: pass })
+            if (pass.match(validPass)) this.setState({ passStrength: 'limegreen', goodPass: true })
+            else this.setState({ passStrength: 'red', goodPass: false })
+        } else {
+            this.setState({ again_password: pass })
+            if (pass.match(validPass) && pass === this.state.password) this.setState({ againPassStrength: 'limegreen', goodAgainPass: true })
+            else this.setState({ againPassStrength: 'red', goodAgainPass: false })
         }
     }
 
     validateEmailPhone = str => {
-        this.setState({email_phone: str})
-        if(str.match(validEmail)) {this.setState({goodEmailPhone: true, isPhone: false}); console.log('valid email')}
-        else if(str.match(validPhone)) {this.setState({goodEmailPhone: true, isPhone: true}); console.log('valid phone number')}
-        else {this.setState({goodEmailPhone: false}); console.log('not valid email or phone')}
+        this.setState({ email_phone: str })
+        if (str.match(validEmail)) { this.setState({ goodEmailPhone: true, isPhone: false }); console.log('valid email') }
+        else if (str.match(validPhone)) { this.setState({ goodEmailPhone: true, isPhone: true }); console.log('valid phone number') }
+        else { this.setState({ goodEmailPhone: false }); console.log('not valid email or phone') }
     }
 
     validateUsername = async str => {
-        this.setState({username: str})
+        this.setState({ username: str })
         console.log(str)
-        if(str.match(validUsername)){
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/check-username', {username: str})
-            .then(res => {console.log(res.data.body); this.setState({goodUsername: res.data.body})})
-            .catch(err => console.log(err));
-        }else this.setState({goodUsername: false})
+        if (str.match(validUsername)) {
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/check-username', { username: str })
+                .then(res => { console.log(res.data.body); this.setState({ goodUsername: res.data.body }) })
+                .catch(err => console.log(err));
+        } else this.setState({ goodUsername: false })
     }
 
     login = async () => {
-        if(this.state.newUser){
-            if(this.state.isPhone){
+        if (this.state.newUser) {
+            if (this.state.isPhone) {
                 await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/register', {
                     name: this.state.name,
                     username: this.state.username,
@@ -94,12 +95,12 @@ export default class LoginRegister extends Component {
                     this.setState(baseState)
                     this.props.navigation.push('Main')
                 }).catch(err => console.log('Problem Registering: ' + err));
-            }else{
+            } else {
                 await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/register', {
                     name: this.state.name,
                     username: this.state.username,
                     email: this.state.email_phone,
-                    phone:  null,
+                    phone: null,
                     password: this.state.password
                 }).then(res => {
                     console.log('registered and logged in')
@@ -109,31 +110,30 @@ export default class LoginRegister extends Component {
                     this.props.navigation.push('Main')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }
-        }else{
+        } else {
             //FOR THE SAKE OF TESTING
-            AUTH_TOKEN = 'testing_token'
-            console.log('from Login: ' + AUTH_TOKEN)
+            //AUTH_TOKEN = 'testing_token'
+            //console.log('from Login: ' + AUTH_TOKEN)
             this.setState(baseState)
-            if(AUTH_TOKEN) this.props.navigation.push('Main')
-            else alert('incorrect login')
-            /*
+            //if(AUTH_TOKEN) this.props.navigation.push('Main')
+            //else alert('incorrect login')
+
             console.log(`requesting...\nusername: ${this.state.username}\npassword: ${this.state.password}\n`)
             await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/login', {
                 username: this.state.username,
                 password: this.state.password
             }).then(res => {
                 AUTH_TOKEN = res.data.token
-                if(AUTH_TOKEN){
+                if (AUTH_TOKEN) {
                     console.log('logged in with token: ' + AUTH_TOKEN)
-                    this.props.navigation.push('Feed')
-                }else{
+                    this.props.navigation.push('Main')
+                } else {
                     console.log('token: ' + AUTH_TOKEN)
                     alert('Incorrect username and password combination')
                 }
             }).catch(err => console.log('Problem Logging in: ' + err));
-            */
         }
-    }
+    };
 
     // RETURNS EITHER LOGIN OR REGISTER VIEW
     Form = () => {
@@ -143,31 +143,31 @@ export default class LoginRegister extends Component {
         const checkEmailPhone = this.state.goodEmailPhone ? faCheckCircle : faTimesCircle
         const checkEmailPhoneColor = this.state.goodEmailPhone ? 'dodgerblue' : '#999'
 
-        if(this.state.newUser) return(
-            <View style={{flex: 2, justifyContent: 'center'}}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        if (this.state.newUser) return (
+            <View style={{ flex: 2, justifyContent: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text>Register</Text>
-                    <TouchableOpacity onPress={() => {alert('Username: 4-18 characters starting with a letter using ONLY lowercase, numeric, and underscore values.\n\nEmail or phone number: must be valid.\n\nPassword: At least 8 characters requiring one uppercase, one lowercase, and one numeric. Special characters are allowed.')}}>
-                        <Icon icon={faInfoCircle} size={15} style={{margin: 5, color: '#999'}}/>
+                    <TouchableOpacity onPress={() => { alert('Username: 4-18 characters starting with a letter using ONLY lowercase, numeric, and underscore values.\n\nEmail or phone number: must be valid.\n\nPassword: At least 8 characters requiring one uppercase, one lowercase, and one numeric. Special characters are allowed.') }}>
+                        <Icon icon={faInfoCircle} size={15} style={{ margin: 5, color: '#999' }} />
                     </TouchableOpacity>
                 </View>
                 <TextInput
-                    onChangeText={name => this.setState({name: name})}
+                    onChangeText={name => this.setState({ name: name })}
                     style={styles.input}
                     autoCompleteType='name'
                     autoCapitalize='words'
                     placeholder='Name'
                     placeholderTextColor='#999'
-                    textContentType='name'/>
+                    textContentType='name' />
                 <TextInput
                     onChangeText={username => this.validateUsername(username)}
                     style={styles.input}
                     placeholder='Username'
                     placeholderTextColor='#999'
                     autoCapitalize='none'
-                    textContentType='username'/>
+                    textContentType='username' />
                 <TouchableHighlight style={styles.check_username} disabled>
-                    <Icon icon={checkUsername} style={{color: checkUsernameColor}} size={20}/>
+                    <Icon icon={checkUsername} style={{ color: checkUsernameColor }} size={20} />
                 </TouchableHighlight>
                 <TextInput
                     onChangeText={email_phone => this.validateEmailPhone(email_phone)}
@@ -177,50 +177,50 @@ export default class LoginRegister extends Component {
                     placeholderTextColor='#999'
                     autoCapitalize='none'
                     textContentType='emailAddress'
-                    keyboardType='email-address'/>
+                    keyboardType='email-address' />
                 <TouchableHighlight style={styles.check_emailPhone} disabled>
-                    <Icon icon={checkEmailPhone} style={{color: checkEmailPhoneColor}} size={20}/>
+                    <Icon icon={checkEmailPhone} style={{ color: checkEmailPhoneColor }} size={20} />
                 </TouchableHighlight>
                 <View style={styles.passwordInput}>
                     <TextInput
                         onChangeText={pass => this.validatePassword(pass, false)}
-                        style={[styles.input,{borderBottomColor: this.state.passStrength}]}
+                        style={[styles.input, { borderBottomColor: this.state.passStrength }]}
                         autoCapitalize='none'
                         secureTextEntry={this.state.hidePassword}
                         placeholder='Password'
                         placeholderTextColor='#999'
                         returnKeyType='next'
-                        textContentType='password'/>
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
-                        <Icon icon={eyecon} style={{color: '#999'}} size={24}/>
+                        textContentType='password' />
+                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({ hidePassword: !prev.hidePassword }))}>
+                        <Icon icon={eyecon} style={{ color: '#999' }} size={24} />
                     </TouchableHighlight>
                 </View>
                 <TextInput
                     onChangeText={pass => this.validatePassword(pass, true)}
-                    style={[styles.input,{borderBottomColor: this.state.againPassStrength}]}
+                    style={[styles.input, { borderBottomColor: this.state.againPassStrength }]}
                     autoCapitalize='none'
                     secureTextEntry={this.state.hidePassword}
                     placeholder='Confirm Password'
                     placeholderTextColor='#999'
                     returnKeyType='go'
-                    textContentType='newPassword'/>
+                    textContentType='newPassword' />
             </View>
         )
-        return(
-            <View style={{flex: 2, justifyContent: 'center'}}>
+        return (
+            <View style={{ flex: 2, justifyContent: 'center' }}>
                 <Text>Login</Text>
                 <TextInput
-                    onChangeText={username => this.setState({username: username})}
+                    onChangeText={username => this.setState({ username: username })}
                     style={styles.input}
                     autoCapitalize='none'
                     placeholder='Username'
                     autoCompleteType='username'
                     placeholderTextColor='#999'
                     returnKeyType='next'
-                    textContentType='username'/>
+                    textContentType='username' />
                 <View style={styles.passwordInput}>
                     <TextInput
-                        onChangeText={password => this.setState({password: password})}
+                        onChangeText={password => this.setState({ password: password })}
                         style={styles.input}
                         autoCompleteType='password'
                         autoCapitalize='none'
@@ -228,9 +228,9 @@ export default class LoginRegister extends Component {
                         placeholder='Password'
                         placeholderTextColor='#999'
                         returnKeyType='go'
-                        textContentType='password'/>
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({hidePassword: !prev.hidePassword}))}>
-                        <Icon icon={eyecon} style={{color: 'gray'}} size={24}/>
+                        textContentType='password' />
+                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({ hidePassword: !prev.hidePassword }))}>
+                        <Icon icon={eyecon} style={{ color: 'gray' }} size={24} />
                     </TouchableHighlight>
                 </View>
             </View>
@@ -238,33 +238,33 @@ export default class LoginRegister extends Component {
     }
 
     //LOGIN/REGISTER CONTAINER
-    render(){
+    render() {
         const otherForm = this.state.newUser ? 'login' : 'register' // LOGIN/REGISTER TEXT LINK
         const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
         const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true
 
-        return(
+        return (
             <View style={styles.container}>
-                <StatusBar hidden={true}/>
-                <ImageBackground source={require('../assets/img/leaf_background.jpg')} style={{width: '100%', height: '100%'}}>
+                <StatusBar hidden={true} />
+                <ImageBackground source={require('../assets/img/leaf_background.jpg')} style={{ width: '100%', height: '100%' }}>
                     <View style={styles.login}>
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', bottom: -10}}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', bottom: -10 }}>
                             <Text>DemBoiz present</Text>
                             <View style={styles.passwordInput}>
-                                <Icon icon={faLeaf} size={70}/>
-                                <Text style={{fontWeight: 'bold', marginLeft: 10}}>Leaf</Text>
+                                <Icon icon={faLeaf} size={70} />
+                                <Text style={{ fontWeight: 'bold', marginLeft: 10 }}>Leaf</Text>
                             </View>
-                            <Text style={{fontStyle: 'italic'}}>aka Bootleg Vine!</Text>
+                            <Text style={{ fontStyle: 'italic' }}>aka Bootleg Vine!</Text>
                             <Text> </Text>
                         </View>
 
-                        <this.Form/>
+                        <this.Form />
 
-                        <View style={{flex: 1, justifyContent: 'center'}}>
-                            <Button style={styles.btn} title={loginBtn} disabled={disableBtn} onPress={() => this.login()}/>
-                            <View style={[styles.passwordInput,{width: 200, justifyContent: 'center'}]}>
-                                <Text style={{margin: 10, width: 60}} onPress={() => this.setState(prevState => ({newUser: !prevState.newUser}))}>{otherForm}</Text>
-                                <Text style={{margin: 10}} onPress={() => this.props.navigation.push('Forgot')}>forgot password?</Text>
+                        <View style={{ flex: 1, justifyContent: 'center' }}>
+                            <Button style={styles.btn} title={loginBtn} disabled={disableBtn} onPress={() => this.login()} />
+                            <View style={[styles.passwordInput, { width: 200, justifyContent: 'center' }]}>
+                                <Text style={{ margin: 10, width: 60 }} onPress={() => this.setState(prevState => ({ newUser: !prevState.newUser }))}>{otherForm}</Text>
+                                <Text style={{ margin: 10 }} onPress={() => this.props.navigation.push('Forgot')}>forgot password?</Text>
                             </View>
                         </View>
                     </View>

@@ -44,8 +44,8 @@ export default StyleSheet.create({
         height: 80,
     },
     captureBtnInternal: {
-        width: 76,
-        height: 76,
+        width: 56,
+        height: 56,
         borderWidth: 2,
         borderRadius: 76,
         backgroundColor: "red",

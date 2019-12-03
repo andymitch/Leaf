@@ -1,156 +1,362 @@
-import React, {Component} from 'react'
-import {View, Text, FlatList, ActivityIndicator, Dimensions} from 'react-native'
-import {Container, Content, Tab, Tabs, TabHeading} from 'native-base'
+import React, { Component } from 'react'
+import { View, Text, Image, ActivityIndicator, Dimensions, StatusBar } from 'react-native'
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures'
+import { LinearGradient } from 'expo-linear-gradient'
+import { NavigationEvents } from 'react-navigation'
+import { createTransition, SlideUp, SlideDown, SlideLeft, SlideRight } from 'react-native-transition'
 
 // ICONS
-import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
-import {faStream, faFire} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
+import { faStream, faFire, faHeart as solidHeart, faTrophy, faUserFriends, faPlay } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as regHeart } from '@fortawesome/free-regular-svg-icons'
 
-import FeedCard from './FeedCard'
-const viewabilityConfig = {minimumViewTime: 2000, viewAreaCoveragePercentThreshold: 50}
-const {height: winHeight} = Dimensions.get('window')
-
+const { height: winHeight, width: winWidth } = Dimensions.get('window')
+const Transition = createTransition()
+import List from './List'
 import Axios from 'axios'
-import {AUTH_TOKEN} from './LoginRegister'
+import { AUTH_TOKEN } from './LoginRegister'
+import { Video } from 'expo-av'
+import { TouchableWithoutFeedback, TouchableOpacity } from 'react-native-gesture-handler'
 Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
+const popFeed = [{
+    id: 1,
+    liked: false,
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'popFirst',
+    content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+    caption: 'My first post!',
+    likes: 12
+}, {
+    id: 2,
+    liked: false,
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'popSecond',
+    content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+    caption: 'posty post!',
+    likes: 5
+}, {
+    id: 3,
+    liked: true,
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'popThird',
+    content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+    caption: 'yupp!',
+    likes: 13
+}, {
+    id: 4,
+    liked: false,
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'popFourth',
+    content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+    caption: 'okay boomer!',
+    likes: 20
+}]
+const folFeed = [{
+    id: 1,
+    liked: false,
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'folFirst',
+    content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+    caption: 'My first post!',
+    likes: 12
+}, {
+    id: 2,
+    liked: false,
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'folSecond',
+    content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+    caption: 'posty post!',
+    likes: 5
+}, {
+    id: 3,
+    liked: true,
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'folThird',
+    content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+    caption: 'yupp!',
+    likes: 13
+}, {
+    id: 4,
+    liked: false,
+    profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+    name: 'folFourth',
+    content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+    caption: 'okay boomer!',
+    likes: 20
+}]
 
-class FeedContent extends Component{
+class FeedContent extends Component {
     state = {
-        feed: [],
-        isLoading: true
+        liked: this.props.liked,
+        likes: this.props.likes,
+        play: true
     }
 
-    constructor(props) {
-        super(props)
-        this.cellRefs = {}
-    }
-
-    componentDidMount = async () => {
-        await this.loadItems()
-    }
-
-    componentWillUnmount(){
-
-    }
-
-    loadItems = async () => {
-        // FOR TESTING PURPOSES
-        const _feed = new Array(5).fill({
-            profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-            name: 'BillyBob',
-            location: 'Boulder, Colorado',
-            content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
-            caption: 'My first post!',
-            likes: 12,
-            index: 0
-        })
-        const start = this.state.feed.length
-        const newFeed = _feed.map((item, i) => ({
-            ...item,
-            index: start + i,
-        }))
-        const feed = [...this.state.feed, ...newFeed]
-        this.setState({feed: feed, isLoading: false})
-        /*
-        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/${this.props.feedType}`, {})
-        .then(res => {
-            this.setState({feed: res.data, isLoading: false})
-        })
-        .catch(err => console.log(err))
-        */
-    }
-
-    handleViewableItemsChanged = props => {
-        const viewable = props.viewableItems || []
-        const changed = props.changed
-        console.log(viewable.length, changed.length)
-        changed.forEach(item => {
-            const cell = this.cellRefs[item.index]
-            if(cell){
-                console.log(item)
-                if(item.isViewable){
-                    console.log('play')
-                    cell.play()
-                }else{
-                    console.log('pause')
-                    cell.pause()
-                }
-            }
-        })
-    }
-
-    renderItem = ({item}) => {
-        console.log('rendering item')
-        this.handleViewableItemsChanged({changed: this.state.feed})
-        return(
-            <View style={{flex: 1}}>
-                <FeedCard ref={ref => {this.cellRefs[item.index] = ref}}
-                    likes={item.likes} profile={item.profile} location={item.location} content={item.content} caption={item.caption} name={item.name}/>
-            </View>
-        )
-    }
-
-    separator = () => { return <View style={{height: 1, width: '100%', backgroundColor: 'gainsboro'}}></View> }
-
-    render(){
-        if(this.state.isLoading){
-            return(
-                <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-                    <ActivityIndicator size='large' color='blue' animated/>
-                </View>
-            )
+    async componentWillUnmount() {
+        if (this.props.likes < this.state.likes) {
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.id })
+                .then(() => console.log('liked'))
+                .catch(err => console.log('Problem Liking: ' + err))
+            this.props.like(this.props.onPopular, this.props.index, 1)
+        } else if (this.props.likes > this.state.likes) {
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.id })
+                .then(() => console.log('unliked'))
+                .catch(err => console.log('Problem Unliking: ' + err))
+            this.props.like(this.props.onPopular, this.props.index, -1)
         }
-        return(
-            <FlatList style={{height: winHeight}}
-                data={this.state.feed}
-                renderItem={this.renderItem}
-                keyExtractor={item => item.index.toString()}
-                onViewableItemsChanged={this.handleViewableItemsChanged}
-                viewabilityConfig={viewabilityConfig}
-                ItemSeparatorComponent={this.separator}
-                ListEmptyComponent={() =>
-                    <Text style={{}}>
-                        Make some friends.
-                    </Text>
-                }
-            />
+    }
+
+    renderPlay = () => {
+        if (this.state.play) return null
+        return <Icon icon={faPlay} size={200} style={{ color: 'rgba(0,0,0,.2)', left: (winWidth / 2) - 80 }} />
+    }
+
+    render() {
+        const heart = this.state.liked ? solidHeart : regHeart
+        const heartColor = this.state.liked ? '#ff6781' : 'white'
+        return (
+            <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'black', width: winWidth }}>
+                <Video
+                    resizeMode='cover'
+                    shouldPlay={this.state.play}
+                    isLooping
+                    rate={1.0}
+                    volume={3.0}
+                    source={{ uri: this.props.content }}
+                    style={{ width: winWidth, height: winHeight, position: 'absolute' }}
+                />
+
+                <View style={{ width: winWidth, height: winHeight - 300, top: 100, position: 'absolute' }}>
+                    <TouchableOpacity onPress={() => { this.setState(prev => ({ play: !prev.play })) }} style={{ zIndex: 1, height: winHeight - 300, width: winWidth, alignContent: 'center', justifyContent: 'center' }}>
+                        <View style={{ width: winWidth, justifyContent: 'center' }}>
+                            {this.renderPlay()}
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
+                <LinearGradient
+                    colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
+                    style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', width: winWidth, bottom: 0, position: 'absolute', zIndex: 1, padding: 20 }}>
+                    <View style={{ flexDirection: 'column' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={{ uri: this.props.profile }} style={{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, borderColor: 'white', marginRight: 5 }} />
+                            <Text style={{ fontSize: 30, color: 'white' }}>{this.props.name}</Text>
+                        </View>
+                        <Text style={{ color: 'white' }}>{this.props.caption}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text style={{ color: 'white', fontSize: 18, marginRight: 5 }}>{this.state.likes}</Text>
+                        <TouchableOpacity onPress={() => {
+                            if (this.state.liked) this.setState(prev => ({ likes: prev.likes - 1 }))
+                            else this.setState(prev => ({ likes: prev.likes + 1 }))
+                            this.setState(prev => ({ liked: !prev.liked }))
+                        }}>
+                            <Icon icon={heart} size={30} style={{ color: heartColor }} />
+                        </TouchableOpacity>
+                    </View>
+                </LinearGradient>
+            </View>
         )
     }
 }
 
-export default class Feed extends Component{
-    render(){
-        return(
-            <FeedContent feedType='myFeed'/>
+export default class Feed extends Component {
+    state = {
+        popular: [],
+        following: [],
+        popularIndex: 0,
+        followingIndex: 0,
+        onPopular: false,
+        blurred: false,
+        isLoading: true,
+        gotoLeaderboard: false,
+        gotoFollowing: false
+    }
+
+    componentDidMount() {
+        this.getFeed(true, 'popular')
+        this.getFeed(true, 'following')
+    }
+
+    getFeed = async (refresh, from) => {
+        this.setState({ isLoading: true })
+        // FOR TESTING PURPOSES
+        if (from === 'popular') {
+            if (refresh) this.setState({ popular: popFeed })
+            else this.setState(prev => ({ popular: [...prev.popular, ...popFeed] }))
+        } else {
+            if (refresh) this.setState({ following: folFeed })
+            else this.setState(prev => ({ following: [...prev.following, ...folFeed] }))
+        }
+        this.setState({ isLoading: false })
+        /*
+        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed`, { params: { from: from } })
+            .then(res => {
+                if (from === 'popular') {
+                    if (refresh) this.setState({ popular: res.data, isLoading: false })
+                    else this.setState(prev => ({ popular: [...prev.popular, ...res.data], isLoading: false }))
+                } else {
+                    if (refresh) this.setState({ following: res.data, isLoading: false })
+                    else this.setState(prev => ({ following: [...prev.following, ...res.data], isLoading: false }))
+                }
+            }).catch(err => console.log(err))
+        */
+    }
+
+    onSwipe = gName => {
+        if (gName === swipeDirections.SWIPE_UP) {
+            if (this.state.onPopular) {
+                if (this.state.popularIndex < this.state.popular.length - 1) {
+                    this._transition.show(this.renderContent(this.state.popularIndex + 1, true), SlideUp)
+                    this.setState(prev => ({ popularIndex: prev.popularIndex + 1 }))
+                    if (this.state.popularIndex > this.state.popular.length - 3) this.getFeed(false, 'popular')
+                }
+            } else {
+                if (this.state.followingIndex < this.state.following.length - 1) {
+                    this._transition.show(this.renderContent(this.state.followingIndex + 1, false), SlideUp)
+                    this.setState(prev => ({ followingIndex: prev.followingIndex + 1 }))
+                    if (this.state.followingIndex > this.state.following.length - 3) this.getFeed(false, 'following')
+                }
+            }
+        }
+        if (gName === swipeDirections.SWIPE_DOWN) {
+            if (this.state.onPopular) {
+                if (this.state.popularIndex > 0) {
+                    this._transition.show(this.renderContent(this.state.popularIndex - 1, true), SlideDown)
+                    this.setState(prev => ({ popularIndex: prev.popularIndex - 1 }))
+                } else {
+                    this.getFeed(true, 'popular')
+                }
+            } else {
+                if (this.state.followingIndex > 0) {
+                    this._transition.show(this.renderContent(this.state.followingIndex - 1, false), SlideDown)
+                    this.setState(prev => ({ followingIndex: prev.followingIndex - 1 }))
+                } else {
+                    this.getFeed(true, 'following')
+                }
+            }
+
+        }
+    }
+
+    goBack = () => { this.setState({ gotoFollowing: false, gotoLeaderboard: false }) }
+
+    like = (isPopular, index, liked) => {
+        if (isPopular) {
+            temp = this.state.popular
+            temp[index].likes += liked
+            temp[index].liked = liked > 0 ? true : false
+            this.setState({ popular: temp })
+        } else {
+            temp = this.state.following
+            temp[index].likes += liked
+            temp[index].liked = liked > 0 ? true : false
+            this.setState({ following: temp })
+        }
+    }
+
+    loading = () => {
+        return (
+            <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'black' }}>
+                <ActivityIndicator size='large' color='blue' animated />
+            </View>
         )
-        return(
-            <Container>
-                <Content>
-                    <Tabs tabBarPosition='top' tabBarUnderlineStyle={{backgroundColor: 'blue'}}>
-                        <Tab
-                            heading={
-                                <TabHeading  style={{backgroundColor: 'white'}}>
-                                    <Text style={{marginRight: 5}}>My Feed</Text>
-                                    <Icon icon={faStream}/>
-                                </TabHeading>
-                            }
-                        >
-                            <FeedContent feedType='myFeed'/>
-                        </Tab>
-                        <Tab
-                            heading={
-                                <TabHeading style={{backgroundColor: 'white'}}>
-                                    <Text style={{marginRight: 5}}>Popular</Text>
-                                    <Icon icon={faFire}/>
-                                </TabHeading>
-                            }
-                        >
-                            <FeedContent feedType='popular'/>
-                        </Tab>
-                    </Tabs>
-                </Content>
-            </Container>
+    }
+
+    renderContent = (index, pop) => {
+        const config = { velocityThreshold: 0.3, directionalOffsetThreshold: 80 }
+        if (pop) {
+            return (
+                <GestureRecognizer onSwipe={this.onSwipe} config={config} style={{ flex: 1, backgroundColor: 'black' }}>
+                    <FeedContent like={this.like} onPopular={true} index={index} {...this.state.popular[index]} />
+                </GestureRecognizer>
+            )
+        } else {
+            return (
+                <GestureRecognizer onSwipe={this.onSwipe} config={config} style={{ flex: 1, backgroundColor: 'black' }}>
+                    <FeedContent like={this.like} onPopular={false} index={index} {...this.state.following[index]} />
+                </GestureRecognizer>
+            )
+        }
+    }
+
+    render() {
+        if (this.state.blurred) return (
+            <View>
+                <NavigationEvents
+                    onWillFocus={() => this.setState({ blurred: false })}
+                    onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false })}
+                />
+            </View>
+        )
+        if (this.state.gotoFollowing) return (
+            <View style={{ flex: 1 }}>
+                <NavigationEvents
+                    onWillFocus={() => this.setState({ blurred: false })}
+                    onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false })}
+                />
+                <List leaderboard={false} goBack={this.goBack} />
+            </View>
+
+        )
+        if (this.state.gotoLeaderboard) return (
+            <View style={{ flex: 1 }}>
+                <NavigationEvents
+                    onWillFocus={() => this.setState({ blurred: false })}
+                    onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false })}
+                />
+                <List leaderboard={true} goBack={this.goBack} />
+            </View>
+        )
+
+        const whatList = this.state.onPopular ? faTrophy : faUserFriends
+        const fColor = this.state.onPopular ? 'rgba(210,210,210,.8)' : 'white'
+        const pColor = this.state.onPopular ? 'white' : 'rgba(210,210,210,.8)'
+        return (
+            <View style={{ flex: 1 }}>
+                <NavigationEvents
+                    onWillFocus={() => this.setState({ blurred: false })}
+                    onDidBlur={() => this.setState({ blurred: true })}
+                />
+                <StatusBar hidden={false} barStyle='light-content' />
+                <View style={{ flex: 1, backgroundColor: 'black' }}>
+                    <LinearGradient colors={['rgba(0,0,0,1)', 'rgba(0,0,0,0)']} style={{ width: winWidth, zIndex: 1, position: 'absolute', top: 0 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: winWidth, padding: 20, top: 20 }}>
+                            <TouchableOpacity onPress={() => {
+                                if (this.state.onPopular) this.setState({ gotoLeaderboard: true })
+                                else this.setState({ gotoFollowing: true })
+                            }}>
+                                <Icon icon={whatList} size={30} style={{ color: 'rgba(255,255,255,.8)' }} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', width: winWidth, top: -20 }}>
+                            <TouchableWithoutFeedback style={{ flexDirection: 'row' }} onPress={() => {
+                                if (this.state.onPopular) {
+                                    this.setState({ onPopular: false })
+                                    this._transition.show(this.renderContent(this.state.followingIndex, false), SlideRight)
+                                }
+                            }}>
+                                <Icon icon={faStream} size={20} style={{ color: fColor, marginRight: 5 }} />
+                                <Text style={{ color: fColor }} >Following</Text>
+                            </TouchableWithoutFeedback>
+                            <Text style={{ color: 'white', fontSize: 30, top: -10 }}> | </Text>
+                            <TouchableWithoutFeedback style={{ flexDirection: 'row' }} onPress={() => {
+                                if (!this.state.onPopular) {
+                                    this.setState({ onPopular: true })
+                                    this._transition.show(this.renderContent(this.state.popularIndex, true), SlideLeft)
+                                }
+                            }}>
+                                <Text style={{ color: pColor }} >Popular</Text>
+                                <Icon icon={faFire} size={20} style={{ color: pColor, marginLeft: 2 }} />
+                            </TouchableWithoutFeedback>
+                        </View>
+                    </LinearGradient>
+                    <Transition ref={(node) => { this._transition = node; }}>
+                        {this.state.isLoading ? this.loading() : this.renderContent(0, false)}
+                    </Transition>
+                </View>
+            </View>
         )
     }
 }
