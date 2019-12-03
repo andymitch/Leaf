@@ -11,10 +11,9 @@ Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
 //STYLES AND ICONS
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
-import {faArrowLeft, faPaperPlane, faVolumeUp, faVolumeMute, faMapMarkerAlt, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
+import {faArrowLeft, faPaperPlane, faMicrophone, faMicrophoneSlash, faMapMarkerAlt, faInfoCircle} from '@fortawesome/free-solid-svg-icons'
 import styles from '../styles/styles'
 import {locBtn} from '../styles/style'
-
 const {width: winWidth, height: winHeight} = Dimensions.get('window')
 
 export default class Preview extends Component{
@@ -28,7 +27,7 @@ export default class Preview extends Component{
     }
 
     muteBtn = isVideo => {
-        const muteIcon = this.state.mute ? faVolumeUp : faVolumeMute
+        const muteIcon = this.state.mute ? faMicrophone : faMicrophoneSlash
         if(isVideo){
             return(
                 <TouchableOpacity onPress={() => this.setState(prev => ({mute: !prev.mute}))}>
@@ -78,8 +77,6 @@ export default class Preview extends Component{
         let uploadData = new FormData()
         if(isVideo) uploadData.append('media', {type: 'image/jpg', uri: this.state.media.uri})
         else uploadData.append('media', {type: 'video/mp4', uri: this.state.media.uri})
-        uploadDate.append('location', {type: 'text', this.state.location})
-        uploadDate.append('caption', {type: 'text', this.state.caption})
 
         await fetch('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/upload', {method: 'post', body: uploadData})
         .then(res => console.log(res.data))
