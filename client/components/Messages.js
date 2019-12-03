@@ -141,7 +141,6 @@ const chats = [
 
 class ChatItem extends Component {
     renderGroup = group => {
-        console.log(group)
         let groupStr = ''
         for(user of group) groupStr += `, ${user.name}`
         groupStr = groupStr.slice(2,groupStr.length)

@@ -46,7 +46,8 @@ export default class LoginRegister extends Component {
 
     componentWillMount = async () => {
         await getItemAsync('token').then(res => AUTH_TOKEN = res).catch(err => console.log(err))
-        if (AUTH_TOKEN) this.props.navigation.goBack()
+        console.log('token pre-login: ' + AUTH_TOKEN)
+        if (AUTH_TOKEN) this.props.navigation.push('Main')
     }
 
     validatePassword = (pass, isAgain) => {

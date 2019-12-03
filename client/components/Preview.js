@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, Dimensions, Text, TextInput, ToastAndroid, StatusBar } from 'react-native'
+import { View, TouchableOpacity, Dimensions, Text, TextInput, ToastAndroid, StatusBar, Platform } from 'react-native'
 import { Video } from 'expo-av'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import { LinearGradient } from 'expo-linear-gradient'
-import MovToMp4 from "react-native-mov-to-mp4"
+import { RNS3 } from 'react-native-aws3'
 
 //AUTH TOKEN, AXIOS
 import Axios from 'axios'

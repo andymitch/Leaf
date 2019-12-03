@@ -65,7 +65,7 @@ export default class ChatCam extends Component {
             <Camera
                 type={cameraType}
                 flashMode={flashMode}
-                style={{ backgroundColor: 'transparent', height: winHeight - 60, width: winWidth, left: 0, right: 0, top: 0, position: 'absolute' }}
+                style={{ backgroundColor: 'transparent', height: winHeight, width: winWidth, left: 0, right: 0, top: 0, position: 'absolute' }}
                 ref={camera => this.camera = camera}
                 ratio={'18:9'}
             />
@@ -78,16 +78,13 @@ export default class ChatCam extends Component {
         if (hasCameraPermission === null) return <View />
         if (hasCameraPermission === false) return <Text>Access to camera has been denied.</Text>
         return (
-            <View style={{ flex: 1, flexDirection: 'column', height: winHeight - 60, top: 0 }}>
+            <View style={{height: winHeight-100}}>
                 <NavigationEvents
                     onWillFocus={() => this.setState({ blurred: false })}
                     onDidBlur={() => this.setState({ blurred: true })}
                 />
                 <StatusBar hidden />
-                <View style={[styles.inline, { zIndex: 1, backgroundColor: 'transparent' }]}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Main')}>
-                        <Icon icon={faTimes} style={{ color: 'white' }} size={30} />
-                    </TouchableOpacity>
+                <View style={[styles.inline, { zIndex: 1, backgroundColor: 'transparent', justifyContent: 'flex-end' }]}>
                     <TouchableOpacity onPress={() => this.setFlashMode(flashMode === CameraFlashModes.torch ? CameraFlashModes.off : CameraFlashModes.torch)}>
                         <Ionicons name={flashMode == CameraFlashModes.torch ? "md-flash" : 'md-flash-off'} color="white" size={30} />
                     </TouchableOpacity>
@@ -97,7 +94,7 @@ export default class ChatCam extends Component {
 
                 <LinearGradient
                     colors={['rgba(0,0,0,0)', 'rgba(0,0,0,.8)', 'rgba(0,0,0,1)']}
-                    style={{ flexDirection: 'row', justifyContent: 'space-around', position: 'absolute', bottom: 0, width: winWidth, height: 60, alignItems: 'center' }}>
+                    style={{ flexDirection: 'row', justifyContent: 'space-around', position: 'absolute', bottom: 0, width: winWidth, height: 70, alignItems: 'center' }}>
                     <TouchableWithoutFeedback onPress={this.fromCameraRoll}>
                         <Icon icon={faImages} style={{ color: 'white' }} size={30} />
                     </TouchableWithoutFeedback>
