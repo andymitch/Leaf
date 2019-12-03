@@ -1,19 +1,5 @@
-1. Password disappears after clicking show password icon twice
-2. usernames should be lowercase
-3. front camera captures mirrored image
-4. login will take (username, email, or phone) and password
-5. optional private posts are seen by followers, all else are seen by everyone (ie. geolocation feed)
+camera timer doesn't work
 
+front camera captures invertedY to preview
 
-
-FeedCard
-
--profile picture
--location
--content (photo or video so account for both)
--caption
--like button
-
-These are the minimum elements. If you have any other ideas, go ahead and add them.
-const {width: winWidth} = Dimensions.get('window') will get you the full width of the screen so you can use the variable winWidth when you're dealing with the width of your component.
-Also note that the media will be a square so when you assign its dimensions, make sure they are equal.
+integrate light/dark mode using stylesheets
