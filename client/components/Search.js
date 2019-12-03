@@ -21,7 +21,7 @@ export default class Search extends Component{
                 // for testing
                 this.setState({searching: false})
                 /*
-                await Axios.get('', {params: {keyphrase: keyphrase}})
+                await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/search', {params: {keyphrase: keyphrase}})
                 .then(res => this.setState({results: res.data, searching: false}))
                 .catch(err => console.log(err))
                 */

@@ -86,11 +86,11 @@ export default class List extends Component {
     async componentDidMount() {
         /*
         if (this.props.leaderboard) {
-            await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/leaderboard`, {})
+            await Axios.post(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/leaderboard`, {})
                 .then(res => this.setState({ items: res.data }))
                 .catch(err => console.log(err))
         } else {
-            await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/following`, {})
+            await Axios.post(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/following`, {})
                 .then(res => this.setState({ items: res.data }))
                 .catch(err => console.log(err))
         }

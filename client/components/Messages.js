@@ -8,7 +8,6 @@ Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 import Profile from './Profile'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-const { height: winHeight, width: winWidth } = Dimensions.get('window')
 
 // FOR TESTING PURPOSES
 const requests = [
