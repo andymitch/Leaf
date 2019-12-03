@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Button, TextInput, View, FlatList, Text} from 'react-native'
 import { styles } from '../styles/style'
+import Axios from 'axios'
 
 const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
 const validUsername = /^[a-z][a-z0-9_]{4,18}$/gm
