@@ -17,6 +17,16 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       borderRadius: 20,
     },
+    change: {
+      flex: 1,
+      flexDirection: 'column',
+      marginHorizontal: 50,
+      marginVertical: 50,
+      backgroundColor: 'rgba(255, 255, 255, .9)',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 20,
+    },
     btn: {
       position: 'absolute',
       alignSelf: 'flex-end'
@@ -28,6 +38,16 @@ const styles = StyleSheet.create({
       width: 200,
       marginBottom: 10,
       padding: 10,
+      color: 'black'
+    },
+    input2: {
+      borderBottomColor: 'gray',
+      borderBottomWidth: 1,
+      height: 40,
+      width: 200,
+      marginBottom: 10,
+      padding: 10,
+      textAlign: 'center',
       color: 'black'
     },
     inputCenter: {

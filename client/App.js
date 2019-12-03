@@ -9,6 +9,8 @@ import ForgotPassword from './components/ForgotPassword'
 import Preview from './components/Preview'
 import Main from './components/Main'
 import ChatView from './components/ChatView'
+import ChangePass from './components/ChangePass'
+import Settings from './components/Settings'
 
 // HIDE WARNINGS
 console.disableYellowBox = true
@@ -19,7 +21,9 @@ const rootNav = createStackNavigator({
   Forgot: ForgotPassword,
   Preview: Preview,
   Main: Main,
-  Chat: ChatView
+  Chat: ChatView,
+  Settings: Settings,
+  ChangePass: ChangePass
 },{
   initialRouteName: 'Login',
   headerMode: 'none',
