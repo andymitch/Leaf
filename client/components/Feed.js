@@ -17,7 +17,6 @@ import Axios from 'axios'
 import { AUTH_TOKEN } from './LoginRegister'
 import { Video } from 'expo-av'
 import { TouchableWithoutFeedback, TouchableOpacity } from 'react-native-gesture-handler'
-Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
 const popFeed = [{
     id: 1,
@@ -95,12 +94,12 @@ class FeedContent extends Component {
 
     async componentWillUnmount() {
         if (this.props.likes < this.state.likes) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.id })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.id, token: AUTH_TOKEN })
                 .then(() => console.log('liked'))
                 .catch(err => console.log('Problem Liking: ' + err))
             this.props.like(this.props.onPopular, this.props.index, 1)
         } else if (this.props.likes > this.state.likes) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.id })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.id, token: AUTH_TOKEN })
                 .then(() => console.log('unliked'))
                 .catch(err => console.log('Problem Unliking: ' + err))
             this.props.like(this.props.onPopular, this.props.index, -1)
