@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Button, TextInput, TouchableOpacity, View, FlatList, Text} from 'react-native'
+import {Button, TextInput, TouchableOpacity, View, Text} from 'react-native'
 import { styles } from '../styles/style'
 import Axios from 'axios'
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
@@ -7,39 +7,21 @@ import {faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import {AUTH_TOKEN} from './LoginRegister'
 Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
-
-const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
-const validUsername = /^[a-z][a-z0-9_]{4,18}$/gm
-export class ChangePass extends Component{
+export class ChangeName extends Component{
   state = {
     current: '',
-    password: '',
-    goodPass: false,
-    passStrength: 'grey',
-    again_password: '',
-    againPassStrength: 'grey',
-    goodAgainPass: false
+    name: '',
   }
-  validatePassword = (pass, isAgain) => {
-      if (!isAgain) {
-          this.setState({ password: pass })
-          if (pass.match(validPass)) this.setState({ passStrength: 'limegreen', goodPass: true })
-          else this.setState({ passStrength: 'red', goodPass: false })
-      } else {
-          this.setState({ again_password: pass })
-          if (pass.match(validPass) && pass === this.state.password) this.setState({ againPassStrength: 'limegreen', goodAgainPass: true })
-          else this.setState({ againPassStrength: 'red', goodAgainPass: false })
-      }
-  }
+
   submit = async () => {
-    await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-password', {
+    await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-name', {
+      name: this.state.name,
       current: this.state.current,
-      password: this.state.password,
       token: AUTH_TOKEN
     }).then(res => {
         if(res.data==true){
-          console.log("pass changed")
-          alert("Your password has been changed.")
+          console.log("name changed")
+          alert("Your name has been changed.")
           this.props.navigation.goBack()
         }
         else{
@@ -47,15 +29,16 @@ export class ChangePass extends Component{
           alert("Your current password was incorrect. Please try again.")
           this.props.navigation.goBack()
         }
-    }).catch(err => console.log('Problem with changing password: ' + err));
+    }).catch(err => console.log('Problem with changing name: ' + err));
   }
+
   Form = () => {
       return (
           <View style={{ flex: 1, justifyContent: 'center'}}>
-              <Text style={{left: 30, fontSize: 17}}>Change Password</Text>
+              <Text style={{left: 42, fontSize: 17}}>Change Name</Text>
               <TextInput
                   onChangeText={current => this.setState({current: current})}
-                  style={[styles.input2, { borderBottomColor: this.state.passStrength }]}
+                  style={styles.input2}
                   autoCapitalize='none'
                   secureTextEntry='true'
                   placeholder='Current password'
@@ -63,14 +46,13 @@ export class ChangePass extends Component{
                   returnKeyType='next'
                   textContentType='password' />
               <TextInput
-                  onChangeText={pass => this.validatePassword(pass, false)}
-                  style={[styles.input2, { borderBottomColor: this.state.passStrength }]}
-                  autoCapitalize='none'
-                  secureTextEntry='true'
-                  placeholder='New Password'
+                  onChangeText={name => this.setState({ name: name })}
+                  style={styles.input2}
+                  autoCompleteType='name'
+                  autoCapitalize='words'
+                  placeholder='New Name'
                   placeholderTextColor='#999'
-                  returnKeyType='next'
-                  textContentType='password' />
+                  textContentType='name' />
               <Button style={styles.btn} title="SUBMIT" onPress={() => this.submit()} />
 
           </View>
@@ -91,4 +73,4 @@ export class ChangePass extends Component{
         )
     }
 }
-export default ChangePass
+export default ChangeName
