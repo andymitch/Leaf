@@ -112,8 +112,7 @@ class FeedContent extends Component {
     }
 
     render() {
-        const heart = this.state.liked ? solidHeart : regHeart
-        const heartColor = this.state.liked ? '#ff6781' : 'white'
+        const boltColor = this.state.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
         return (
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'black', width: winWidth }}>
                 <Video
@@ -151,7 +150,7 @@ class FeedContent extends Component {
                             else this.setState(prev => ({ likes: prev.likes + 1 }))
                             this.setState(prev => ({ liked: !prev.liked }))
                         }}>
-                            <Icon icon={heart} size={30} style={{ color: heartColor }} />
+                            <Icon icon={faBolt} size={30} style={{ color: boltColor }} />
                         </TouchableOpacity>
                     </View>
                 </LinearGradient>

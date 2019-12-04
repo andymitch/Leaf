@@ -3,3 +3,9 @@ camera timer doesn't work
 front camera captures invertedY to preview
 
 integrate light/dark mode using stylesheets
+
+dismiss keyboard on blur
+
+make text field viewable on keyboard input
+
+avoid cheating: user creates 1 second videos of nothing and gets points for them.

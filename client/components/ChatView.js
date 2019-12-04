@@ -51,7 +51,7 @@ export default class ChatView extends Component {
                     initialScrollIndex={this.state.index}
                     data={contents}
                     renderItem={({ uri, i }) => (
-                        <TouchableOpacity onPress={() => this.setState({ index: 4 })} style={{ width: 100, height: 100, backgroundColor: 'black' }}>
+                        <TouchableOpacity key={i} onPress={() => this.setState({ index: 4 })} style={{ width: 100, height: 100, backgroundColor: 'black' }}>
                             <Video resizeMode='cover' shouldPlay={false} source={{ uri: contents[0] }} style={{ width: 100, height: 100, position: 'absolute' }} />
                             <View style={{ position: 'absolute' }}>
                                 <Image source={{ uri: profiles[0] }} style={{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, borderColor: 'white' }} />
@@ -76,7 +76,7 @@ export default class ChatView extends Component {
             return (
                 <Video
                     resizeMode='cover'
-                    shouldPlay={this.state.play}
+                    shouldPlay
                     rate={1.0}
                     volume={3.0}
                     source={{ uri: this.state.messages[this.state.index].content }}
@@ -90,12 +90,12 @@ export default class ChatView extends Component {
     }
 
     render() {
+        console.log(this.state.index)
         return (
             <View style={{ flex: 1 }}>
                 <Icon icon={faTimes} style={{ color: 'white', position: 'absolute', margin: 20 }} size={30} />
                 {this.renderContent()}
                 {this.reel(this.state.messages)}
-                {/*<MessageItems messages={this.state.messages}/>*/}
             </View>
         )
     }

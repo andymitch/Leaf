@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, Dimensions, Text, TextInput, ToastAndroid, StatusBar, Platform } from 'react-native'
+import { View, TouchableOpacity, Dimensions, Text, TextInput, ToastAndroid, StatusBar, Platform, Keyboard } from 'react-native'
 import { Video } from 'expo-av'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
@@ -182,6 +182,7 @@ export default class Preview extends Component {
                         placeholder='type something...'
                         placeholderTextColor='#999'
                         spellCheck={true}
+                        returnKeyType='go'
                     />
                     <View style={{ alignSelf: 'flex-end', position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center' }}>
                         <TouchableOpacity onPress={() => this.upload()}>
