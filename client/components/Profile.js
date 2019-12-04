@@ -9,7 +9,6 @@ import { Video } from 'expo-av'
 import Axios from 'axios'
 import { AUTH_TOKEN } from './LoginRegister'
 Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
-import Settings from './Settings'
 const { height: winHeight, width: winWidth } = Dimensions.get('window')
 let following = null
 
@@ -67,7 +66,6 @@ export default class Profile extends Component {
         points: 0,
         videos: [],
         following: null,
-        onSettings: false,
         onVideo: -1,
         isLoading: true
     }
@@ -81,7 +79,7 @@ export default class Profile extends Component {
             points: 1056,
             videos: _videos,
             isLoading: false,
-            following: false
+            following: null
         })
         /*
         const username = this.props.username ? this.props.username : null
@@ -102,7 +100,7 @@ export default class Profile extends Component {
 
     componentWillUnmount() { this.follow() }
 
-    goBack = () => { this.setState({ onSettings: false, onVideo: -1 }) }
+    goBack = () => { this.setState({ onVideo: -1 }) }
 
     like = index => {
 
@@ -148,7 +146,6 @@ export default class Profile extends Component {
                 </View>
             )
         }
-        if (this.state.onSettings) return <Settings goBack={this.goBack} />
         if (this.state.onVideo+1) return <FullVideo goBack={this.goBack} like={this.like} video={this.state.videos[this.state.onVideo]}/>
         return (
             <View style={{ flex: 1, padding: 20 }}>
@@ -168,7 +165,7 @@ export default class Profile extends Component {
                     <View>
                         {this.renderFollow()}
                         {this.state.following === null &&
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.props.navigation.push('Settings')}>
                                 <Icon icon={faCog} size={30} />
                             </TouchableOpacity>
                         }
