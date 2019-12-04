@@ -14,7 +14,7 @@ import ReactNativeSettingsPage, { SwitchRow, SliderRow, SectionRow, NavigateRow,
 
 
 
-export class Settings extends Component {
+export default class Settings extends Component {
 	// TODO: implement your navigationOptions
 	state = {
 		switch: false,
@@ -57,5 +57,3 @@ export class Settings extends Component {
 		)
 	}
 }
-
-export default Settings

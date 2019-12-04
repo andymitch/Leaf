@@ -172,7 +172,7 @@ class ReqItem extends Component {
                 this.props.clear(this.props.index)
                 console.log('following')
                 /*
-                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/follow', { user: this.props.name })
+                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/follow', { username: this.props.name, follow: true })
                     .then(() => this.props.clear(this.props.index))
                     .catch(err => console.log(err))
                 */
@@ -181,7 +181,7 @@ class ReqItem extends Component {
                 this.setState({accepted: true})
                 console.log('accepted follow')
                 /*
-                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/accept', { user: this.props.name })
+                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/accept', { username: this.props.name })
                     .then(() => this.setState({ accepted: true }))
                     .catch(err => console.log(err))
                 */
