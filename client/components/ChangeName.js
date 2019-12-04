@@ -4,6 +4,8 @@ import { styles } from '../styles/style'
 import Axios from 'axios'
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons'
+import {AUTH_TOKEN} from './LoginRegister'
+Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
 export class ChangeName extends Component{
   state = {
@@ -14,7 +16,8 @@ export class ChangeName extends Component{
   submit = async () => {
     await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-name', {
       name: this.state.name,
-      current: this.state.current
+      current: this.state.current,
+      token: AUTH_TOKEN
     }).then(res => {
         if(res.data==true){
           console.log("name changed")

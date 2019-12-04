@@ -4,6 +4,8 @@ import { styles } from '../styles/style'
 import Axios from 'axios'
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons'
+import {AUTH_TOKEN} from './LoginRegister'
+Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
 
 const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
@@ -31,7 +33,9 @@ export class ChangePass extends Component{
   }
   submit = async () => {
     await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-password', {
-      password: this.state.password
+      current: this.state.current,
+      password: this.state.password,
+      token: AUTH_TOKEN
     }).then(res => {
         if(res.data==true){
           console.log("pass changed")

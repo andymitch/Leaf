@@ -4,6 +4,8 @@ import { styles } from '../styles/style'
 import Axios from 'axios'
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons'
+import {AUTH_TOKEN} from './LoginRegister'
+Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
 const validUsername = /^[a-z][a-z0-9_]{4,18}$/gm
 
@@ -29,7 +31,8 @@ export class ChangeUser extends Component{
   submit = async () => {
     await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-password', {
       current: this.state.current,
-      username: this.state.username
+      username: this.state.username,
+      token: AUTH_TOKEN
     }).then(res => {
         if(res.data==true){
           console.log("username changed")

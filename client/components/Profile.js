@@ -166,7 +166,7 @@ export default class Profile extends Component {
                     </View>
                     <View>
                         {this.renderFollow()}
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.push('Settings')}>
                             <Icon icon={faCog} size={30} />
                         </TouchableOpacity>
                     </View>
