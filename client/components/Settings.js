@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { View, FlatList, Text } from 'react-native'
+import { View, TouchableOpacity, FlatList, Text } from 'react-native'
 import ReactNativeSettingsPage, { SwitchRow, SliderRow, SectionRow, NavigateRow, CheckRow } from 'react-native-settings-page';
+import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
+import {faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -24,20 +26,27 @@ export default class Settings extends Component {
 	}
 	render() {
 		return (
-			<ReactNativeSettingsPage style={{ top: 50 }}>
-				<SectionRow text='Settings' style={{ justifyContent: 'center' }}>
-					<NavigateRow
-						text='Change Name'
-						onPressCallback={this._navigateToName} />
-					<NavigateRow
-						text='Change Username'
-						onPressCallback={this._navigateToUser} />
-					<NavigateRow
-						text='Change Password'
-						onPressCallback={this._navigateToPass} />
-					
-				</SectionRow>
-			</ReactNativeSettingsPage>
+      <View style={{flex: 1, flexDirection: "column"}}>
+        <View style={{zIndex: 1,top:47,alignSelf: "flex-start"}}>
+            <TouchableOpacity onPress={() => this.props.navigation.pop()}>
+                <Icon icon={faArrowLeft} style={{color: 'black'}} size={30}/>
+            </TouchableOpacity>
+        </View>
+  			<ReactNativeSettingsPage style={{ top: 50 }}>
+  				<SectionRow text='             Settings' style={{ alignSelf: "flex-end" }}>
+  					<NavigateRow
+  						text='Change Name'
+  						onPressCallback={this._navigateToName} />
+  					<NavigateRow
+  						text='Change Username'
+  						onPressCallback={this._navigateToUser} />
+  					<NavigateRow
+  						text='Change Password'
+  						onPressCallback={this._navigateToPass} />
+
+  				</SectionRow>
+  			</ReactNativeSettingsPage>
+      </View>
 		)
 	}
 }
