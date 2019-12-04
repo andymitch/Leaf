@@ -7,7 +7,7 @@ import { createTransition, SlideUp, SlideDown, SlideLeft, SlideRight } from 'rea
 
 // ICONS
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
-import { faStream, faFire, faHeart as solidHeart, faTrophy, faUserFriends, faPlay, faBolt } from '@fortawesome/free-solid-svg-icons'
+import { faStream, faFire, faHeart as solidHeart, faTrophy, faUserFriends, faPlay } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as regHeart } from '@fortawesome/free-regular-svg-icons'
 
 const { height: winHeight, width: winWidth } = Dimensions.get('window')
@@ -17,7 +17,6 @@ import Axios from 'axios'
 import { AUTH_TOKEN } from './LoginRegister'
 import { Video } from 'expo-av'
 import { TouchableWithoutFeedback, TouchableOpacity } from 'react-native-gesture-handler'
-Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
 const popFeed = [{
     id: 1,
@@ -95,12 +94,12 @@ class FeedContent extends Component {
 
     async componentWillUnmount() {
         if (this.props.likes < this.state.likes) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.id })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.id, token: AUTH_TOKEN })
                 .then(() => console.log('liked'))
                 .catch(err => console.log('Problem Liking: ' + err))
             this.props.like(this.props.onPopular, this.props.index, 1)
         } else if (this.props.likes > this.state.likes) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.id })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.id, token: AUTH_TOKEN })
                 .then(() => console.log('unliked'))
                 .catch(err => console.log('Problem Unliking: ' + err))
             this.props.like(this.props.onPopular, this.props.index, -1)
@@ -113,7 +112,8 @@ class FeedContent extends Component {
     }
 
     render() {
-        const boltColor = this.state.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
+        const heart = this.state.liked ? solidHeart : regHeart
+        const heartColor = this.state.liked ? '#ff6781' : 'white'
         return (
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: 'black', width: winWidth }}>
                 <Video
@@ -151,7 +151,7 @@ class FeedContent extends Component {
                             else this.setState(prev => ({ likes: prev.likes + 1 }))
                             this.setState(prev => ({ liked: !prev.liked }))
                         }}>
-                            <Icon icon={faBolt} size={30} style={{ color: boltColor }} />
+                            <Icon icon={heart} size={30} style={{ color: heartColor }} />
                         </TouchableOpacity>
                     </View>
                 </LinearGradient>
