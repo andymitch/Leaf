@@ -1,54 +1,52 @@
 import React, {Component} from 'react'
-import {Button, TextInput, TouchableOpacity, View, FlatList, Text} from 'react-native'
+import {Button, TextInput, View, TouchableOpacity, FlatList, Text} from 'react-native'
 import { styles } from '../styles/style'
 import Axios from 'axios'
 import {FontAwesomeIcon as Icon} from '@fortawesome/react-native-fontawesome'
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 
-
-const validPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
 const validUsername = /^[a-z][a-z0-9_]{4,18}$/gm
-export class ChangePass extends Component{
+
+export class ChangeUser extends Component{
   state = {
     current: '',
-    password: '',
-    goodPass: false,
-    passStrength: 'grey',
-    again_password: '',
-    againPassStrength: 'grey',
-    goodAgainPass: false
+    goodUsername: false,
+    username: ''
   }
-  validatePassword = (pass, isAgain) => {
-      if (!isAgain) {
-          this.setState({ password: pass })
-          if (pass.match(validPass)) this.setState({ passStrength: 'limegreen', goodPass: true })
-          else this.setState({ passStrength: 'red', goodPass: false })
-      } else {
-          this.setState({ again_password: pass })
-          if (pass.match(validPass) && pass === this.state.password) this.setState({ againPassStrength: 'limegreen', goodAgainPass: true })
-          else this.setState({ againPassStrength: 'red', goodAgainPass: false })
-      }
+  validateUsername = async str => {
+      this.setState({ username: str })
+      console.log(str)
+      if (str.match(validUsername)) {
+          await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/check-username', { username: str })
+              .then(res => { console.log(res.data.body); this.setState({ goodUsername: res.data.body }) })
+              .catch(err => console.log(err));
+      } else this.setState({ goodUsername: false })
   }
+  _navigateBack = () => {
+		const { navigation } = this.props
+		navigation.navigate('Settings');
+	}
   submit = async () => {
     await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-password', {
-      password: this.state.password
+      current: this.state.current,
+      username: this.state.username
     }).then(res => {
         if(res.data==true){
-          console.log("pass changed")
-          alert("Your password has been changed.")
-          this.props.navigation.goBack()
+          console.log("username changed")
+          alert("Your username has been changed.")
+          this._navigateBack()
         }
         else{
           console.log("not changed")
           alert("Your current password was incorrect. Please try again.")
-          this.props.navigation.goBack()
+          this._navigateBack()
         }
-    }).catch(err => console.log('Problem with changing password: ' + err));
+    }).catch(err => console.log('Problem with changing username: ' + err));
   }
   Form = () => {
       return (
           <View style={{ flex: 1, justifyContent: 'center'}}>
-              <Text style={{left: 30, fontSize: 17}}>Change Password</Text>
+              <Text style={{left: 30, fontSize: 17}}>Change Username</Text>
               <TextInput
                   onChangeText={current => this.setState({current: current})}
                   style={[styles.input2, { borderBottomColor: this.state.passStrength }]}
@@ -59,14 +57,12 @@ export class ChangePass extends Component{
                   returnKeyType='next'
                   textContentType='password' />
               <TextInput
-                  onChangeText={pass => this.validatePassword(pass, false)}
-                  style={[styles.input2, { borderBottomColor: this.state.passStrength }]}
-                  autoCapitalize='none'
-                  secureTextEntry='true'
-                  placeholder='New Password'
+                  onChangeText={username => this.validateUsername(username)}
+                  style={styles.input2}
+                  placeholder='New Username'
                   placeholderTextColor='#999'
-                  returnKeyType='next'
-                  textContentType='password' />
+                  autoCapitalize='none'
+                  textContentType='username' />
               <Button style={styles.btn} title="SUBMIT" onPress={() => this.submit()} />
 
           </View>
@@ -87,4 +83,4 @@ export class ChangePass extends Component{
         )
     }
 }
-export default ChangePass
+export default ChangeUser
