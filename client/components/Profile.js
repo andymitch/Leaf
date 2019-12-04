@@ -9,7 +9,6 @@ import { Video } from 'expo-av'
 import Axios from 'axios'
 import { AUTH_TOKEN } from './LoginRegister'
 Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
-import Settings from './Settings'
 const { height: winHeight, width: winWidth } = Dimensions.get('window')
 let following = null
 
@@ -42,14 +41,14 @@ class FullVideo extends Component{
         const video = this.props.video
         const boltColor = video.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
         return(
-            <View style={{height: winHeight, width: winWidth}}>
-                <View style={{position: 'absolute', margin: 20}}>
+            <View style={{height: winHeight, width: winWidth, backgroundColor: 'rgba(0, 0, 255, .5)'}}>
+                <View style={{position: 'absolute', margin: 20, backgroundColor: 'green'}}>
                     <Icon icon={faArrowLeft} style={{color: 'white'}} size={30}/>
                 </View>
                 <Video source={{ uri: video.uri }} resizeMode='cover' isLooping shouldPlay style={{ width: winWidth, height: winHeight, position: 'absolute' }} />
                 <View style={{width: '100%', bottom: 20, justifyContent: 'space-between'}}>
                     <Text>{video.caption}</Text>
-                    <View>
+                    <View style={{backgroundColor: 'red'}}>
                         <Text style={{ color: 'white' }}>{video.life}</Text>
                         <Icon icon={faBolt} style={{ color: boltColor }} size={30} />
                     </View>
@@ -67,7 +66,6 @@ export default class Profile extends Component {
         points: 0,
         videos: [],
         following: null,
-        onSettings: false,
         onVideo: -1,
         isLoading: true
     }
@@ -80,7 +78,8 @@ export default class Profile extends Component {
             fullname: 'Andrew Mitchell',
             points: 1056,
             videos: _videos,
-            isLoading: false
+            isLoading: false,
+            following: null
         })
         /*
         const username = this.props.username ? this.props.username : null
@@ -101,7 +100,7 @@ export default class Profile extends Component {
 
     componentWillUnmount() { this.follow() }
 
-    goBack = () => { this.setState({ onSettings: false, onVideo: -1 }) }
+    goBack = () => { this.setState({ onVideo: -1 }) }
 
     like = index => {
 
@@ -120,7 +119,7 @@ export default class Profile extends Component {
         const followColor = this.state.following ? 'lightgrey' : 'cadetblue'
         const followText = this.state.following ? 'UNFOLLOW' : 'FOLLOW'
         return (
-            <TouchableOpacity style={{ backgroundColor: followColor, margin: 5, paddingHorizontal: 10, paddingVertical: 5 }} onPress={() => this.setState(prev => ({ following: !prev.following }))}>
+            <TouchableOpacity style={{ backgroundColor: followColor, margin: 5, paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10 }} onPress={() => this.setState(prev => ({ following: !prev.following }))}>
                 <Text>{followText}</Text>
             </TouchableOpacity>
         )
@@ -147,7 +146,6 @@ export default class Profile extends Component {
                 </View>
             )
         }
-        if (this.state.onSettings) return <Settings goBack={this.goBack} />
         if (this.state.onVideo+1) return <FullVideo goBack={this.goBack} like={this.like} video={this.state.videos[this.state.onVideo]}/>
         return (
             <View style={{ flex: 1, padding: 20 }}>
@@ -166,9 +164,11 @@ export default class Profile extends Component {
                     </View>
                     <View>
                         {this.renderFollow()}
-                        <TouchableOpacity onPress={() => this.props.navigation.push('Settings')}>
-                            <Icon icon={faCog} size={30} />
-                        </TouchableOpacity>
+                        {this.state.following === null &&
+                            <TouchableOpacity onPress={() => this.props.navigation.push('Settings')}>
+                                <Icon icon={faCog} size={30} />
+                            </TouchableOpacity>
+                        }
                     </View>
                 </View>
                 <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
