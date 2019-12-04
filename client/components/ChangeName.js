@@ -19,17 +19,18 @@ export class ChangeName extends Component{
       current: this.state.current,
       token: AUTH_TOKEN
     }).then(res => {
-        if(res.data==true){
+        if(res.data.body==true){
           console.log("name changed")
           alert("Your name has been changed.")
           this.props.navigation.goBack()
         }
         else{
+          console.log(res.data)
           console.log("not changed")
           alert("Your current password was incorrect. Please try again.")
           this.props.navigation.goBack()
         }
-    }).catch(err => console.log('Problem with changing name: ' + err));
+    }).catch(err => console.log('Problem with changing name: ' + JSON.stringify(err.response)));
   }
 
   Form = () => {

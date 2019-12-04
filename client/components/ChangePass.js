@@ -37,7 +37,7 @@ export class ChangePass extends Component{
       password: this.state.password,
       token: AUTH_TOKEN
     }).then(res => {
-        if(res.data==true){
+        if(res.data.body==true){
           console.log("pass changed")
           alert("Your password has been changed.")
           this.props.navigation.goBack()
@@ -48,7 +48,7 @@ export class ChangePass extends Component{
           this.props.navigation.goBack()
         }
     }).catch(err => console.log('Problem with changing password: ' + err));
-  }
+  } 
   Form = () => {
       return (
           <View style={{ flex: 1, justifyContent: 'center'}}>

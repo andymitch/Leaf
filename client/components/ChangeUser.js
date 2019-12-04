@@ -29,12 +29,13 @@ export class ChangeUser extends Component{
 		navigation.navigate('Settings');
 	}
   submit = async () => {
-    await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-password', {
+    await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-username', {
       current: this.state.current,
       username: this.state.username,
       token: AUTH_TOKEN
     }).then(res => {
-        if(res.data==true){
+      console.log(AUTH_TOKEN)
+        if(res.data.body==true){
           console.log("username changed")
           alert("Your username has been changed.")
           this._navigateBack()
