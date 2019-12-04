@@ -133,8 +133,8 @@ export default class Preview extends Component {
 
     render() {
         return (
-            <View style={{ flex: 1, flexDirection: 'column', alignContent: 'space-between' }}>
-                <StatusBar hidden />
+            <View style={{ flex: 1, flexDirection: 'column', alignContent: 'space-between', paddingTop: 20 }}>
+                <StatusBar hidden={false}/>
                 <View style={[styles.inline, { zIndex: 1 }]}>
                     <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                         <Icon icon={faArrowLeft} style={{ color: 'white' }} size={30} />

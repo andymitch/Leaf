@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, ActivityIndicator, Dimensions, StatusBar } from 'react-native'
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures'
-import { LinearGradient } from 'expo-linear-gradient'
-import { NavigationEvents } from 'react-navigation'
-import { createTransition, SlideUp, SlideDown, SlideLeft, SlideRight } from 'react-native-transition'
+import { View, Text, Image, ActivityIndicator, StatusBar } from 'react-native'
 
 // ICONS
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
@@ -41,26 +37,30 @@ class Avatar extends Component {
     render() {
         return (
             <View style={{ margin: 10, justifyContent: 'center' }}>
-                <Image source={{ uri: this.props.item.profile }} style={{ height: 50, width: 50, borderRadius: 25, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
-                <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{this.props.item.name}</Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <Icon icon={faGem} size={15} style={{ marginRight: 2 }} />
-                    <Text>{this.props.item.points}</Text>
-                </View>
+                <TouchableOpacity onPress={() => this.props.goto(this.props.item.name)}>
+                    <Image source={{ uri: this.props.item.profile }} style={{ height: 50, width: 50, borderRadius: 25, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
+                    <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{this.props.item.name}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                        <Icon icon={faGem} size={15} style={{ marginRight: 2 }} />
+                        <Text>{this.props.item.points}</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         )
     }
 }
 
 class Leaderboard extends Component {
+    goto = username => { this.props.goto(username) }
+
     render() {
         return (
             <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row' }}>
                 {this.props.items.map((item, index) => {
                     return (
-                        <View style={{ flexDirection: 'row' }}>
+                        <View key={index} style={{ flexDirection: 'row' }}>
                             <Text style={{ marginRight: 2 }}>{index + 1}.</Text>
-                            <Avatar item={item} />
+                            <Avatar goto={this.goto} item={item} />
                         </View>
                     )
                 })}
@@ -70,10 +70,12 @@ class Leaderboard extends Component {
 }
 
 class Following extends Component {
+    goto = username => { this.props.goto(username) }
+
     render() {
         return (
             <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row' }}>
-                {this.props.items.map(item => { return <Avatar item={item} /> })}
+                {this.props.items.map((item, index) => { return <Avatar goto={this.goto} key={index} item={item} /> })}
             </View>
         )
     }
@@ -100,34 +102,39 @@ export default class List extends Component {
         */
     }
 
+    goto = username => { this.props.gotoProfile(username) }
+
     render() {
         if (this.state.isLoading) {
             return (
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'black' }}>
+                    <StatusBar hidden={false} barStyle='dark-content'/>
                     <ActivityIndicator size='large' color='blue' animated />
                 </View>
             )
         }
         if (this.props.leaderboard) return (
-            <View style={{ flex: 1, flexDirection: 'column', padding: 20 }}>
+            <View style={{ flex: 1, flexDirection: 'column', margin: 20, paddingTop: 20 }}>
+                <StatusBar hidden={false} barStyle='dark-content'/>
                 <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <TouchableOpacity onPress={() => this.props.goBack()}>
                         <Icon icon={faArrowLeft} size={30} />
                     </TouchableOpacity>
                     <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Leaderboard</Text>
                 </View>
-                <Leaderboard items={this.state.items} />
+                <Leaderboard goto={this.goto} items={this.state.items} />
             </View>
         )
         return (
-            <View style={{ flex: 1, flexDirection: 'column', margin: 20 }}>
+            <View style={{ flex: 1, flexDirection: 'column', margin: 20, paddingTop: 20 }}>
+                <StatusBar hidden={false} barStyle='dark-content'/>
                 <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <TouchableOpacity onPress={() => this.props.goBack()}>
                         <Icon icon={faArrowLeft} size={30} />
                     </TouchableOpacity>
                     <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Following</Text>
                 </View>
-                <Following items={this.state.items} />
+                <Following goto={this.goto} items={this.state.items} />
             </View>
         )
     }

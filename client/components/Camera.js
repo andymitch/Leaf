@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Dimensions, Platform, StatusBar } from 'react-native'
+import { View, Text, TouchableOpacity, TouchableWithoutFeedback, Dimensions, StatusBar } from 'react-native'
 import { Camera } from 'expo-camera'
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
@@ -85,7 +85,7 @@ export default class CameraView extends React.Component {
                     onWillFocus={() => this.setState({ blurred: false })}
                     onDidBlur={() => this.setState({ blurred: true })}
                 />
-                <StatusBar hidden/>
+                <StatusBar hidden={false}/>
                 <View style={[styles.inline, { zIndex: 1, backgroundColor: 'transparent' }]}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Main')}>
                         <Icon icon={faTimes} style={{ color: 'white' }} size={30} />

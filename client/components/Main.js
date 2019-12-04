@@ -14,7 +14,7 @@ import Camera from './Camera'
 
 
 const getTabBarIcon = (navigation, focused) => {
-    const tint = focused ? 'white' : '#ddd'
+    const tint = focused ? 'white' : '#bbb'
     switch (navigation.state.routeName) {
         case 'Home': return <Icon icon={faHome} size={30} color={tint} />
         case 'Search': return <Icon icon={faSearch} size={30} color={tint} />

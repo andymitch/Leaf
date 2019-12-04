@@ -1,20 +1,42 @@
 import React, { Component } from 'react'
-import { View, Image, Text, ActivityIndicator, Dimensions } from 'react-native'
+import { View, Image, Text, ActivityIndicator, Dimensions, StatusBar } from 'react-native'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
-import { faCog, faBolt, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faBolt, faArrowLeft, faFire } from '@fortawesome/free-solid-svg-icons'
 import { faGem } from '@fortawesome/free-regular-svg-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { NavigationEvents } from 'react-navigation'
 import { Video } from 'expo-av'
+
 import Axios from 'axios'
 import { AUTH_TOKEN } from './LoginRegister'
 Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
+
 const { height: winHeight, width: winWidth } = Dimensions.get('window')
 let following = null
 
-
 // FOR TESTING PURPOSES
 const _videos = [
+    {
+        id: 111,
+        liked: null,
+        uri: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+        caption: 'this is my caption!',
+        life: 3
+    }, {
+        id: 111,
+        liked: null,
+        uri: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+        caption: 'this is my caption!',
+        life: 3
+    }, {
+        id: 111,
+        liked: null,
+        uri: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
+        caption: 'this is my caption!',
+        life: 3
+    }
+]
+const otherVideos = [
     {
         id: 111,
         liked: false,
@@ -36,21 +58,34 @@ const _videos = [
     }
 ]
 
-class FullVideo extends Component{
-    render(){
+class FullVideo extends Component {
+    state = {
+        liked: this.props.video.liked
+    }
+
+    async componentWillUnmount() {
+        if (this.props.video.liked && !this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.video.id }).catch(err => console.log(err))
+        else if (!this.props.video.liked && this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.video.id }).catch(err => console.log(err))
+    }
+
+    render() {
         const video = this.props.video
-        const boltColor = video.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
-        return(
-            <View style={{height: winHeight, width: winWidth, backgroundColor: 'rgba(0, 0, 255, .5)'}}>
-                <View style={{position: 'absolute', margin: 20, backgroundColor: 'green'}}>
-                    <Icon icon={faArrowLeft} style={{color: 'white'}} size={30}/>
-                </View>
+        const boltColor = this.state.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
+        return (
+            <View style={{ height: '100%', width: '100%' }}>
                 <Video source={{ uri: video.uri }} resizeMode='cover' isLooping shouldPlay style={{ width: winWidth, height: winHeight, position: 'absolute' }} />
-                <View style={{width: '100%', bottom: 20, justifyContent: 'space-between'}}>
-                    <Text>{video.caption}</Text>
-                    <View style={{backgroundColor: 'red'}}>
-                        <Text style={{ color: 'white' }}>{video.life}</Text>
-                        <Icon icon={faBolt} style={{ color: boltColor }} size={30} />
+                <View style={{ position: 'absolute', margin: 20, marginTop: 40 }}>
+                    <TouchableOpacity onPress={() => this.props.goBack()} >
+                        <Icon icon={faArrowLeft} style={{ color: 'white' }} size={40} />
+                    </TouchableOpacity>
+                </View>
+                <View style={{ width: '100%', bottom: 0, justifyContent: 'space-between', position: 'absolute', flexDirection: 'row', padding: 20 }}>
+                    <Text style={{ color: 'white', fontSize: 18 }}>{video.caption}</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text style={{ color: 'white', fontSize: 18 }}>{video.life}</Text>
+                        <TouchableOpacity onPress={() => { if (this.state.liked !== null) { this.setState(prev => ({ liked: !prev.liked })); this.props.like(this.props.index) } }}>
+                            <Icon icon={faBolt} style={{ color: boltColor }} size={50} />
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -72,17 +107,31 @@ export default class Profile extends Component {
 
     async componentDidMount() {
         // FOR TESTING PURPOSES
-        this.setState({
-            profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-            username: 'andymitch559',
-            fullname: 'Andrew Mitchell',
-            points: 1056,
-            videos: _videos,
-            isLoading: false,
-            following: null
-        })
+        if (this.props.username === undefined) {
+            this.setState({
+                profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+                username: 'andymitch559',
+                fullname: 'Andrew Mitchell',
+                points: 1056,
+                streak: 3,
+                videos: _videos,
+                isLoading: false,
+                following: null
+            })
+        } else {
+            this.setState({
+                profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+                username: 'BillyBob',
+                fullname: 'Billy Bob',
+                points: 103,
+                videos: otherVideos,
+                streak: 1,
+                isLoading: false,
+                following: false
+            })
+        }
         /*
-        const username = this.props.username ? this.props.username : null
+        const username = this.props.username === undefined ? null : this.props.username
         await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/profile', { params: { username: username } })
             .then(res => {
                 this.setState({
@@ -90,6 +139,7 @@ export default class Profile extends Component {
                     username: res.data.username,
                     fullname: res.data.fullname,
                     points: res.data.points,
+                    streak: res.data.streak,
                     videos: res.data.videos,
                     following: res.data.following
                 })
@@ -103,7 +153,15 @@ export default class Profile extends Component {
     goBack = () => { this.setState({ onVideo: -1 }) }
 
     like = index => {
-
+        let temp = this.state.videos
+        if (temp[index].liked) {
+            temp[index].liked = false
+            temp[index].likes -= 1
+        } else {
+            temp[index].liked = true
+            temp[index].likes += 1
+        }
+        this.setState({ videos: temp })
     }
 
     follow = async () => {
@@ -115,7 +173,6 @@ export default class Profile extends Component {
     }
 
     renderFollow = () => {
-        if (this.state.following === null) return null
         const followColor = this.state.following ? 'lightgrey' : 'cadetblue'
         const followText = this.state.following ? 'UNFOLLOW' : 'FOLLOW'
         return (
@@ -125,11 +182,26 @@ export default class Profile extends Component {
         )
     }
 
+    renderStreak = () => {
+        if (this.state.streak == 1) return null
+        const streak = `x${this.state.streak}`
+        return (
+            <View style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ position: 'absolute', zIndex: 1 }}>
+                    <Text style={{ fontWeight: 'bold', bottom: -2, fontSize: 10 }}>{streak}</Text>
+                </View>
+                <View style={{ position: 'absolute', zIndex: 0 }}>
+                    <Icon icon={faFire} size={20} style={{ color: 'rgba(255,69,0,.7)' }} />
+                </View>
+            </View>
+        )
+    }
+
     renderVideoItem = (video, index) => {
         const boltColor = video.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
         return (
-            <TouchableOpacity onPress={() => this.setState({onVideo: index})} style={{ width: (winWidth / 2) - 40, height: (winWidth / 2) - 40 }}>
-                <Video source={{ uri: video.uri }} resizeMode='cover' isLooping isMuted shouldPlay style={{ width: (winWidth / 2) - 40, height: (winWidth / 2) - 40, position: 'absolute' }} />
+            <TouchableOpacity key={index} onPress={() => this.setState({ onVideo: index })} style={{ width: (winWidth / 2) - 40, height: (winWidth / 2) - 40, margin: 5, borderRadius: 5 }}>
+                <Video source={{ uri: video.uri }} resizeMode='cover' isLooping isMuted shouldPlay style={{ width: (winWidth / 2) - 40, height: (winWidth / 2) - 40, position: 'absolute', borderRadius: 5 }} />
                 <View style={{ position: 'absolute', bottom: 0, right: 0, margin: 10, flexDirection: 'row' }}>
                     <Text style={{ color: 'white' }}>{video.life}</Text>
                     <Icon icon={faBolt} style={{ color: boltColor }} />
@@ -142,14 +214,21 @@ export default class Profile extends Component {
         if (this.state.isLoading) {
             return (
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'black' }}>
+                    <StatusBar hidden={false}/>
                     <ActivityIndicator size='large' color='blue' animated />
                 </View>
             )
         }
-        if (this.state.onVideo+1) return <FullVideo goBack={this.goBack} like={this.like} video={this.state.videos[this.state.onVideo]}/>
+        if (this.state.onVideo + 1) return <FullVideo index={this.state.onVideo} following={this.state.following} goBack={this.goBack} like={this.like} video={this.state.videos[this.state.onVideo]} />
         return (
-            <View style={{ flex: 1, padding: 20 }}>
+            <View style={{ flex: 1, padding: 20, paddingTop: 40 }}>
+                <StatusBar hidden={false} barStyle='dark-content'/>
                 <NavigationEvents onDidBlur={() => this.follow()} />
+                {this.state.following !== null &&
+                    <TouchableOpacity onPress={() => this.props.goBack()}>
+                        <Icon icon={faArrowLeft} size={35} style={{margin: 10, marginTop: 0}}/>
+                    </TouchableOpacity>
+                }
                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row' }}>
                         <Image source={{ uri: this.state.profile }} style={{ height: 70, width: 70, borderRadius: 45, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
@@ -157,13 +236,14 @@ export default class Profile extends Component {
                             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{this.state.username}</Text>
                             <Text style={{ fontSize: 15, fontStyle: 'italic', color: 'grey' }}>{this.state.fullname}</Text>
                             <View style={{ flexDirection: 'row' }}>
+                                {this.renderStreak()}
                                 <Icon icon={faGem} size={20} />
                                 <Text>{this.state.points}</Text>
                             </View>
                         </View>
                     </View>
                     <View>
-                        {this.renderFollow()}
+                        {this.state.following !== null && this.renderFollow()}
                         {this.state.following === null &&
                             <TouchableOpacity onPress={() => this.props.navigation.push('Settings')}>
                                 <Icon icon={faCog} size={30} />
@@ -171,7 +251,7 @@ export default class Profile extends Component {
                         }
                     </View>
                 </View>
-                <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
+                <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
                     {this.state.videos.map((video, index) => this.renderVideoItem(video, index))}
                 </View>
             </View>

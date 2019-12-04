@@ -7,12 +7,12 @@ import { createTransition, SlideUp, SlideDown, SlideLeft, SlideRight } from 'rea
 
 // ICONS
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
-import { faStream, faFire, faHeart as solidHeart, faTrophy, faUserFriends, faPlay, faBolt } from '@fortawesome/free-solid-svg-icons'
-import { faHeart as regHeart } from '@fortawesome/free-regular-svg-icons'
+import { faStream, faFire, faTrophy, faUserFriends, faPlay, faBolt } from '@fortawesome/free-solid-svg-icons'
 
 const { height: winHeight, width: winWidth } = Dimensions.get('window')
 const Transition = createTransition()
 import List from './List'
+import Profile from './Profile'
 import Axios from 'axios'
 import { AUTH_TOKEN } from './LoginRegister'
 import { Video } from 'expo-av'
@@ -138,10 +138,10 @@ class FeedContent extends Component {
                     colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
                     style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', width: winWidth, bottom: 0, position: 'absolute', zIndex: 1, padding: 20 }}>
                     <View style={{ flexDirection: 'column' }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={() => this.props.gotoProfile(this.props.name)} style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={{ uri: this.props.profile }} style={{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, borderColor: 'white', marginRight: 5 }} />
                             <Text style={{ fontSize: 30, color: 'white' }}>{this.props.name}</Text>
-                        </View>
+                        </TouchableOpacity>
                         <Text style={{ color: 'white' }}>{this.props.caption}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
@@ -170,7 +170,8 @@ export default class Feed extends Component {
         blurred: false,
         isLoading: true,
         gotoLeaderboard: false,
-        gotoFollowing: false
+        gotoFollowing: false,
+        gotoProfile: null
     }
 
     componentDidMount() {
@@ -239,7 +240,9 @@ export default class Feed extends Component {
         }
     }
 
-    goBack = () => { this.setState({ gotoFollowing: false, gotoLeaderboard: false }) }
+    goBack = () => { this.setState({ gotoFollowing: false, gotoLeaderboard: false, gotoProfile: null }) }
+
+    gotoProfile = username => { this.setState({ gotoProfile: username }) }
 
     like = (isPopular, index, liked) => {
         if (isPopular) {
@@ -268,35 +271,44 @@ export default class Feed extends Component {
         if (pop) {
             return (
                 <GestureRecognizer onSwipe={this.onSwipe} config={config} style={{ flex: 1, backgroundColor: 'black' }}>
-                    <FeedContent like={this.like} onPopular={true} index={index} {...this.state.popular[index]} />
+                    <FeedContent gotoProfile={this.gotoProfile} like={this.like} onPopular={true} index={index} {...this.state.popular[index]} />
                 </GestureRecognizer>
             )
         } else {
             return (
                 <GestureRecognizer onSwipe={this.onSwipe} config={config} style={{ flex: 1, backgroundColor: 'black' }}>
-                    <FeedContent like={this.like} onPopular={false} index={index} {...this.state.following[index]} />
+                    <FeedContent gotoProfile={this.gotoProfile} like={this.like} onPopular={false} index={index} {...this.state.following[index]} />
                 </GestureRecognizer>
             )
         }
     }
 
     render() {
-        if(this.state.isLoading) return this.loading()
+        if (this.state.isLoading) return this.loading()
         if (this.state.blurred) return (
             <View>
                 <NavigationEvents
                     onWillFocus={() => this.setState({ blurred: false })}
-                    onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false })}
+                    onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false, gotoProfile: null })}
                 />
+            </View>
+        )
+        if (this.state.gotoProfile !== null) return (
+            <View style={{ flex: 1 }}>
+                <NavigationEvents
+                    onWillFocus={() => this.setState({ blurred: false })}
+                    onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false, gotoProfile: null })}
+                />
+                <Profile username={this.state.gotoProfile} goBack={this.goBack} />
             </View>
         )
         if (this.state.gotoFollowing) return (
             <View style={{ flex: 1 }}>
                 <NavigationEvents
                     onWillFocus={() => this.setState({ blurred: false })}
-                    onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false })}
+                    onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false, gotoProfile: null })}
                 />
-                <List leaderboard={false} goBack={this.goBack} />
+                <List leaderboard={false} gotoProfile={this.gotoProfile} goBack={this.goBack} />
             </View>
 
         )
@@ -304,9 +316,9 @@ export default class Feed extends Component {
             <View style={{ flex: 1 }}>
                 <NavigationEvents
                     onWillFocus={() => this.setState({ blurred: false })}
-                    onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false })}
+                    onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false, gotoProfile: null })}
                 />
-                <List leaderboard={true} goBack={this.goBack} />
+                <List leaderboard={true} gotoProfile={this.gotoProfile} goBack={this.goBack} />
             </View>
         )
 

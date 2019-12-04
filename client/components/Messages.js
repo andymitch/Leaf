@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions, ScrollView, Button, Image } from 'react-native'
+import { View, Text, Image, StatusBar } from 'react-native'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { NavigationEvents } from 'react-navigation'
 import Axios from 'axios'
@@ -297,19 +297,19 @@ export default class Messages extends Component {
     }
 
     render() {
-        console.log('render')
         if (this.state.gotoProfile) return <Profile goBack={this.goBack} user={this.state.gotoProfile} />
         return (
             <View style={{ flex: 1, padding: 20 }}>
+                <StatusBar hidden={false} barStyle='dark-content'/>
                 <NavigationEvents onWillFocus={() => this.get()} />
                 <Text style={{ fontSize: 40, fontWeight: 'bold' }}>Chats & Requests</Text>
                 <View>
                     <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Requests</Text>
-                    {this.state.requests.map((req, i) => <ReqItem index={i} goto={this.goto} clear={this.clear} get={this.get} {...req} />)}
+                    {this.state.requests.map((req, i) => <ReqItem key={i} index={i} goto={this.goto} clear={this.clear} get={this.get} {...req} />)}
                 </View>
                 <View>
                     <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Chats</Text>
-                    {this.state.chats.map((chat, i) => <ChatItem index={i} goto={this.goto} {...chat} />)}
+                    {this.state.chats.map((chat, i) => <ChatItem key={i} index={i} goto={this.goto} {...chat} />)}
                 </View>
             </View>
         )
