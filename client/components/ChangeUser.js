@@ -34,6 +34,7 @@ export class ChangeUser extends Component{
       username: this.state.username,
       token: AUTH_TOKEN
     }).then(res => {
+      console.log(AUTH_TOKEN)
         if(res.data==true){
           console.log("username changed")
           alert("Your username has been changed.")
