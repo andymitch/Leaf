@@ -17,7 +17,13 @@ exports.handler = async (event, context) => {
 
   console.log("Starting to Run Query");
   let decodedToken = jwt.verify(event.token, config.secret)
-  let query = 'INSERT INTO followers ("followingId", "followerId") SELECT id, $1 FROM users WHERE username=$2' 
+  let query = ""
+  if(event.follow == true){
+    query = 'INSERT INTO followers ("followingId", "followerId") SELECT id, $1 FROM users WHERE username=$2' 
+  } else{
+    query = 'DELETE FROM followers WHERE "followerId" = $1 and "followingId" IN (SELECT id FROM users WHERE username=$2)' 
+  }
+  
   let values = [decodedToken.data, event.username];
   let results = []
   await client.query(query, values) //Initiate query
