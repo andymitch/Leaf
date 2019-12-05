@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, Image, ActivityIndicator, StatusBar } from 'react-native'
+import { View, Text, Image, ActivityIndicator } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 // ICONS
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
@@ -8,8 +9,19 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 import Axios from 'axios'
 import { AUTH_TOKEN } from './LoginRegister'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
+
+import { getItemAsync } from 'expo-secure-store'
+import { LIGHT, DARK } from '../colorTheme'
+let theme
+const getTheme = async () => {
+    await getItemAsync('theme')
+    .then(res => {
+        if(res === 'dark') theme = DARK
+        else theme = LIGHT
+    })
+}
+getTheme()
 
 const _items = [{
     profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
@@ -38,11 +50,11 @@ class Avatar extends Component {
         return (
             <View style={{ margin: 10, justifyContent: 'center' }}>
                 <TouchableOpacity onPress={() => this.props.goto(this.props.item.name)}>
-                    <Image source={{ uri: this.props.item.profile }} style={{ height: 50, width: 50, borderRadius: 25, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
-                    <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{this.props.item.name}</Text>
+                    <Image source={{ uri: this.props.item.profile }} style={[{ height: 50, width: 50, borderRadius: 25, borderWidth: 1, marginRight: 5 }, theme.image]} />
+                    <Text style={[{ fontSize: 15, fontWeight: 'bold' }, theme.text]}>{this.props.item.name}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-                        <Icon icon={faGem} size={15} style={{ marginRight: 2 }} />
-                        <Text>{this.props.item.points}</Text>
+                        <Icon icon={faGem} size={15} style={theme.icon} />
+                        <Text style={[theme.text,{marginLeft: 2}]}>{this.props.item.points}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -59,7 +71,7 @@ class Leaderboard extends Component {
                 {this.props.items.map((item, index) => {
                     return (
                         <View key={index} style={{ flexDirection: 'row' }}>
-                            <Text style={{ marginRight: 2 }}>{index + 1}.</Text>
+                            <Text style={[{ marginRight: 2 }, theme.text]}>{index + 1}.</Text>
                             <Avatar goto={this.goto} item={item} />
                         </View>
                     )
@@ -107,29 +119,29 @@ export default class List extends Component {
     render() {
         if (this.state.isLoading) {
             return (
-                <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'black' }}>
+                <View style={[{ alignItems: 'center', justifyContent: 'center', flex: 1 }, theme.view]}>
                     <ActivityIndicator size='large' color='blue' animated />
                 </View>
             )
         }
         if (this.props.leaderboard) return (
-            <View style={{ flex: 1, flexDirection: 'column', margin: 20, paddingTop: 20 }}>
+            <View style={[{ flex: 1, flexDirection: 'column', padding: 20, paddingTop: 40 }, theme.container]}>
                 <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <TouchableOpacity onPress={() => this.props.goBack()}>
-                        <Icon icon={faArrowLeft} size={30} />
+                        <Icon icon={faArrowLeft} size={30} style={theme.icon} />
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Leaderboard</Text>
+                    <Text style={[{ fontSize: 30, fontWeight: 'bold' }, theme.text]}>Leaderboard</Text>
                 </View>
                 <Leaderboard goto={this.goto} items={this.state.items} />
             </View>
         )
         return (
-            <View style={{ flex: 1, flexDirection: 'column', margin: 20, paddingTop: 20 }}>
+            <View style={[{ flex: 1, flexDirection: 'column', padding: 20, paddingTop: 40 }, theme.container]}>
                 <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <TouchableOpacity onPress={() => this.props.goBack()}>
-                        <Icon icon={faArrowLeft} size={30} />
+                        <Icon icon={faArrowLeft} size={30} style={theme.icon} />
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Following</Text>
+                    <Text style={[{ fontSize: 30, fontWeight: 'bold' }, theme.text]}>Following</Text>
                 </View>
                 <Following goto={this.goto} items={this.state.items} />
             </View>

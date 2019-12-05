@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Text, View, TextInput, TouchableHighlight, StatusBar, ImageBackground, TouchableOpacity } from 'react-native'
-import { setItemAsync, getItemAsync, deleteItemAsync } from 'expo-secure-store'
+import { Button, Text, View, TextInput, TouchableHighlight, ImageBackground, TouchableOpacity } from 'react-native'
+import { setItemAsync, getItemAsync } from 'expo-secure-store'
 import Axios from 'axios'
 
 //ICONS, STYLES, ANIMATIONS
@@ -15,13 +15,8 @@ const validEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]
 const validPhone = /(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})/g
 const validUsername = /^[a-z][a-z0-9_]{4,18}$/gm
 
-//AUTH TOKEN
-export let AUTH_TOKEN = null
-export const logout = async () => {
-    await deleteItemAsync('token')
-}
-
 let baseState = null
+
 
 //AUTH COMPONENT
 export default class LoginRegister extends Component {
@@ -39,15 +34,20 @@ export default class LoginRegister extends Component {
         phone: '',
         password: '',
         again_password: '',
-        passStrength: 'grey', // WILL CHANGE TO RED OR GREEN WHEN INPUT CHANGES
-        againPassStrength: 'grey'
+        passStrength: 'grey',
+        againPassStrength: 'grey',
+        checking: true
     }
     baseState = this.state
 
     componentWillMount = async () => {
-        await getItemAsync('token').then(res => AUTH_TOKEN = res).catch(err => console.log(err))
-        console.log('token pre-login: ' + AUTH_TOKEN)
-        if (AUTH_TOKEN) this.props.navigation.push('Main')
+        let testTheme = null
+        let testToken = null
+        await getItemAsync('token').then(res => testToken = res)
+        await getItemAsync('theme').then(res => testTheme = res)
+        if(!testTheme) await setItemAsync('theme', 'light')
+        if (testToken) this.props.navigation.push('Main')
+        setTimeout(() => this.setState({checking: false}), 500)
     }
 
     validatePassword = (pass, isAgain) => {
@@ -239,6 +239,8 @@ export default class LoginRegister extends Component {
 
     //LOGIN/REGISTER CONTAINER
     render() {
+        if(this.state.checking) return <View style={{flex: 1, backgroundColor: 'black'}}/>
+
         const otherForm = this.state.newUser ? 'login' : 'register' // LOGIN/REGISTER TEXT LINK
         const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
         const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true

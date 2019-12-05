@@ -4,19 +4,21 @@ import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures'
 import { LinearGradient } from 'expo-linear-gradient'
 import { NavigationEvents } from 'react-navigation'
 import { createTransition, SlideUp, SlideDown, SlideLeft, SlideRight } from 'react-native-transition'
+import { TouchableWithoutFeedback, TouchableOpacity } from 'react-native-gesture-handler'
 
-// ICONS
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
 import { faStream, faFire, faTrophy, faUserFriends, faPlay, faBolt } from '@fortawesome/free-solid-svg-icons'
 
 const { height: winHeight, width: winWidth } = Dimensions.get('window')
 const Transition = createTransition()
+
 import List from './List'
 import Profile from './Profile'
+
 import Axios from 'axios'
 import { AUTH_TOKEN } from './LoginRegister'
 import { Video } from 'expo-av'
-import { TouchableWithoutFeedback, TouchableOpacity } from 'react-native-gesture-handler'
+
 
 const popFeed = [{
     id: 1,
