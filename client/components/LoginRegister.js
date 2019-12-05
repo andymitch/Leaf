@@ -139,9 +139,9 @@ export default class LoginRegister extends Component {
     Form = () => {
         const eyecon = this.state.hidePassword ? faEye : faEyeSlash // EYE/EYESLASH ICON
         const checkUsername = this.state.goodUsername ? faCheckCircle : faTimesCircle
-        const checkUsernameColor = this.state.goodUsername ? 'dodgerblue' : '#999'
+        const checkUsernameColor = this.state.goodUsername ? 'dodgerblue' : 'red'
         const checkEmailPhone = this.state.goodEmailPhone ? faCheckCircle : faTimesCircle
-        const checkEmailPhoneColor = this.state.goodEmailPhone ? 'dodgerblue' : '#999'
+        const checkEmailPhoneColor = this.state.goodEmailPhone ? 'dodgerblue' : 'red'
 
         if (this.state.newUser) return (
             <View style={{ flex: 2, justifyContent: 'center' }}>
@@ -245,7 +245,6 @@ export default class LoginRegister extends Component {
 
         return (
             <View style={styles.container}>
-                <StatusBar hidden={true} />
                 <ImageBackground source={require('../assets/img/leaf_background.jpg')} style={{ width: '100%', height: '100%' }}>
                     <View style={styles.login}>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', bottom: -10 }}>

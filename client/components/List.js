@@ -108,14 +108,12 @@ export default class List extends Component {
         if (this.state.isLoading) {
             return (
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'black' }}>
-                    <StatusBar hidden={false} barStyle='dark-content'/>
                     <ActivityIndicator size='large' color='blue' animated />
                 </View>
             )
         }
         if (this.props.leaderboard) return (
             <View style={{ flex: 1, flexDirection: 'column', margin: 20, paddingTop: 20 }}>
-                <StatusBar hidden={false} barStyle='dark-content'/>
                 <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <TouchableOpacity onPress={() => this.props.goBack()}>
                         <Icon icon={faArrowLeft} size={30} />
@@ -127,7 +125,6 @@ export default class List extends Component {
         )
         return (
             <View style={{ flex: 1, flexDirection: 'column', margin: 20, paddingTop: 20 }}>
-                <StatusBar hidden={false} barStyle='dark-content'/>
                 <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <TouchableOpacity onPress={() => this.props.goBack()}>
                         <Icon icon={faArrowLeft} size={30} />

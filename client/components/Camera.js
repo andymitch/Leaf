@@ -5,13 +5,12 @@ import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker'
 import { LinearGradient } from 'expo-linear-gradient'
 import { NavigationEvents } from 'react-navigation'
-import MovToMp4 from "react-native-mov-to-mp4"
 
 import CameraTimer from './CameraTimer'
 
 //ICONS, STYLES
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
-import { faTimes, faImages } from '@fortawesome/free-solid-svg-icons'
+import { faImages } from '@fortawesome/free-solid-svg-icons'
 import { Ionicons } from '@expo/vector-icons'
 import styles from '../styles/styles'
 const { width: winWidth, height: winHeight } = Dimensions.get('window')
@@ -86,10 +85,7 @@ export default class CameraView extends React.Component {
                     onDidBlur={() => this.setState({ blurred: true })}
                 />
                 <StatusBar hidden={false}/>
-                <View style={[styles.inline, { zIndex: 1, backgroundColor: 'transparent' }]}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Main')}>
-                        <Icon icon={faTimes} style={{ color: 'white' }} size={30} />
-                    </TouchableOpacity>
+                <View style={[styles.inline, { zIndex: 1, backgroundColor: 'transparent', justifyContent: 'flex-end', top: 20 }]}>
                     <TouchableOpacity onPress={() => this.setFlashMode(flashMode === CameraFlashModes.torch ? CameraFlashModes.off : CameraFlashModes.torch)}>
                         <Ionicons name={flashMode == CameraFlashModes.torch ? "md-flash" : 'md-flash-off'} color="white" size={30} />
                     </TouchableOpacity>

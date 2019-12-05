@@ -191,7 +191,7 @@ export default class Profile extends Component {
                     <Text style={{ fontWeight: 'bold', bottom: -2, fontSize: 10 }}>{streak}</Text>
                 </View>
                 <View style={{ position: 'absolute', zIndex: 0 }}>
-                    <Icon icon={faFire} size={20} style={{ color: 'rgba(255,69,0,.7)' }} />
+                    <Icon icon={faFire} size={20} style={{ color: 'rgba(255,69,0,.5)' }} />
                 </View>
             </View>
         )
@@ -222,7 +222,6 @@ export default class Profile extends Component {
         if (this.state.onVideo + 1) return <FullVideo index={this.state.onVideo} following={this.state.following} goBack={this.goBack} like={this.like} video={this.state.videos[this.state.onVideo]} />
         return (
             <View style={{ flex: 1, padding: 20, paddingTop: 40 }}>
-                <StatusBar hidden={false} barStyle='dark-content'/>
                 <NavigationEvents onDidBlur={() => this.follow()} />
                 {this.state.following !== null &&
                     <TouchableOpacity onPress={() => this.props.goBack()}>
@@ -231,7 +230,7 @@ export default class Profile extends Component {
                 }
                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Image source={{ uri: this.state.profile }} style={{ height: 70, width: 70, borderRadius: 45, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
+                        <Image source={{ uri: this.state.profile }} style={{ height: 70, width: 70, borderRadius: 35, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
                         <View>
                             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{this.state.username}</Text>
                             <Text style={{ fontSize: 15, fontStyle: 'italic', color: 'grey' }}>{this.state.fullname}</Text>
@@ -251,8 +250,10 @@ export default class Profile extends Component {
                         }
                     </View>
                 </View>
-                <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    {this.state.videos.map((video, index) => this.renderVideoItem(video, index))}
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                    <View style={{flexWrap: 'wrap', width: winWidth-60, flexDirection: 'row'}}>
+                        {this.state.videos.map((video, index) => this.renderVideoItem(video, index))}
+                    </View>
                 </View>
             </View>
         )

@@ -109,7 +109,7 @@ class FeedContent extends Component {
     renderPlay = () => {
         if (this.state.play) return null
         return <Icon icon={faPlay} size={200} style={{ color: 'rgba(0,0,0,.2)', left: (winWidth / 2) - 80 }} />
-    }
+    } 
 
     render() {
         const boltColor = this.state.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
@@ -330,7 +330,6 @@ export default class Feed extends Component {
                     onWillFocus={() => this.setState({ blurred: false })}
                     onDidBlur={() => this.setState({ blurred: true })}
                 />
-                <StatusBar hidden={false} barStyle='light-content' />
                 <View style={{ flex: 1, backgroundColor: 'black' }}>
                     <LinearGradient colors={['rgba(0,0,0,1)', 'rgba(0,0,0,0)']} style={{ width: winWidth, zIndex: 1, position: 'absolute', top: 0 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: winWidth, padding: 20, top: 20 }}>
