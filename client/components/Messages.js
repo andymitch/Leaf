@@ -12,17 +12,17 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 // FOR TESTING PURPOSES
 const requests = [
     {
-        name: 'Aaron',
+        username: 'Aaron',
         profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
         follow: true,
         accept: false
     }, {
-        name: 'Ben',
+        username: 'Ben',
         profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
         follow: false,
         id: 1
     }, {
-        name: 'Charlie',
+        username: 'Charlie',
         profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
         follow: true,
         accept: false
@@ -33,35 +33,35 @@ const chats = [
         id: 2,
         group: [
             {
-                name: 'Aaron',
+                username: 'Aaron',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
             }, {
-                name: 'Ben',
+                username: 'Ben',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
             }, {
-                name: 'Charlie',
+                username: 'Charlie',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
             },
         ],
         messages: [
             {
-                name: 'Aaron',
+                username: 'Aaron',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Charlie',
+                username: 'Charlie',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Ben',
+                username: 'Ben',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Aaron',
+                username: 'Aaron',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Ben',
+                username: 'Ben',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             },
@@ -71,32 +71,32 @@ const chats = [
         id: 3,
         group: [
             {
-                name: 'Aaron',
+                username: 'Aaron',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
             }, {
-                name: 'Ben',
+                username: 'Ben',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
             },
         ],
         messages: [
             {
-                name: 'Aaron',
+                username: 'Aaron',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Ben',
+                username: 'Ben',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Ben',
+                username: 'Ben',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Aaron',
+                username: 'Aaron',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Aaron',
+                username: 'Aaron',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             },
@@ -106,32 +106,32 @@ const chats = [
         id: 4,
         group: [
             {
-                name: 'Aaron',
+                username: 'Aaron',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
             }, {
-                name: 'Charlie',
+                username: 'Charlie',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
             },
         ],
         messages: [
             {
-                name: 'Aaron',
+                username: 'Aaron',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Charlie',
+                username: 'Charlie',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Charlie',
+                username: 'Charlie',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Aaron',
+                username: 'Aaron',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             }, {
-                name: 'Charlie',
+                username: 'Charlie',
                 profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
                 content: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4'
             },
@@ -143,7 +143,7 @@ const chats = [
 class ChatItem extends Component {
     renderGroup = group => {
         let groupStr = ''
-        for (user of group) groupStr += `, ${user.name}`
+        for (user of group) groupStr += `, ${user.username}`
         groupStr = groupStr.slice(2, groupStr.length)
         return (
             <View style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: 'gainsboro', width: '100%', marginVertical: 5, padding: 10 }}>
@@ -200,11 +200,11 @@ class ReqItem extends Component {
             return (
                 <View style={{ width: '100%', alignContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row' }}>
-                        <TouchableWithoutFeedback onPress={() => this.props.goto(this.props.name)}>
+                        <TouchableWithoutFeedback onPress={() => this.props.goto(this.props.username)}>
                             <Image source={{ uri: this.props.profile }} style={{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
                         </TouchableWithoutFeedback>
                         <View>
-                            <Text style={{ fontWeight: 'bold', marginHorizontal: 5 }}>{this.props.name}</Text>
+                            <Text style={{ fontWeight: 'bold', marginHorizontal: 5 }}>{this.props.username}</Text>
                             <Text>would like to follow you.</Text>
                         </View>
                     </View>
@@ -224,7 +224,7 @@ class ReqItem extends Component {
                 <View style={{ flexDirection: 'row' }}>
                     <Image source={{ uri: this.props.profile }} style={{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
                     <View>
-                        <Text style={{ fontWeight: 'bold', marginHorizontal: 5 }}>{this.props.name}</Text>
+                        <Text style={{ fontWeight: 'bold', marginHorizontal: 5 }}>{this.props.username}</Text>
                         <Text>invites you to join a chat group.</Text>
                     </View>
                 </View>
@@ -294,7 +294,7 @@ export default class Messages extends Component {
     goto = loc => {
         if (Number.isInteger(loc)) {
             // goto chat
-            this.props.navigation.push('Chat', { messages: this.state.chats[loc] })
+            this.props.navigation.push('Chat', { messages: this.state.chats[loc].messages, myIndex: this.state.chats[loc].myIndex, id: this.state.chats[loc].id })
         } else {
             //goto profile of username
             this.setState({ gotoProfile: loc })
@@ -307,10 +307,9 @@ export default class Messages extends Component {
                 <ActivityIndicator size='large' color='blue' animated />
             </View>
         )
-        if (this.state.gotoProfile) return <Profile goBack={this.goBack} user={this.state.gotoProfile} />
+        if (this.state.gotoProfile) return <Profile goBack={this.goBack} username={this.state.gotoProfile} />
         return (
-            <View style={{ flex: 1, padding: 20 }}>
-                <StatusBar hidden={false} barStyle='dark-content' />
+            <View style={{ flex: 1, padding: 20, paddingTop: 40 }}>
                 <NavigationEvents onWillFocus={() => this.get()} />
                 <Text style={{ fontSize: 40, fontWeight: 'bold' }}>Chats & Requests</Text>
                 <View>

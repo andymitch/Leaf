@@ -8,4 +8,8 @@ dismiss keyboard on blur
 
 make text field viewable on keyboard input
 
-avoid cheating: user creates 1 second videos of nothing and gets points for them.
+avoid cheating: user creates 1 second videos of nothing and gets points for them
+
+add location to videos
+
+upload or capture videos need to be 10 seconds or less
