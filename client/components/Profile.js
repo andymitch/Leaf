@@ -61,15 +61,15 @@ class FullVideo extends Component {
     }
 
     async componentWillUnmount() {
-        if (this.props.video.liked && !this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.video.id, token: this.props.screenProps.token }).catch(err => console.log(err))
-        else if (!this.props.video.liked && this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.video.id, token: this.props.screenProps.token }).catch(err => console.log(err))
+        if (this.props.video.liked && !this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.video.id, token: this.props.token }).catch(err => console.log(err))
+        else if (!this.props.video.liked && this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.video.id, token: this.props.token }).catch(err => console.log(err))
     }
 
     render() {
         const video = this.props.video
         const boltColor = this.state.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
         return (
-            <View style={[{ height: '100%', width: '100%' }, this.state.theme.container]}>
+            <View style={{ height: '100%', width: '100%', backgroundColor: 'black' }}>
                 <Video source={{ uri: video.uri }} resizeMode='cover' isLooping shouldPlay style={{ width: winWidth, height: winHeight, position: 'absolute' }} />
                 <View style={{ position: 'absolute', margin: 20, marginTop: 40 }}>
                     <TouchableOpacity onPress={() => this.props.goBack()} >
@@ -236,7 +236,7 @@ export default class Profile extends Component {
                 </View>
             )
         }
-        if (this.state.onVideo + 1) return <FullVideo index={this.state.onVideo} following={this.state.following} goBack={this.goBack} like={this.like} video={this.state.videos[this.state.onVideo]} />
+        if (this.state.onVideo + 1) return <FullVideo token={this.props.screenProps.token} index={this.state.onVideo} following={this.state.following} goBack={this.goBack} like={this.like} video={this.state.videos[this.state.onVideo]} />
         return (
             <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, this.state.theme.container]}>
                 <NavigationEvents onDidBlur={() => this.follow()}/>
