@@ -171,7 +171,8 @@ export default class Feed extends Component {
         isLoading: true,
         gotoLeaderboard: false,
         gotoFollowing: false,
-        gotoProfile: null
+        gotoProfile: null,
+        noMore: false
     }
 
     componentDidMount() {
@@ -191,8 +192,9 @@ export default class Feed extends Component {
         }
         this.setState({ isLoading: false })
         /*
-        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed`, { params: { from: from, token: this.props.token } })
+        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed`, { params: { from: from, token: this.props.screenProps.token } })
             .then(res => {
+                if(res.data.length < 5) this.setState({noMore: true})
                 if (from === 'popular') {
                     if (refresh) this.setState({ popular: res.data, isLoading: false })
                     else this.setState(prev => ({ popular: [...prev.popular, ...res.data], isLoading: false }))
@@ -210,13 +212,13 @@ export default class Feed extends Component {
                 if (this.state.popularIndex < this.state.popular.length - 1) {
                     this._transition.show(this.renderContent(this.state.popularIndex + 1, true), SlideUp)
                     this.setState(prev => ({ popularIndex: prev.popularIndex + 1 }))
-                    if (this.state.popularIndex > this.state.popular.length - 3) this.getFeed(false, 'popular')
+                    if (this.state.popularIndex > this.state.popular.length - 3 && !this.state.noMore) this.getFeed(false, 'popular')
                 }
             } else {
                 if (this.state.followingIndex < this.state.following.length - 1) {
                     this._transition.show(this.renderContent(this.state.followingIndex + 1, false), SlideUp)
                     this.setState(prev => ({ followingIndex: prev.followingIndex + 1 }))
-                    if (this.state.followingIndex > this.state.following.length - 3) this.getFeed(false, 'following')
+                    if (this.state.followingIndex > this.state.following.length - 3 && !this.state.noMore) this.getFeed(false, 'following')
                 }
             }
         }
