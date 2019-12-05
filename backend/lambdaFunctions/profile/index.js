@@ -34,7 +34,13 @@ exports.handler = async (event, context) => {
       return response;
     });
 
+
+    
+
     //Gets all needed data from Likes, Videos, and Users tables
+    if(event.queryStringParameters.username == ""){
+      event.queryStringParameters.username = tokenUsername
+    }
   query = 'SELECT users.profilepicture, users.id uid, users.username, users.name, users.points, users.multiplier, videos.id, EXTRACT(Day FROM videos.expiredate - NOW()) as life, likes.users, videos.title, videos.description, videos.likes, videos.url FROM users FULL JOIN videos ON users.id = videos.ownerid FULL JOIN likes ON videos.id = likes.videoid WHERE users.username=$1';  //Query structures
   values = [event.queryStringParameters.username]//Values to put into query
   let [username, profilepicture, name, points, multiplier, uid] = [null, null, null, null, null, null]

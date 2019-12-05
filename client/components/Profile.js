@@ -105,29 +105,48 @@ export default class Profile extends Component {
 
     async componentDidMount() {
         // FOR TESTING PURPOSES
-        if (this.props.username === undefined) {
-            this.setState({
-                profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-                username: 'andymitch559',
-                fullname: 'Andrew Mitchell',
-                points: 1056,
-                streak: 3,
-                videos: _videos,
-                isLoading: false,
-                following: null
-            })
-        } else {
-            this.setState({
-                profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-                username: 'BillyBob',
-                fullname: 'Billy Bob',
-                points: 103,
-                videos: otherVideos,
-                streak: 1,
-                isLoading: false,
-                following: false
-            })
-        }
+        // if (this.props.username === undefined) {
+        //     this.setState({
+        //         profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+        //         username: 'andymitch559',
+        //         fullname: 'Andrew Mitchell',
+        //         points: 1056,
+        //         streak: 3,
+        //         videos: _videos,
+        //         isLoading: false,
+        //         following: null
+        //     })
+        // } else {
+        //     this.setState({
+        //         profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
+        //         username: 'BillyBob',
+        //         fullname: 'Billy Bob',
+        //         points: 103,
+        //         videos: otherVideos,
+        //         streak: 1,
+        //         isLoading: false,
+        //         following: false
+        //     })
+        // }
+        const username = this.props.username === undefined ? "" : this.props.username
+        console.log(username)
+        console.log("AUTH")
+        console.log("TEST" + this.props.screenProps.token)
+        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/profile?username=${username}&token=${this.props.screenProps.token}`)
+            .then(res => {
+                console.log(res.data)
+                this.setState({
+                    profile: res.data.profilepicture,
+                    username: res.data.username,
+                    fullname: res.data.name,
+                    points: res.data.points,
+                    streak: res.data.multiplier,
+                    videos: res.data.videos,
+                    following: res.data.following,
+                    isLoading: false
+                })
+                following = res.data.following
+            }).catch(err => console.log(err.response))
         /*
         const username = this.props.username === undefined ? null : this.props.username
         await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/profile', { params: { username: username, token: this.props.screenProps.token } })
