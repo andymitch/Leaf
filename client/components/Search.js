@@ -62,7 +62,7 @@ export default class Search extends Component {
     }
 
     render() {
-        if (this.state.goto) return <Profile goBack={this.goBack} username={this.state.goto} />
+        if (this.state.goto) return <Profile goBack={this.goBack} username={this.state.goto} token={this.props.screenProps.token}/>
         return (
             <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, this.state.theme.container]}>
                 <View style={[this.state.theme.container, { flexDirection: 'row', justifyContent: 'center', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5, elevation: 2, marginBottom: 20, borderRadius: 10 }]}>

@@ -95,12 +95,12 @@ class FeedContent extends Component {
 
     async componentWillUnmount() {
         if (this.props.likes < this.state.likes) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.id, token: this.props.screenProps.token })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.id, token: this.props.token })
                 .then(() => console.log('liked'))
                 .catch(err => console.log('Problem Liking: ' + err))
             this.props.like(this.props.onPopular, this.props.index, 1)
         } else if (this.props.likes > this.state.likes) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.id, token: this.props.screenProps.token })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.id, token: this.props.token })
                 .then(() => console.log('unliked'))
                 .catch(err => console.log('Problem Unliking: ' + err))
             this.props.like(this.props.onPopular, this.props.index, -1)
@@ -191,7 +191,7 @@ export default class Feed extends Component {
         }
         this.setState({ isLoading: false })
         /*
-        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed`, { params: { from: from, token: this.props.screenProps.token } })
+        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed`, { params: { from: from, token: this.props.token } })
             .then(res => {
                 if (from === 'popular') {
                     if (refresh) this.setState({ popular: res.data, isLoading: false })
@@ -271,13 +271,13 @@ export default class Feed extends Component {
         if (pop) {
             return (
                 <GestureRecognizer onSwipe={this.onSwipe} config={config} style={{ flex: 1, backgroundColor: 'black' }}>
-                    <FeedContent gotoProfile={this.gotoProfile} like={this.like} onPopular={true} index={index} {...this.state.popular[index]} />
+                    <FeedContent token={this.props.screenProps.token} gotoProfile={this.gotoProfile} like={this.like} onPopular={true} index={index} {...this.state.popular[index]} />
                 </GestureRecognizer>
             )
         } else {
             return (
                 <GestureRecognizer onSwipe={this.onSwipe} config={config} style={{ flex: 1, backgroundColor: 'black' }}>
-                    <FeedContent gotoProfile={this.gotoProfile} like={this.like} onPopular={false} index={index} {...this.state.following[index]} />
+                    <FeedContent token={this.props.screenProps.token} gotoProfile={this.gotoProfile} like={this.like} onPopular={false} index={index} {...this.state.following[index]} />
                 </GestureRecognizer>
             )
         }
@@ -299,7 +299,7 @@ export default class Feed extends Component {
                     onWillFocus={() => this.setState({ blurred: false })}
                     onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false, gotoProfile: null })}
                 />
-                <Profile username={this.state.gotoProfile} goBack={this.goBack} />
+                <Profile token={this.props.screenProps.token} username={this.state.gotoProfile} goBack={this.goBack} />
             </View>
         )
         if (this.state.gotoFollowing) return (
