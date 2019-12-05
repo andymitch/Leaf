@@ -299,7 +299,7 @@ export default class Feed extends Component {
                     onWillFocus={() => this.setState({ blurred: false })}
                     onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false, gotoProfile: null })}
                 />
-                <Profile token={this.props.screenProps.token} username={this.state.gotoProfile} goBack={this.goBack} />
+                <Profile  screenProps={{theme: this.props.screenProps.theme, token: this.props.screenProps.token}} username={this.state.gotoProfile} goBack={this.goBack} />
             </View>
         )
         if (this.state.gotoFollowing) return (

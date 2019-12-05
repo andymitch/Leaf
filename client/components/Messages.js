@@ -316,7 +316,7 @@ export default class Messages extends Component {
                 <ActivityIndicator size='large' color='blue' animated />
             </View>
         )
-        if (this.state.gotoProfile) return <Profile token={this.props.screenProps.token} goBack={this.goBack} username={this.state.gotoProfile} />
+        if (this.state.gotoProfile) return <Profile  screenProps={{theme: this.props.screenProps.theme, token: this.props.screenProps.token}} goBack={this.goBack} username={this.state.gotoProfile} />
         return (
             <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, this.state.theme.container]}>
                 <NavigationEvents onWillFocus={() => this.get()} />
