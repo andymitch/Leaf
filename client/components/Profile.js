@@ -231,7 +231,7 @@ export default class Profile extends Component {
                 }
                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Image source={{ uri: this.state.profile }} style={{ height: 70, width: 70, borderRadius: 45, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
+                        <Image source={{ uri: this.state.profile }} style={{ height: 70, width: 70, borderRadius: 35, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
                         <View>
                             <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{this.state.username}</Text>
                             <Text style={{ fontSize: 15, fontStyle: 'italic', color: 'grey' }}>{this.state.fullname}</Text>
