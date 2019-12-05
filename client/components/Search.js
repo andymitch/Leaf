@@ -50,13 +50,15 @@ export default class Search extends Component {
             this.setState({ searching: true })
             setTimeout(() => {
                 // for testing
-                this.setState({ results: _results, searching: false })
+                // this.setState({ results: _results, searching: false })
 
-                /*
-                await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/search', {params: {keyphrase: keyphrase}})
-                .then(res => this.setState({results: res.data, searching: false}))
-                .catch(err => console.log(err))
-                */
+                Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/search?keyphrase=${keyphrase}`)
+                .then(res => {
+                    console.log(res.data)
+                    this.setState({results: res.data, searching: false})
+                })
+                .catch(err => console.log(err.response))
+
             }, 2000)
         }
     }
