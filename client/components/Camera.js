@@ -38,7 +38,7 @@ export default class CameraView extends React.Component {
             this.setState({ capturing: true })
             const {uri, codec = "mp4"} = await this.camera.recordAsync({quality: "720p", maxDuration: 10 });
             this.setState({capturing: false})
-            this.props.navigation.push('Preview', { uri: uri })
+            this.props.screenProps.push('Preview', { uri: uri })
         }
     }
 
@@ -49,7 +49,7 @@ export default class CameraView extends React.Component {
                 mediaTypes: ImagePicker.MediaTypeOptions.Videos,
                 aspect: [18, 9],
             })
-            if (!result.cancelled) this.props.navigation.push('Preview', { uri: result.uri })
+            if (!result.cancelled) this.props.screenProps.push('Preview', { uri: result.uri, })
         }
     };
 

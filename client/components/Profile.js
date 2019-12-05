@@ -6,23 +6,8 @@ import { faGem } from '@fortawesome/free-regular-svg-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { NavigationEvents } from 'react-navigation'
 import { Video } from 'expo-av'
-
 import Axios from 'axios'
-import { AUTH_TOKEN } from './LoginRegister'
-Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
-
-import { getItemAsync } from 'expo-secure-store'
 import { LIGHT, DARK } from '../colorTheme'
-let theme
-const getTheme = async () => {
-    await getItemAsync('theme')
-    .then(res => {
-        if(res === 'dark') theme = DARK
-        else theme = LIGHT
-    })
-}
-getTheme()
-
 const { height: winHeight, width: winWidth } = Dimensions.get('window')
 let following = null
 
@@ -76,16 +61,15 @@ class FullVideo extends Component {
     }
 
     async componentWillUnmount() {
-        console.log(await getItemAsync('theme'))
-        if (this.props.video.liked && !this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.video.id }).catch(err => console.log(err))
-        else if (!this.props.video.liked && this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.video.id }).catch(err => console.log(err))
+        if (this.props.video.liked && !this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.video.id, token: this.props.screenProps.token }).catch(err => console.log(err))
+        else if (!this.props.video.liked && this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.video.id, token: this.props.screenProps.token }).catch(err => console.log(err))
     }
 
     render() {
         const video = this.props.video
         const boltColor = this.state.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
         return (
-            <View style={[{ height: '100%', width: '100%' }, theme.container]}>
+            <View style={[{ height: '100%', width: '100%' }, this.state.theme.container]}>
                 <Video source={{ uri: video.uri }} resizeMode='cover' isLooping shouldPlay style={{ width: winWidth, height: winHeight, position: 'absolute' }} />
                 <View style={{ position: 'absolute', margin: 20, marginTop: 40 }}>
                     <TouchableOpacity onPress={() => this.props.goBack()} >
@@ -115,7 +99,8 @@ export default class Profile extends Component {
         videos: [],
         following: null,
         onVideo: -1,
-        isLoading: true
+        isLoading: true,
+        theme: this.props.screenProps.theme == 'dark' ? DARK : LIGHT
     }
 
     async componentDidMount() {
@@ -145,7 +130,7 @@ export default class Profile extends Component {
         }
         /*
         const username = this.props.username === undefined ? null : this.props.username
-        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/profile', { params: { username: username } })
+        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/profile', { params: { username: username, token: this.props.screenProps.token } })
             .then(res => {
                 this.setState({
                     profile: res.data.profile,
@@ -179,7 +164,7 @@ export default class Profile extends Component {
 
     follow = async () => {
         if (following !== null && following !== this.state.following) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/follow', { username: this.state.username, follow: this.state.following })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/follow', { username: this.state.username, follow: this.state.following, token: this.props.screenProps.token })
                 .catch(err => console.log(err))
             following = this.state.following
         }
@@ -201,10 +186,10 @@ export default class Profile extends Component {
         return (
             <View style={{ width: 20, height: 20, justifyContent: 'center', alignItems: 'center' }}>
                 <View style={{ position: 'absolute', zIndex: 1 }}>
-                    <Text style={[{ fontWeight: 'bold', bottom: -2, fontSize: 10 }, theme.text]}>{streak}</Text>
+                    <Text style={[{ fontWeight: 'bold', bottom: -2, fontSize: 10 }, this.state.theme.text]}>{streak}</Text>
                 </View>
                 <View style={{ position: 'absolute', zIndex: 0 }}>
-                    <Icon icon={faFire} size={20} style={theme.streak} />
+                    <Icon icon={faFire} size={20} style={this.state.theme.streak} />
                 </View>
             </View>
         )
@@ -226,7 +211,7 @@ export default class Profile extends Component {
     render() {
         if (this.state.isLoading) {
             return (
-                <View style={[{ alignItems: 'center', justifyContent: 'center', flex: 1 }, theme.container]}>
+                <View style={[{ alignItems: 'center', justifyContent: 'center', flex: 1 }, this.state.theme.container]}>
                     <StatusBar hidden={false}/>
                     <ActivityIndicator size='large' color='blue' animated />
                 </View>
@@ -234,7 +219,7 @@ export default class Profile extends Component {
         }
         if (this.state.onVideo + 1) return <FullVideo index={this.state.onVideo} following={this.state.following} goBack={this.goBack} like={this.like} video={this.state.videos[this.state.onVideo]} />
         return (
-            <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, theme.container]}>
+            <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, this.state.theme.container]}>
                 <NavigationEvents onDidBlur={() => this.follow()}/>
                 {this.state.following !== null &&
                     <TouchableOpacity onPress={() => this.props.goBack()}>
@@ -243,22 +228,22 @@ export default class Profile extends Component {
                 }
                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Image source={{ uri: this.state.profile }} style={[{ height: 70, width: 70, borderRadius: 35, borderWidth: 1, borderColor: 'black', marginRight: 5 }, theme.image]} />
+                        <Image source={{ uri: this.state.profile }} style={[{ height: 70, width: 70, borderRadius: 35, borderWidth: 1, borderColor: 'black', marginRight: 5 }, this.state.theme.image]} />
                         <View>
-                            <Text style={[{ fontSize: 20, fontWeight: 'bold' }, theme.text]}>{this.state.username}</Text>
+                            <Text style={[{ fontSize: 20, fontWeight: 'bold' }, this.state.theme.text]}>{this.state.username}</Text>
                             <Text style={{ fontSize: 15, fontStyle: 'italic', color: 'grey' }}>{this.state.fullname}</Text>
                             <View style={{ flexDirection: 'row' }}>
                                 {this.renderStreak()}
-                                <Icon icon={faGem} size={20} style={theme.icon}/>
-                                <Text style={theme.text}>{this.state.points}</Text>
+                                <Icon icon={faGem} size={20} style={this.state.theme.icon}/>
+                                <Text style={this.state.theme.text}>{this.state.points}</Text>
                             </View>
                         </View>
                     </View>
                     <View>
                         {this.state.following !== null && this.renderFollow()}
                         {this.state.following === null &&
-                            <TouchableOpacity onPress={() => this.props.navigation.push('Settings')}>
-                                <Icon icon={faCog} size={30} style={theme.icon}/>
+                            <TouchableOpacity onPress={() => {console.log('trying to go to settings '); this.props.screenProps.push('Settings')}}>
+                                <Icon icon={faCog} size={30} style={this.state.theme.icon}/>
                             </TouchableOpacity>
                         }
                     </View>

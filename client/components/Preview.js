@@ -8,8 +8,6 @@ import { RNS3 } from 'react-native-aws3'
 
 //AUTH TOKEN, AXIOS
 import Axios from 'axios'
-import { AUTH_TOKEN } from './LoginRegister'
-Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 
 //STYLES AND ICONS
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
@@ -79,7 +77,7 @@ export default class Preview extends Component {
         let temp = null;
         await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/upload', {
             caption: this.state.caption,
-            token: AUTH_TOKEN,
+            token: this.props.screenProps.token,
             location: this.state.location,
             system: Platform.OS
         })

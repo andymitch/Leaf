@@ -3,23 +3,11 @@ import { View, Text, Image, StatusBar, ActivityIndicator } from 'react-native'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { NavigationEvents } from 'react-navigation'
 import Axios from 'axios'
-import { AUTH_TOKEN } from './LoginRegister'
-Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 import Profile from './Profile'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-
-import { getItemAsync } from 'expo-secure-store'
 import { LIGHT, DARK } from '../colorTheme'
-let theme
-const getTheme = async () => {
-    await getItemAsync('theme')
-    .then(res => {
-        if(res === 'dark') theme = DARK
-        else theme = LIGHT
-    })
-}
-getTheme()
+
 
 // FOR TESTING PURPOSES
 const requests = [
@@ -153,14 +141,18 @@ const chats = [
 ]
 
 class ChatItem extends Component {
+    state = {
+        theme: this.props.theme == 'dark' ? DARK : LIGHT
+    }
+
     renderGroup = group => {
         let groupStr = ''
         for (user of group) groupStr += `, ${user.username}`
         groupStr = groupStr.slice(2, groupStr.length)
         return (
             <View style={{ flexDirection: 'row', borderRadius: 10, backgroundColor: 'rgba(128,128,128,.5)', width: '100%', marginVertical: 5, padding: 10 }}>
-                <Image source={{ uri: group[0].profilepicture }} style={[{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, marginRight: 5 }, theme.image]} />
-                <Text style={[{ fontWeight: 'bold' }, theme.text]}>{groupStr}</Text>
+                <Image source={{ uri: group[0].profilepicture }} style={[{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, marginRight: 5 }, this.state.theme.image]} />
+                <Text style={[{ fontWeight: 'bold' }, this.state.theme.text]}>{groupStr}</Text>
             </View>
         )
     }
@@ -175,6 +167,10 @@ class ChatItem extends Component {
 }
 
 class ReqItem extends Component {
+    state = {
+        theme: this.props.theme == 'dark' ? DARK : LIGHT
+    }
+
     action = async () => {
         if (this.props.follow) {
             if (this.props.accept) {
@@ -182,7 +178,7 @@ class ReqItem extends Component {
                 this.props.clear(this.props.index)
                 console.log('following')
                 /*
-                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/follow', { username: this.props.name, follow: true })
+                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/follow', { username: this.props.name, follow: true, token: this.props.token })
                     .then(() => this.props.clear(this.props.index))
                     .catch(err => console.log(err))
                 */
@@ -196,7 +192,7 @@ class ReqItem extends Component {
             this.props.clear(this.props.index)
             console.log('joined chat group ' + this.props.id)
             /*
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/join', { id: this.props.id })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/join', { id: this.props.id, token: this.props.token })
                 .then(() => {
                     this.props.clear(this.props.index)
                     this.props.get()
@@ -210,14 +206,14 @@ class ReqItem extends Component {
         const acceptColor = this.props.accept ? 'cadetblue' : '#00bfff'
         if (this.props.follow) {
             return (
-                <View style={[{ width: '100%', alignContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }, theme.container]}>
+                <View style={[{ width: '100%', alignContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }, this.state.theme.container]}>
                     <View style={{ flexDirection: 'row' }}>
                         <TouchableWithoutFeedback onPress={() => this.props.goto(this.props.username)}>
-                            <Image source={{ uri: this.props.profilepicture }} style={[{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, marginRight: 5 }, theme.image]} />
+                            <Image source={{ uri: this.props.profilepicture }} style={[{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, marginRight: 5 }, this.state.theme.image]} />
                         </TouchableWithoutFeedback>
                         <View>
-                            <Text style={[{ fontWeight: 'bold', marginHorizontal: 5 }, theme.text]}>{this.props.username}</Text>
-                            <Text style={theme.text}>would like to follow you.</Text>
+                            <Text style={[{ fontWeight: 'bold', marginHorizontal: 5 }, this.state.theme.text]}>{this.props.username}</Text>
+                            <Text style={this.state.theme.text}>would like to follow you.</Text>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -232,12 +228,12 @@ class ReqItem extends Component {
             )
         }
         return (
-            <View style={[{ width: '100%', alignContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }, theme.container]}>
+            <View style={[{ width: '100%', alignContent: 'center', flexDirection: 'row', justifyContent: 'space-between' }, this.state.theme.container]}>
                 <View style={{ flexDirection: 'row' }}>
-                    <Image source={{ uri: this.props.profilepicture }} style={[{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, marginRight: 5 }, theme.image]} />
+                    <Image source={{ uri: this.props.profilepicture }} style={[{ height: 30, width: 30, borderRadius: 15, borderWidth: 1, marginRight: 5 }, this.state.theme.image]} />
                     <View>
-                        <Text style={[{ fontWeight: 'bold', marginHorizontal: 5 }, theme.text]}>{this.props.username}</Text>
-                        <Text style={theme.text}>invites you to join a chat group.</Text>
+                        <Text style={[{ fontWeight: 'bold', marginHorizontal: 5 }, this.state.theme.text]}>{this.props.username}</Text>
+                        <Text style={this.state.theme.text}>invites you to join a chat group.</Text>
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -258,7 +254,8 @@ export default class Messages extends Component {
         requests: [],
         chats: [],
         gotoProfile: null,
-        isLoading: true
+        isLoading: true,
+        theme: this.props.screenProps.theme == 'dark' ? DARK : LIGHT
     }
 
     componentDidMount() {
@@ -269,12 +266,12 @@ export default class Messages extends Component {
         this.setState({ requests: requests, chats: chats, isLoading: false })
         /*
         //get requests
-        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/requests')
+        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/requests', {params:{token: this.props.screenProps.token}})
             .then(res => this.setState({ requests: res.data }))
             .catch(err => console.log(err))
 
         //get chats
-        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/chats')
+        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/chats', {params:{token: this.props.screenProps.token}})
             .then(res => this.setState({ chats: res.data }))
             .catch(err => console.log(err))
         */
@@ -285,7 +282,7 @@ export default class Messages extends Component {
         temp[index].accept = true
         this.setState({ requests: temp })
         /*
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/accept', { username: this.props.name })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/accept', { username: this.props.name, token: this.props.screenProps.token })
                 .then(() => this.setState({ accepted: true }))
                 .catch(err => console.log(err))
         */
@@ -296,7 +293,7 @@ export default class Messages extends Component {
         temp.splice(index, 1)
         this.setState({ requests: temp })
         /*
-        await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/requests', { requests: temp })
+        await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/requests', { requests: temp, token: this.props.screenProps.token })
             .catch(err => console.log(err))
         */
     }
@@ -306,7 +303,7 @@ export default class Messages extends Component {
     goto = loc => {
         if (Number.isInteger(loc)) {
             // goto chat
-            this.props.navigation.push('Chat', { messages: this.state.chats[loc].messages, myIndex: this.state.chats[loc].myIndex, id: this.state.chats[loc].id })
+            this.props.screenProps.push('Chat', { messages: this.state.chats[loc].messages, myIndex: this.state.chats[loc].myIndex, id: this.state.chats[loc].id })
         } else {
             //goto profile of username
             this.setState({ gotoProfile: loc })
@@ -315,22 +312,22 @@ export default class Messages extends Component {
 
     render() {
         if (this.state.isLoading) return (
-            <View style={[{ alignItems: 'center', justifyContent: 'center', flex: 1}, theme.container]}>
+            <View style={[{ alignItems: 'center', justifyContent: 'center', flex: 1}, this.state.theme.container]}>
                 <ActivityIndicator size='large' color='blue' animated />
             </View>
         )
         if (this.state.gotoProfile) return <Profile goBack={this.goBack} username={this.state.gotoProfile} />
         return (
-            <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, theme.container]}>
+            <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, this.state.theme.container]}>
                 <NavigationEvents onWillFocus={() => this.get()} />
-                <Text style={[{ fontSize: 40, fontWeight: 'bold' }, theme.text]}>Chats & Requests</Text>
+                <Text style={[{ fontSize: 40, fontWeight: 'bold' }, this.state.theme.text]}>Chats & Requests</Text>
                 <View>
-                    <Text style={[{ fontSize: 30, fontWeight: 'bold' }, theme.text]}>Requests</Text>
-                    {this.state.requests.map((req, i) => <ReqItem key={i} index={i} goto={this.goto} acceptFollow={this.acceptFollow} clear={this.clear} get={this.get} {...req} />)}
+                    <Text style={[{ fontSize: 30, fontWeight: 'bold' }, this.state.theme.text]}>Requests</Text>
+                    {this.state.requests.map((req, i) => <ReqItem token={this.props.screenProps.token} theme={this.props.screenProps.theme} key={i} index={i} goto={this.goto} acceptFollow={this.acceptFollow} clear={this.clear} get={this.get} {...req} />)}
                 </View>
                 <View>
-                    <Text style={[{ fontSize: 30, fontWeight: 'bold' }, theme.text]}>Chats</Text>
-                    {this.state.chats.map((chat, i) => <ChatItem key={i} index={i} goto={this.goto} {...chat} />)}
+                    <Text style={[{ fontSize: 30, fontWeight: 'bold' }, this.state.theme.text]}>Chats</Text>
+                    {this.state.chats.map((chat, i) => <ChatItem  theme={this.props.screenProps.theme} key={i} index={i} goto={this.goto} {...chat} />)}
                 </View>
             </View>
         )

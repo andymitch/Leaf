@@ -3,7 +3,6 @@ import { View, TouchableOpacity, FlatList, Text } from 'react-native'
 import ReactNativeSettingsPage, { SwitchRow, SliderRow, SectionRow, NavigateRow, CheckRow } from 'react-native-settings-page';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { getItemAsync, setItemAsync } from 'expo-secure-store'
 
 
 export default class Settings extends Component {
@@ -14,9 +13,8 @@ export default class Settings extends Component {
 	}
 
 	setTheme = async () => {
-		if(await getItemAsync('theme') === 'light') await setItemAsync('theme', 'dark')
-		else await setItemAsync('theme', 'light')
-		console.log(await getItemAsync('theme'))
+		if(this.props.screenProps.theme === 'light') this.props.screenProps.setTheme('dark')
+		else this.props.screenProps.setTheme('light')
 	}
 
 	_navigateToPass = () => {
@@ -53,7 +51,7 @@ export default class Settings extends Component {
 
 					</SectionRow>
 				</ReactNativeSettingsPage>
-				<TouchableOpacity onPress={() => this.setTheme()} style={{width: '50%', height: 100, alignSelf: 'center', color: 'grey'}}>
+				<TouchableOpacity onPress={() => {alert('Mode switched. Reload app to see effects.'); this.setTheme()}} style={{width: '50%', height: 100, alignSelf: 'center', color: 'grey'}}>
 					<Text>Light / Dark Mode</Text>
 				</TouchableOpacity>
 			</View>

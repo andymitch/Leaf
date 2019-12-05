@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Text, View, TextInput, TouchableHighlight, ImageBackground, TouchableOpacity } from 'react-native'
-import { setItemAsync, getItemAsync } from 'expo-secure-store'
+import { Button, Text, View, TextInput, ImageBackground, TouchableOpacity } from 'react-native'
 import Axios from 'axios'
 
 //ICONS, STYLES, ANIMATIONS
@@ -35,20 +34,9 @@ export default class LoginRegister extends Component {
         password: '',
         again_password: '',
         passStrength: 'grey',
-        againPassStrength: 'grey',
-        checking: true
+        againPassStrength: 'grey'
     }
     baseState = this.state
-
-    componentWillMount = async () => {
-        let testTheme = null
-        let testToken = null
-        await getItemAsync('token').then(res => testToken = res)
-        await getItemAsync('theme').then(res => testTheme = res)
-        if(!testTheme) await setItemAsync('theme', 'light')
-        if (testToken) this.props.navigation.push('Main')
-        setTimeout(() => this.setState({checking: false}), 500)
-    }
 
     validatePassword = (pass, isAgain) => {
         if (!isAgain) {
@@ -90,10 +78,8 @@ export default class LoginRegister extends Component {
                     password: this.state.password
                 }).then(res => {
                     console.log('registered and logged in')
-                    AUTH_TOKEN = res.data.token
-                    setItemAsync('token', res.data.token)
+                    this.props.screenProps.setToken(res.data.token)
                     this.setState(baseState)
-                    this.props.navigation.push('Main')
                 }).catch(err => console.log('Problem Registering: ' + err));
             } else {
                 await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/register', {
@@ -104,31 +90,22 @@ export default class LoginRegister extends Component {
                     password: this.state.password
                 }).then(res => {
                     console.log('registered and logged in')
-                    AUTH_TOKEN = res.data.token
-                    setItemAsync('token', res.data.token)
+                    this.props.screenProps.setToken(res.data.token)
                     this.setState(baseState)
-                    this.props.navigation.push('Main')
                 }).catch(err => console.log('Problem Registering: ' + err));
             }
         } else {
-            //FOR THE SAKE OF TESTING
-            //AUTH_TOKEN = 'testing_token'
-            //console.log('from Login: ' + AUTH_TOKEN)
             this.setState(baseState)
-            //if(AUTH_TOKEN) this.props.navigation.push('Main')
-            //else alert('incorrect login')
-
             console.log(`requesting...\nusername: ${this.state.username}\npassword: ${this.state.password}\n`)
             await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/login', {
                 username: this.state.username,
                 password: this.state.password
             }).then(res => {
-                AUTH_TOKEN = res.data.token
-                if (AUTH_TOKEN) {
-                    console.log('logged in with token: ' + AUTH_TOKEN)
-                    this.props.navigation.push('Main')
+                if (res.data) {
+                    console.log('logged in with token: ' + res.data.token)
+                    this.props.screenProps.setToken(res.data.token)
                 } else {
-                    console.log('token: ' + AUTH_TOKEN)
+                    console.log('token: ' + res.data.token)
                     alert('Incorrect username and password combination')
                 }
             }).catch(err => console.log('Problem Logging in: ' + err));
@@ -166,9 +143,9 @@ export default class LoginRegister extends Component {
                     placeholderTextColor='#999'
                     autoCapitalize='none'
                     textContentType='username' />
-                <TouchableHighlight style={styles.check_username} disabled>
+                <TouchableOpacity style={styles.check_username} disabled>
                     <Icon icon={checkUsername} style={{ color: checkUsernameColor }} size={20} />
-                </TouchableHighlight>
+                </TouchableOpacity>
                 <TextInput
                     onChangeText={email_phone => this.validateEmailPhone(email_phone)}
                     style={styles.input}
@@ -178,9 +155,9 @@ export default class LoginRegister extends Component {
                     autoCapitalize='none'
                     textContentType='emailAddress'
                     keyboardType='email-address' />
-                <TouchableHighlight style={styles.check_emailPhone} disabled>
+                <TouchableOpacity style={styles.check_emailPhone} disabled>
                     <Icon icon={checkEmailPhone} style={{ color: checkEmailPhoneColor }} size={20} />
-                </TouchableHighlight>
+                </TouchableOpacity>
                 <View style={styles.passwordInput}>
                     <TextInput
                         onChangeText={pass => this.validatePassword(pass, false)}
@@ -191,9 +168,9 @@ export default class LoginRegister extends Component {
                         placeholderTextColor='#999'
                         returnKeyType='next'
                         textContentType='password' />
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({ hidePassword: !prev.hidePassword }))}>
+                    <TouchableOpacity style={styles.eyeconBtn} onPress={() => this.setState(prev => ({ hidePassword: !prev.hidePassword }))}>
                         <Icon icon={eyecon} style={{ color: '#999' }} size={24} />
-                    </TouchableHighlight>
+                    </TouchableOpacity>
                 </View>
                 <TextInput
                     onChangeText={pass => this.validatePassword(pass, true)}
@@ -229,9 +206,9 @@ export default class LoginRegister extends Component {
                         placeholderTextColor='#999'
                         returnKeyType='go'
                         textContentType='password' />
-                    <TouchableHighlight style={styles.eyeconBtn} onPress={() => this.setState(prev => ({ hidePassword: !prev.hidePassword }))}>
+                    <TouchableOpacity style={styles.eyeconBtn} onPress={() => this.setState(prev => ({ hidePassword: !prev.hidePassword }))}>
                         <Icon icon={eyecon} style={{ color: 'gray' }} size={24} />
-                    </TouchableHighlight>
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -239,8 +216,7 @@ export default class LoginRegister extends Component {
 
     //LOGIN/REGISTER CONTAINER
     render() {
-        if(this.state.checking) return <View style={{flex: 1, backgroundColor: 'black'}}/>
-
+        console.log(this.props)
         const otherForm = this.state.newUser ? 'login' : 'register' // LOGIN/REGISTER TEXT LINK
         const loginBtn = this.state.newUser ? 'Register & Login' : 'Login' // LOGIN/REGISTER BUTTON
         const disableBtn = (!this.state.newUser || (this.state.goodPass && this.state.goodAgainPass && this.state.goodEmailPhone && this.state.goodUsername)) ? false : true

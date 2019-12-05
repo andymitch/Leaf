@@ -16,7 +16,6 @@ import List from './List'
 import Profile from './Profile'
 
 import Axios from 'axios'
-import { AUTH_TOKEN } from './LoginRegister'
 import { Video } from 'expo-av'
 
 
@@ -96,12 +95,12 @@ class FeedContent extends Component {
 
     async componentWillUnmount() {
         if (this.props.likes < this.state.likes) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.id, token: AUTH_TOKEN })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.id, token: this.props.screenProps.token })
                 .then(() => console.log('liked'))
                 .catch(err => console.log('Problem Liking: ' + err))
             this.props.like(this.props.onPopular, this.props.index, 1)
         } else if (this.props.likes > this.state.likes) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.id, token: AUTH_TOKEN })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.id, token: this.props.screenProps.token })
                 .then(() => console.log('unliked'))
                 .catch(err => console.log('Problem Unliking: ' + err))
             this.props.like(this.props.onPopular, this.props.index, -1)
@@ -192,7 +191,7 @@ export default class Feed extends Component {
         }
         this.setState({ isLoading: false })
         /*
-        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed`, { params: { from: from } })
+        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed`, { params: { from: from, token: this.props.screenProps.token } })
             .then(res => {
                 if (from === 'popular') {
                     if (refresh) this.setState({ popular: res.data, isLoading: false })
@@ -309,7 +308,7 @@ export default class Feed extends Component {
                     onWillFocus={() => this.setState({ blurred: false })}
                     onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false, gotoProfile: null })}
                 />
-                <List leaderboard={false} gotoProfile={this.gotoProfile} goBack={this.goBack} />
+                <List theme={this.props.screenProps.theme} token={this.props.screenProps.token} leaderboard={false} gotoProfile={this.gotoProfile} goBack={this.goBack} />
             </View>
 
         )
@@ -319,7 +318,7 @@ export default class Feed extends Component {
                     onWillFocus={() => this.setState({ blurred: false })}
                     onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false, gotoProfile: null })}
                 />
-                <List leaderboard={true} gotoProfile={this.gotoProfile} goBack={this.goBack} />
+                <List theme={this.props.screenProps.theme} token={this.props.screenProps.token} leaderboard={true} gotoProfile={this.gotoProfile} goBack={this.goBack} />
             </View>
         )
 

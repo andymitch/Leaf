@@ -13,3 +13,5 @@ avoid cheating: user creates 1 second videos of nothing and gets points for them
 add location to videos
 
 upload or capture videos need to be 10 seconds or less
+
+use REDUX for token state management

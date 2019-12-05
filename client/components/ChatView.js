@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions, FlatList, ScrollView, Image } from 'react-native'
+import { View, Text, Dimensions, ScrollView, Image } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Video } from 'expo-av'
 import Axios from 'axios'
-import { AUTH_TOKEN } from './LoginRegister'
-Axios.defaults.headers.common['auth-token'] = AUTH_TOKEN
 import ChatCam from './ChatCam'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
 import { faTimes, faVideo } from '@fortawesome/free-solid-svg-icons'
@@ -29,7 +27,7 @@ export default class ChatView extends Component {
         })
         this.setState({messages: temp})
         /*
-        await Axios.post('/chat', {uri: uri, id: this.props.navigation.getParam('id')})
+        await Axios.post('/chat', {uri: uri, id: this.props.navigation.getParam('id'), token: this.props.token})
         .then(res => {
             let temp = this.state.messages
             temp.push(res.data)

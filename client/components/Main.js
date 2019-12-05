@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
+import { createAppContainer } from 'react-navigation'
 
 // ICONS
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
@@ -24,12 +25,12 @@ const getTabBarIcon = (navigation, focused) => {
     }
 }
 
-export default createMaterialBottomTabNavigator({
-    Home: { screen: Feed },
-    Search: { screen: Search },
+const mainNav = createMaterialBottomTabNavigator({
+    Home: { screen: props => <Feed {...props} {...this.props} /> },
+    Search: { screen: props => <Search {...props} {...this.props} /> },
     Camera: { screen: Camera },
-    Messages: { screen: Messages },
-    Profile: { screen: Profile }
+    Messages: { screen: props => <Messages {...props} {...this.props} /> },
+    Profile: { screen: props => <Profile {...props} {...this.props} /> }
 }, {
     defaultNavigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused }) => getTabBarIcon(navigation, focused)
@@ -40,3 +41,11 @@ export default createMaterialBottomTabNavigator({
     inactiveColor: 'black',
     barStyle: { backgroundColor: 'black' }
 })
+
+const Main = createAppContainer(mainNav)
+
+export default class extends Component{
+    render(){
+        return <Main screenProps={{...this.props.screenProps, ...this.props.navigation}}/>
+    }
+}
