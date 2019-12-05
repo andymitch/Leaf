@@ -228,6 +228,7 @@ export default class Feed extends Component {
                     this._transition.show(this.renderContent(this.state.popularIndex - 1, true), SlideDown)
                     this.setState(prev => ({ popularIndex: prev.popularIndex - 1 }))
                 } else {
+                    console.log('refreshing...')
                     this.getFeed(true, 'popular')
                 }
             } else {
@@ -235,6 +236,7 @@ export default class Feed extends Component {
                     this._transition.show(this.renderContent(this.state.followingIndex - 1, false), SlideDown)
                     this.setState(prev => ({ followingIndex: prev.followingIndex - 1 }))
                 } else {
+                    console.log('refreshing...')
                     this.getFeed(true, 'following')
                 }
             }
