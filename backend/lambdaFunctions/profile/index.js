@@ -15,7 +15,7 @@ exports.handler = async (event, context) => {
   client.connect();
   console.log("Succesfully connected to database");
 
-  let decodedToken = jwt.verify(event.token, config.secret)
+  let decodedToken = jwt.verify(event.queryStringParameters.token, config.secret)
   console.log("Running Query for Username stored in token");
   //Get username for id in token
   let query = 'SELECT username FROM users WHERE id=$1'
@@ -36,7 +36,7 @@ exports.handler = async (event, context) => {
 
     //Gets all needed data from Likes, Videos, and Users tables
   query = 'SELECT users.profilepicture, users.id uid, users.username, users.name, users.points, users.multiplier, videos.id, EXTRACT(Day FROM videos.expiredate - NOW()) as life, likes.users, videos.title, videos.description, videos.likes, videos.url FROM users FULL JOIN videos ON users.id = videos.ownerid FULL JOIN likes ON videos.id = likes.videoid WHERE users.username=$1';  //Query structures
-  values = [event.username]//Values to put into query
+  values = [event.queryStringParameters.username]//Values to put into query
   let [username, profilepicture, name, points, multiplier, uid] = [null, null, null, null, null, null]
   let videos = []
   await client.query(query, values) //Initiate query
@@ -61,7 +61,7 @@ exports.handler = async (event, context) => {
         videos.push({
           "id": row.id,
           "description": row.description,
-          "url": row.url,
+          "uri": row.url,
           "life": row.life,
           "liked": liked
         })
@@ -101,11 +101,7 @@ exports.handler = async (event, context) => {
       });
 
   }
-
-  let response = {
-    statusCode: 200,
-    body: "Success",
-    data: {
+  let results = {
       username,
       profilepicture,
       name,
@@ -114,6 +110,9 @@ exports.handler = async (event, context) => {
       following,
       videos
     }
+  let response = {
+    statusCode: 200,
+    body: JSON.stringify(results)
   };
 
   console.log("End Query and Connection");
