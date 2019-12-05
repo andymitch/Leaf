@@ -17,7 +17,7 @@ exports.handler = async (event, context) => {
 
   console.log("Starting to Run Query");
   let query = 'SELECT username, profilepicture, name FROM users WHERE LOWER(username) ~ LOWER($1) OR LOWER(name) ~ LOWER($1) LIMIT 50' // "~" is basically like contains
-  let values = [event.queryStringParameters.keyphrase];
+  let values = [event.keyphrase];
   let results = []
   await client.query(query, values) //Initiate query
     .then(res => {
@@ -33,8 +33,10 @@ exports.handler = async (event, context) => {
     });
   let response = {
     statusCode: 200,
-    body: JSON.stringify({"data": results}),
-    
+    body: "Success",
+    data: {
+      results
+    }
   };
   console.log("End Query and Connection");
   client.end()
