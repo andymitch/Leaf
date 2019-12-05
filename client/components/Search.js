@@ -57,7 +57,7 @@ export default class Search extends Component {
         return (
             <View key={index} style={{ height: 60, backgroundColor: 'white', shadowColor: "gainsboro", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5, elevation: 2, marginVertical: 5, padding: 5, borderRadius: 10 }}>
                 <TouchableOpacity onPress={() => this.setState({ goto: item.username })} style={{flexDirection: 'row', width: '100%'}}>
-                    <Image source={{ uri: item.profile }} style={{ height: 50, width: 50, borderRadius: 25, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
+                    <Image source={{ uri: item.profilepicture }} style={{ height: 50, width: 50, borderRadius: 25, borderWidth: 1, borderColor: 'black', marginRight: 5 }} />
                     <View>
                         <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{item.username}</Text>
                         <Text style={{ fontSize: 15, fontStyle: 'italic', color: 'grey' }}>{item.fullname}</Text>
