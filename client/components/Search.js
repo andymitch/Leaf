@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, ActivityIndicator, Image } from 'react-native'
+import { View, Text, TextInput, Dimensions, ActivityIndicator, Image, ScrollView } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Axios from 'axios'
 import Profile from './Profile'
@@ -16,16 +16,13 @@ export default class Search extends Component {
         theme: this.props.screenProps.theme == 'dark' ? DARK : LIGHT
     }
 
-    searchFor = async keyphrase => {
-        this.setState({ keyphrase })
+    search = async () => {
         if (!this.state.searching) {
             this.setState({ searching: true })
             setTimeout(async () => {
-                await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/search?keyphrase=${keyphrase}`)
-                .then(res => {
-                    console.log(res.data)
-                    this.setState({results: res.data, searching: false})
-                }).catch(err => console.log(err.response))
+                await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/search?keyphrase=${this.state.keyphrase}`)
+                .then(res => this.setState({results: res.data, searching: false}))
+                .catch(err => console.log(err.response))
             }, 2000)
         }
     }
@@ -34,8 +31,8 @@ export default class Search extends Component {
 
     renderItem = (item, index) => {
         return (
-            <View key={index} style={[this.state.theme.container, { height: 60, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5, elevation: 2, marginVertical: 5, padding: 5, borderRadius: 10 }]}>
-                <TouchableOpacity onPress={() => this.setState({ goto: item.username })} style={{flexDirection: 'row', width: '100%'}}>
+            <View key={index} style={[this.state.theme.container, { height: 60, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5, elevation: 2, marginVertical: 5, padding: 5, borderRadius: 10, width: '99%', marginLeft: '.5%' }]}>
+                <TouchableOpacity onPress={() => this.setState({ goto: item.username })} style={{flexDirection: 'row'}}>
                     <Image source={{ uri: item.profilepicture }} style={[{ height: 50, width: 50, borderRadius: 25, borderWidth: 1, marginRight: 5 }, this.state.theme.image]} />
                     <View>
                         <Text style={[{ fontSize: 20, fontWeight: 'bold' }, this.state.theme.text]}>{item.username}</Text>
@@ -55,9 +52,9 @@ export default class Search extends Component {
             )
         }
         return (
-            <View style={{ flex: 1 }}>
+            <ScrollView style={{ height: '90%', width: '100%' }}>
                 {this.state.results.map((result, index) => this.renderItem(result, index))}
-            </View>
+            </ScrollView>
         )
     }
 
@@ -66,7 +63,7 @@ export default class Search extends Component {
         return (
             <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, this.state.theme.container]}>
                 <View style={[this.state.theme.container, { flexDirection: 'row', justifyContent: 'center', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5, elevation: 2, marginBottom: 20, borderRadius: 10 }]}>
-                    <TextInput placeholder='Search' autoCapitalize='none' style={[{ width: winWidth - 50, borderWidth: 0, height: 40, marginBottom: 10, padding: 10, }, this.state.theme.text]} onChangeText={keyphrase => this.searchFor(keyphrase)} />
+                    <TextInput placeholder='Search' autoCapitalize='none' style={[{ width: winWidth - 50, borderWidth: 0, height: 40, marginBottom: 10, padding: 10, }, this.state.theme.text]} onChangeText={keyphrase => {this.setState({keyphrase}); this.search()}} />
                 </View>
                 <View>
                     {this.renderResults()}
