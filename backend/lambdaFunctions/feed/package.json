@@ -1,0 +1,16 @@
+{
+  "name": "feed",
+  "version": "1.0.0",
+  "description": "Feed Lambda Function",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "zip -r ../$npm_package_name.zip * && aws lambda update-function-code --function-name $npm_package_name --zip-file fileb://../$npm_package_name.zip"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.12.1"
+  }
+}
