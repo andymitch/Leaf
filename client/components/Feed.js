@@ -182,16 +182,6 @@ export default class Feed extends Component {
 
     getFeed = async (refresh, from) => {
         this.setState({ isLoading: true })
-        // FOR TESTING PURPOSES
-        // if (from === 'popular') {
-        //     if (refresh) this.setState({ popular: popFeed })
-        //     else this.setState(prev => ({ popular: [...prev.popular, ...popFeed] }))
-        // } else {
-        //     if (refresh) this.setState({ following: folFeed })
-        //     else this.setState(prev => ({ following: [...prev.following, ...folFeed] }))
-        // }
-        // this.setState({ isLoading: false })
-        // /*
         await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed?from=${from}&token=${this.props.screenProps.token}`)
             .then(res => {
                 console.log(res)
@@ -204,7 +194,6 @@ export default class Feed extends Component {
                     else this.setState(prev => ({ following: [...prev.following, ...res.data], isLoading: false }))
                 }
             }).catch(err => console.log(err))
-        // */
     }
 
     onSwipe = gName => {

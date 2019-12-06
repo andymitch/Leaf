@@ -162,7 +162,7 @@ export default class Profile extends Component {
                 })
                 following = res.data.following
             }).catch(err => console.log(err))
-        */
+        */  
     }
 
     componentWillUnmount() { this.follow() }
