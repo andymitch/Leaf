@@ -113,7 +113,7 @@ export default class ChatCam extends Component {
                 {this.renderCamera(this.state.cameraType, this.state.flashMode)}
                 <LinearGradient
                     colors={['rgba(0,0,0,0)','rgba(0,0,0,.8)', 'rgba(0,0,0,1)']}
-                    style={{ flexDirection: 'row', justifyContent: 'space-around', position: 'absolute', bottom: 0, width: winWidth, height: 250, alignItems: 'center' }}>
+                    style={{ flexDirection: 'row', justifyContent: 'space-around', position: 'absolute', bottom: 0, width: winWidth, height: 120, alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => this.props.goBack()}>
                         <Icon icon={faTimes} size={30} style={{color: 'white'}}/>
                     </TouchableOpacity>
