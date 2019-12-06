@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, TouchableOpacity, FlatList, Text } from 'react-native'
 import ReactNativeSettingsPage, { SwitchRow, SliderRow, SectionRow, NavigateRow, CheckRow } from 'react-native-settings-page';
+import RNRestart from 'react-native-restart'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import ProfileCam from './ProfileCam'
@@ -62,8 +63,8 @@ export default class Settings extends Component {
 				<TouchableOpacity onPress={() => {this.props.screenProps.deleteToken()}} style={{width: '50%', height: 100, alignSelf: 'center', color: 'grey'}}>
 					<Text>Logout</Text>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={() => {alert('Mode switched. Reload app to see effects.'); this.setTheme()}} style={{width: '50%', height: 100, alignSelf: 'center', color: 'grey'}}>
-					<Text>Light / Dark Mode</Text>
+				<TouchableOpacity onPress={() => {alert('Mode switched. Reload app to see effects.'); this.setTheme()}} style={{borderRadius: 20, width: '50%', height: 100, alignSelf: 'center', backgroundColor: 'cadetblue', justifyContent: 'center', alignItems: 'center'}}>
+					<Text style={{color: 'white'}}>Light / Dark Mode</Text>
 				</TouchableOpacity>
 			</View>
 		)

@@ -242,7 +242,7 @@ export default class Profile extends Component {
                 <NavigationEvents onDidBlur={() => this.follow()}/>
                 {this.state.following !== null &&
                     <TouchableOpacity onPress={() => this.props.goBack()}>
-                        <Icon icon={faArrowLeft} size={35} style={{margin: 10, marginTop: 0}}/>
+                        <Icon icon={faArrowLeft} size={35} style={[{margin: 10, marginTop: 0}, this.state.theme.icon]}/>
                     </TouchableOpacity>
                 }
                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
