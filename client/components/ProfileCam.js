@@ -32,6 +32,7 @@ export default class ChatCam extends Component {
     setCameraType = cameraType => this.setState({ cameraType })
 
     handleCapture = async () => {
+        const uri = await this.camera.takePictureAsync(options).uri
         // REQ GOES HERE
         this.props.goBack()
     }
@@ -40,6 +41,7 @@ export default class ChatCam extends Component {
         if (this.state.blurred) return null
         return (
             <Camera
+                ref={ref => {this.camera = ref}}
                 type={cameraType}
                 flashMode={flashMode}
                 style={{ backgroundColor: 'black', height: winWidth*2, width: winWidth, position: 'absolute' }}
