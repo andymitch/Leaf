@@ -81,7 +81,7 @@ exports.handler = async (event, context, callback) => {
     console.log(decodedToken.data);
 
     // The url where the video will actually be available to view
-    let uploadUrl = "https://diwoaedb40lx7.cloudfront.net/profile-picture/" + myKey;
+    let uploadUrl = "https://diwoaedb40lx7.cloudfront.net/profile-pictures/" + myKey;
 
     // Insert the randomTitle we generate, the caption, the user id, and the uploadURL
     let query2 = "UPDATE users SET profilepicture = $1 WHERE id = $2";

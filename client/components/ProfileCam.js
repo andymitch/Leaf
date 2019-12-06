@@ -13,6 +13,7 @@ const { width: winWidth, height: winHeight } = Dimensions.get('window')
 const { FlashMode: CameraFlashModes, Type: CameraTypes } = Camera.Constants
 import Axios from 'axios'
 import { RNS3 } from 'react-native-aws3'
+import CameraTimer from "./CameraTimer";
 
 export default class ChatCam extends Component {
     camera = null
@@ -34,26 +35,26 @@ export default class ChatCam extends Component {
     setCameraType = cameraType => this.setState({ cameraType })
 
     handleCapture = async () => {
-        const uri = await this.camera.takePictureAsync(options).uri
-        // REQ GOES HERE
+        //console.log(this.camera.getAvailablePictureSizesAsync('4:3'));
+        const uri = await this.camera.takePictureAsync({quality: 0.3});
 
         // Create entry for video in Database
         let name = null;
         await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/upload-profile-picture', {
-            token: this.props.screenProps.token
+            token: this.props.token
         })
         // Need some values that are returned so assign to object...
-            .then(res => (
+            .then(res => {
                 name = res.data.name
-            ))
+            })
             .catch(err => console.log("failure" + err));
 
         // If our previous request suceeded, actually upload the video
         if (name != null) {
 
             // Create codec naming scheme
-            let type = `image/jpeg`;
-            let extension = '.jpeg';
+            let type = `image/jpg`;
+            let extension = '.jpg';
 
             // Create actual file
             const file = {
@@ -112,13 +113,15 @@ export default class ChatCam extends Component {
                 {this.renderCamera(this.state.cameraType, this.state.flashMode)}
                 <LinearGradient
                     colors={['rgba(0,0,0,0)','rgba(0,0,0,.8)', 'rgba(0,0,0,1)']}
-                    style={{ flexDirection: 'row', justifyContent: 'space-around', position: 'absolute', bottom: 0, width: winWidth, height: 70, alignItems: 'center' }}>
+                    style={{ flexDirection: 'row', justifyContent: 'space-around', position: 'absolute', bottom: 0, width: winWidth, height: 250, alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => this.props.goBack()}>
                         <Icon icon={faTimes} size={30} style={{color: 'white'}}/>
                     </TouchableOpacity>
-                    <TouchableWithoutFeedback onPress={() => this.handleCapture}>
-                        <View style={styles.captureBtn}>
-                            {capturing && <View style={styles.captureBtnInternal} />}
+                    <TouchableWithoutFeedback onPress={this.handleCapture}>
+                        <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
+                            <View style={styles.captureBtn}>
+                                {capturing && <View style={styles.captureBtnInternal} />}
+                            </View>
                         </View>
                     </TouchableWithoutFeedback>
                     <TouchableOpacity onPress={() => this.setFlashMode(flashMode === CameraFlashModes.torch ? CameraFlashModes.off : CameraFlashModes.torch)}>
