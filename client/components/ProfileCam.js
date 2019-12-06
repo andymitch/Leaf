@@ -32,7 +32,7 @@ export default class ChatCam extends Component {
     setCameraType = cameraType => this.setState({ cameraType })
 
     handleCapture = async () => {
-        const uri = await this.camera.takePictureAsync(options).uri
+        const uri = await this.camera.takePictureAsync().uri
         // REQ GOES HERE
         this.props.goBack()
     }
