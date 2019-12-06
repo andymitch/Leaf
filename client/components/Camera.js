@@ -6,8 +6,6 @@ import * as ImagePicker from 'expo-image-picker'
 import { LinearGradient } from 'expo-linear-gradient'
 import { NavigationEvents } from 'react-navigation'
 
-import CameraTimer from './CameraTimer'
-
 //ICONS, STYLES
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
 import { faImages } from '@fortawesome/free-solid-svg-icons'
@@ -25,7 +23,7 @@ export default class CameraView extends React.Component {
         cameraType: Camera.Constants.Type.back,
         flashMode: Camera.Constants.FlashMode.off,
         blurred: false
-    };
+    }
 
     setFlashMode = flashMode => this.setState({ flashMode })
     setCameraType = cameraType => this.setState({ cameraType })
@@ -36,7 +34,7 @@ export default class CameraView extends React.Component {
             this.camera.stopRecording()
         } else {
             this.setState({ capturing: true })
-            const {uri, codec = "mp4"} = await this.camera.recordAsync({quality: "720p", maxDuration: 10 });
+            const {uri, codec = "mp4"} = await this.camera.recordAsync({quality: "480p", maxDuration: 10 })
             this.setState({capturing: false})
             this.props.screenProps.push('Preview', { uri: uri })
         }
@@ -51,7 +49,7 @@ export default class CameraView extends React.Component {
             })
             if (!result.cancelled) this.props.screenProps.push('Preview', { uri: result.uri, })
         }
-    };
+    }
 
     async componentDidMount() {
         const camera = await Permissions.askAsync(Permissions.CAMERA)
@@ -100,13 +98,8 @@ export default class CameraView extends React.Component {
                         <Icon icon={faImages} style={{ color: 'white' }} size={30} />
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={this.handleCapture}>
-                        <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
-                            <View style={styles.captureBtn}>
-                                {capturing && <View style={styles.captureBtnInternal} />}
-                            </View>
-                            <View style={{ position: 'absolute' }}>
-                                {/*capturing*/false && <CameraTimer seconds={10} />}
-                            </View>
+                        <View style={styles.captureBtn}>
+                            {capturing && <View style={styles.captureBtnInternal} />}
                         </View>
                     </TouchableWithoutFeedback>
                     <TouchableOpacity onPress={() => this.setCameraType(cameraType === CameraTypes.back ? CameraTypes.front : CameraTypes.back)}>
@@ -114,6 +107,6 @@ export default class CameraView extends React.Component {
                     </TouchableOpacity>
                 </LinearGradient>
             </View>
-        );
-    };
-};
+        )
+    }
+}

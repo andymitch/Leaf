@@ -4,7 +4,6 @@ import { Camera } from 'expo-camera'
 import * as Permissions from 'expo-permissions'
 import { LinearGradient } from 'expo-linear-gradient'
 import { NavigationEvents } from 'react-navigation'
-import CameraTimer from './CameraTimer'
 
 import { Ionicons } from '@expo/vector-icons'
 import styles from '../styles/styles'
@@ -78,13 +77,8 @@ export default class ChatCam extends Component {
                         <Ionicons name={flashMode == CameraFlashModes.torch ? "md-flash" : 'md-flash-off'} color="white" size={30} />
                     </TouchableOpacity>
                     <TouchableWithoutFeedback onPress={this.handleCapture}>
-                        <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
-                            <View style={styles.captureBtn}>
-                                {capturing && <View style={styles.captureBtnInternal} />}
-                            </View>
-                            <View style={{ position: 'absolute' }}>
-                                {capturing && <CameraTimer seconds={10} />}
-                            </View>
+                        <View style={styles.captureBtn}>
+                            {capturing && <View style={styles.captureBtnInternal} />}
                         </View>
                     </TouchableWithoutFeedback>
                     <TouchableOpacity onPress={() => this.setCameraType(cameraType === CameraTypes.back ? CameraTypes.front : CameraTypes.back)}>

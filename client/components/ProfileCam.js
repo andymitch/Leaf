@@ -10,10 +10,9 @@ import styles from '../styles/styles'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 const { width: winWidth, height: winHeight } = Dimensions.get('window')
-const { FlashMode: CameraFlashModes, Type: CameraTypes } = Camera.Constants
+const { FlashMode: CameraFlashModes } = Camera.Constants
 import Axios from 'axios'
 import { RNS3 } from 'react-native-aws3'
-import CameraTimer from "./CameraTimer";
 
 export default class ChatCam extends Component {
     camera = null
@@ -118,10 +117,8 @@ export default class ChatCam extends Component {
                         <Icon icon={faTimes} size={30} style={{color: 'white'}}/>
                     </TouchableOpacity>
                     <TouchableWithoutFeedback onPress={this.handleCapture}>
-                        <View style={{ alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
-                            <View style={styles.captureBtn}>
-                                {capturing && <View style={styles.captureBtnInternal} />}
-                            </View>
+                        <View style={styles.captureBtn}>
+                            {capturing && <View style={styles.captureBtnInternal} />}
                         </View>
                     </TouchableWithoutFeedback>
                     <TouchableOpacity onPress={() => this.setFlashMode(flashMode === CameraFlashModes.torch ? CameraFlashModes.off : CameraFlashModes.torch)}>
