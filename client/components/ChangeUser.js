@@ -21,7 +21,7 @@ export class ChangeUser extends Component{
       this.setState({ username: str })
       console.log(str)
       if (str.match(validUsername)) {
-          await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/check-username', { username: str })
+          await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/check-username', { username: str })
               .then(res => { console.log(res.data.body); this.setState({ goodUsername: res.data.body }) })
               .catch(err => console.log(err));
       } else this.setState({ goodUsername: false })
@@ -31,7 +31,7 @@ export class ChangeUser extends Component{
 		navigation.navigate('Settings');
 	}
   submit = async () => {
-    await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-username', {
+    await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/change-username', {
       current: this.state.current,
       username: this.state.username,
       token: this.props.screenProps.token

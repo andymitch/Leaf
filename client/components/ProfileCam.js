@@ -11,6 +11,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 const { width: winWidth, height: winHeight } = Dimensions.get('window')
 const { FlashMode: CameraFlashModes, Type: CameraTypes } = Camera.Constants
+import Axios from 'axios'
+import { RNS3 } from 'react-native-aws3'
 
 export default class ChatCam extends Component {
     camera = null
@@ -32,8 +34,51 @@ export default class ChatCam extends Component {
     setCameraType = cameraType => this.setState({ cameraType })
 
     handleCapture = async () => {
-        const uri = await this.camera.takePictureAsync(options).uri
-        // REQ GOES HERE
+        const uri = await this.camera.takePictureAsync(options).uri;
+
+        // Create entry for video in Database
+        let name = null;
+        await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/upload-profile-picture', {
+            token: this.props.screenProps.token
+        })
+        // Need some values that are returned so assign to object...
+            .then(res => (
+                name = res.data.name
+            ))
+            .catch(err => console.log("failure" + err));
+
+        // If our previous request suceeded, actually upload the video
+        if (name != null) {
+
+            // Create codec naming scheme
+            let type = `image/jpeg`;
+            let extension = '.jpeg';
+
+            // Create actual file
+            const file = {
+                uri: uri,
+                name: name + extension,
+                type: type
+            };
+
+            // Options for S3 bucket
+            const options = {
+                keyPrefix: "profile-pictures/",
+                bucket: "leaf-video",
+                region: "us-east-1",
+                accessKey: "AKIA5WQQ4TUUKGMTDZ7W",
+                secretKey: "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",
+                successActionStatus: 201
+            };
+
+            // Put into S3 Bucket
+            RNS3.put(file, options).then(response => {
+                if (response.status !== 201)
+                    throw new Error("Failed to upload photo");
+                console.log(response.body);
+            });
+            alert('Changed!');
+        }
         this.props.goBack()
     }
 

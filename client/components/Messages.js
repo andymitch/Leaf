@@ -178,7 +178,7 @@ class ReqItem extends Component {
                 this.props.clear(this.props.index)
                 console.log('following')
                 /*
-                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/follow', { username: this.props.name, follow: true, token: this.props.token })
+                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/follow', { username: this.props.name, follow: true, token: this.props.token })
                     .then(() => this.props.clear(this.props.index))
                     .catch(err => console.log(err))
                 */
@@ -192,7 +192,7 @@ class ReqItem extends Component {
             this.props.clear(this.props.index)
             console.log('joined chat group ' + this.props.id)
             /*
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/join', { id: this.props.id, token: this.props.token })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/join', { id: this.props.id, token: this.props.token })
                 .then(() => {
                     this.props.clear(this.props.index)
                     this.props.get()
@@ -266,12 +266,12 @@ export default class Messages extends Component {
         this.setState({ requests: requests, chats: chats, isLoading: false })
         /*
         //get requests
-        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/requests', {params:{token: this.props.screenProps.token}})
+        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/requests', {params:{token: this.props.screenProps.token}})
             .then(res => this.setState({ requests: res.data }))
             .catch(err => console.log(err))
 
         //get chats
-        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/chats', {params:{token: this.props.screenProps.token}})
+        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/chats', {params:{token: this.props.screenProps.token}})
             .then(res => this.setState({ chats: res.data }))
             .catch(err => console.log(err))
         */
@@ -282,7 +282,7 @@ export default class Messages extends Component {
         temp[index].accept = true
         this.setState({ requests: temp })
         /*
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/accept', { username: this.props.name, token: this.props.screenProps.token })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/accept', { username: this.props.name, token: this.props.screenProps.token })
                 .then(() => this.setState({ accepted: true }))
                 .catch(err => console.log(err))
         */
@@ -293,7 +293,7 @@ export default class Messages extends Component {
         temp.splice(index, 1)
         this.setState({ requests: temp })
         /*
-        await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/requests', { requests: temp, token: this.props.screenProps.token })
+        await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/requests', { requests: temp, token: this.props.screenProps.token })
             .catch(err => console.log(err))
         */
     }

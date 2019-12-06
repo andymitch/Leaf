@@ -61,8 +61,8 @@ class FullVideo extends Component {
     }
 
     async componentWillUnmount() {
-        if (this.props.video.liked && !this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.video.id, token: this.props.token }).catch(err => console.log(err))
-        else if (!this.props.video.liked && this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.video.id, token: this.props.token }).catch(err => console.log(err))
+        if (this.props.video.liked && !this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/like', { like: false, id: this.props.video.id, token: this.props.token }).catch(err => console.log(err))
+        else if (!this.props.video.liked && this.state.liked) await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/like', { like: true, id: this.props.video.id, token: this.props.token }).catch(err => console.log(err))
     }
 
     render() {
@@ -132,7 +132,7 @@ export default class Profile extends Component {
         console.log(username)
         console.log("AUTH")
         console.log("TEST" + this.props.screenProps.token)
-        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/profile?username=${username}&token=${this.props.screenProps.token}`)
+        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/profile?username=${username}&token=${this.props.screenProps.token}`)
             .then(res => {
                 console.log(res.data)
                 this.setState({
@@ -149,7 +149,7 @@ export default class Profile extends Component {
             }).catch(err => console.log(err.response))
         /*
         const username = this.props.username === undefined ? null : this.props.username
-        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/profile', { params: { username: username, token: this.props.screenProps.token } })
+        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/profile', { params: { username: username, token: this.props.screenProps.token } })
             .then(res => {
                 this.setState({
                     profile: res.data.profile,
@@ -183,7 +183,7 @@ export default class Profile extends Component {
 
     follow = async () => {
         if (following !== null && following !== this.state.following) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/follow', { username: this.state.username, follow: this.state.following, token: this.props.screenProps.token })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/follow', { username: this.state.username, follow: this.state.following, token: this.props.screenProps.token })
                 .catch(err => console.log(err))
             following = this.state.following
         }

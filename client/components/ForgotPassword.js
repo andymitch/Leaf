@@ -23,7 +23,7 @@ export default class ForgotPassword extends Component{
 
   submit = async () => {
     if(this.state.isPhone){
-      await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/forgot-password', {
+      await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/forgot-password', {
         email: null,
         phone: this.state.email_phone
       }).then(res => {
@@ -36,7 +36,7 @@ export default class ForgotPassword extends Component{
       }).catch(err => console.log('Problem with forgot password: ' + err));
     }
     else{
-      await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/forgot-password', {
+      await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/forgot-password', {
         email: this.state.email_phone,
         phone: null
       }).then(res => {

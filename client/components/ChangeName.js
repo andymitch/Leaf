@@ -15,7 +15,7 @@ export class ChangeName extends Component{
 
   submit = async () => {
     let token = null
-    await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-name', {
+    await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/change-name', {
       name: this.state.name,
       current: this.state.current,
       token: this.props.screenProps.token

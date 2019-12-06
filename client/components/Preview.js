@@ -75,7 +75,7 @@ export default class Preview extends Component {
 
         // Create entry for video in Database
         let temp = null;
-        await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/upload', {
+        await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/upload', {
             caption: this.state.caption,
             token: this.props.screenProps.token,
             location: this.state.location,
@@ -123,8 +123,8 @@ export default class Preview extends Component {
                 if (response.status !== 201)
                     throw new Error("Failed to upload video");
                 console.log(response.body);
-            })
-            ToastAndroid.show('Video posted!', ToastAndroid.SHORT)
+            });
+            alert('Video Posted!');
         }
         this.props.navigation.goBack()
     }

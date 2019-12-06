@@ -95,12 +95,12 @@ class FeedContent extends Component {
 
     async componentWillUnmount() {
         if (this.props.likes < this.state.likes) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: true, id: this.props.id, token: this.props.token })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/like', { like: true, id: this.props.id, token: this.props.token })
                 .then(() => console.log('liked'))
                 .catch(err => console.log('Problem Liking: ' + err))
             this.props.like(this.props.onPopular, this.props.index, 1)
         } else if (this.props.likes > this.state.likes) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/like', { like: false, id: this.props.id, token: this.props.token })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/like', { like: false, id: this.props.id, token: this.props.token })
                 .then(() => console.log('unliked'))
                 .catch(err => console.log('Problem Unliking: ' + err))
             this.props.like(this.props.onPopular, this.props.index, -1)
@@ -182,7 +182,7 @@ export default class Feed extends Component {
 
     getFeed = async (refresh, from) => {
         this.setState({ isLoading: true })
-        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/feed?from=${from}&token=${this.props.screenProps.token}`)
+        await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/feed?from=${from}&token=${this.props.screenProps.token}`)
             .then(res => {
                 console.log(res)
                 if(res.data.length < 5) this.setState({noMore: true})

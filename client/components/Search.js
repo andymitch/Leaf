@@ -21,7 +21,7 @@ export default class Search extends Component {
         if (!this.state.searching) {
             this.setState({ searching: true })
             setTimeout(async () => {
-                await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/search?keyphrase=${keyphrase}`)
+                await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/search?keyphrase=${keyphrase}`)
                 .then(res => {
                     console.log(res.data)
                     this.setState({results: res.data, searching: false})

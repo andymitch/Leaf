@@ -32,7 +32,7 @@ export class ChangePass extends Component{
       }
   }
   submit = async () => {
-    await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/change-password', {
+    await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/change-password', {
       current: this.state.current,
       password: this.state.password,
       token: this.props.screenProps.token

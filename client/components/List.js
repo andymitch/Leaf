@@ -104,11 +104,11 @@ export default class List extends Component {
         this.setState({ items: _items, isLoading: false })
         /*
         if (this.props.leaderboard) {
-            await Axios.post(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/leaderboard`, {})
+            await Axios.post(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/leaderboard`, {})
                 .then(res => this.setState({ items: res.data }))
                 .catch(err => console.log(err))
         } else {
-            await Axios.post(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/following`, { token: this.props.token})
+            await Axios.post(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/following`, { token: this.props.token})
                 .then(res => this.setState({ items: res.data }))
                 .catch(err => console.log(err))
         }

@@ -61,7 +61,7 @@ export default class LoginRegister extends Component {
         this.setState({ username: str })
         console.log(str)
         if (str.match(validUsername)) {
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/check-username', { username: str })
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/check-username', { username: str })
                 .then(res => { console.log(res.data.body); this.setState({ goodUsername: res.data.body }) })
                 .catch(err => console.log(err));
         } else this.setState({ goodUsername: false })
@@ -70,7 +70,7 @@ export default class LoginRegister extends Component {
     login = async () => {
         if (this.state.newUser) {
             if (this.state.isPhone) {
-                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/register', {
+                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/register', {
                     name: this.state.name,
                     username: this.state.username,
                     email: null,
@@ -82,7 +82,7 @@ export default class LoginRegister extends Component {
                     this.setState(baseState)
                 }).catch(err => console.log('Problem Registering: ' + err));
             } else {
-                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/register', {
+                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/register', {
                     name: this.state.name,
                     username: this.state.username,
                     email: this.state.email_phone,
@@ -97,7 +97,7 @@ export default class LoginRegister extends Component {
         } else {
             this.setState(baseState)
             console.log(`requesting...\nusername: ${this.state.username}\npassword: ${this.state.password}\n`)
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/Beta/login', {
+            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/login', {
                 username: this.state.username,
                 password: this.state.password
             }).then(res => {
