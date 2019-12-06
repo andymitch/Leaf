@@ -36,8 +36,8 @@ export default class ChatCam extends Component {
 
     handleCapture = async () => {
         //console.log(this.camera.getAvailablePictureSizesAsync('4:3'));
-        const uri = await this.camera.takePictureAsync({quality: 0.3});
-
+        const data = await this.camera.takePictureAsync({quality: 0.3})
+        console.log(data)
         // Create entry for video in Database
         let name = null;
         await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/upload-profile-picture', {
@@ -58,7 +58,7 @@ export default class ChatCam extends Component {
 
             // Create actual file
             const file = {
-                uri: uri,
+                uri: data.uri,
                 name: name + extension,
                 type: type
             };

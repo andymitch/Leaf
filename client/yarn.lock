@@ -9925,14 +9925,14 @@ react-native-mov-to-mp4@^0.2.1:
   resolved "https://registry.yarnpkg.com/react-native-mov-to-mp4/-/react-native-mov-to-mp4-0.2.1.tgz#f1af883aa951b55bf94a1419a6df129d7feac5ef"
   integrity sha1-8a+IOqlRtVv5ShQZpt8SnX/qxe8=
 
-react-native-paper@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-3.2.1.tgz#8b3f4b8ce36ca471aba3fa7407194afe8595cd35"
-  integrity sha512-PpdKW/NQd/dLeeo17+uC82sF2g236dp4ksJ6L11fUXikGaOQaIiIojHxpWxHHVrXya6ZwXXbHGuyOHY3+XNzfw==
+react-native-paper@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-3.3.0.tgz#c2a1e9b793b7063aa1848c1ce7db5719912e215a"
+  integrity sha512-YA3thele/g8uLu19IJuZmr1wC54GTlWkyZj0XHtOs8pEaOnUz6roFlSFIRRIo7MmaaAct7XuM8HTlj/PoLaQ8w==
   dependencies:
     "@callstack/react-theme-provider" "^3.0.5"
     color "^3.1.2"
-    react-native-safe-area-view "^0.12.0"
+    react-native-safe-area-view "^0.13.1"
 
 react-native-ratings@^6.3.0:
   version "6.5.0"
@@ -9957,10 +9957,10 @@ react-native-redash@^8.6.0:
     parse-svg-path "^0.1.2"
     use-memo-one "^1.1.1"
 
-react-native-safe-area-view@^0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.12.0.tgz#5c312f087300ecf82e8541c3eac25d560e147f22"
-  integrity sha512-UrAXmBC4KNR5K2eczIDZgqceWyKsgG9gmWFerHCvoyApfei8ceBB9u/c//PWCpS5Gt8MRLTmX5jPtzdXo2yNqg==
+react-native-safe-area-view@^0.13.1:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.13.2.tgz#fd8245182cfa3240dcc679b010cff43ad32cecb1"
+  integrity sha512-UEeoHi7HXObKd111RKZa6a+aQdxLHlngfaoM3UBgeDDc+7BU7Vd54DSzFFWDL3lwFhieTSvLh6z89jHDypA9KQ==
   dependencies:
     hoist-non-react-statics "^2.3.1"
 
