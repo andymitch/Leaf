@@ -171,18 +171,14 @@ export default class Preview extends Component {
                     </View>
                     <Text style={{ color: 'white', fontSize: 25 }}>Caption</Text>
                     <TextInput
-                        multiline
-                        maxHeight={100}
-                        maxLength={280}
                         onChangeText={caption => this.setState({ caption })}
-                        style={{ borderColor: 'white', borderWidth: 2, borderRadius: 20, padding: 5, paddingLeft: 15, color: 'white', fontSize: 20, width: winWidth - 80 }}
+                        style={{ borderColor: 'white', borderWidth: 2, borderRadius: 20, padding: 5, paddingLeft: 15, color: 'white', fontSize: 20, width: winWidth - 80, marginBottom: 10 }}
                         autoCapitalize='sentences'
                         placeholder='type something...'
                         placeholderTextColor='#999'
                         spellCheck={true}
-                        returnKeyType='go'
                     />
-                    <View style={{ alignSelf: 'flex-end', position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ alignSelf: 'flex-end', position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                         <TouchableOpacity onPress={() => this.upload()}>
                             <Icon icon={faPaperPlane} style={{ color: 'white', marginRight: 20 }} size={40} />
                         </TouchableOpacity>

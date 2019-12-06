@@ -105,7 +105,7 @@ export default class CameraView extends React.Component {
                                 {capturing && <View style={styles.captureBtnInternal} />}
                             </View>
                             <View style={{ position: 'absolute' }}>
-                                {capturing && <CameraTimer seconds={10} />}
+                                {/*capturing*/false && <CameraTimer seconds={10} />}
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
