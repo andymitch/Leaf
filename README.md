@@ -9,8 +9,13 @@ Expo
 
 ## Features
 Login/Register with forgot password functionality
+
 Upload a video from camera roll or record live
+
 Profile to view your stats and videos
+
 Search to find other users
+
 Follow to easily watch other users content
+
 Feed to browse all popular videos
