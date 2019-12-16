@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
 import { createAppContainer } from 'react-navigation'
+import {_getTheme} from '../deviceStorage'
 
 // ICONS
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
@@ -15,7 +16,7 @@ import Camera from './Camera'
 
 
 const getTabBarIcon = (navigation, focused) => {
-    const tint = focused ? 'white' : '#bbb'
+    const tint = focused ? 'white' : 'grey'
     switch (navigation.state.routeName) {
         case 'Home': return <Icon icon={faHome} size={30} color={tint} />
         case 'Search': return <Icon icon={faSearch} size={30} color={tint} />
@@ -32,9 +33,7 @@ const mainNav = createMaterialBottomTabNavigator({
     Messages: { screen: props => <Messages {...props} {...this.props} /> },
     Profile: { screen: props => <Profile {...props} {...this.props} /> }
 }, {
-    defaultNavigationOptions: ({ navigation }) => ({
-        tabBarIcon: ({ focused }) => getTabBarIcon(navigation, focused)
-    }),
+    defaultNavigationOptions: ({ navigation }) => ({ tabBarIcon: ({ focused }) => getTabBarIcon(navigation, focused) }),
     initialRouteName: 'Camera',
     labeled: false,
     activeColor: '#444',
@@ -45,6 +44,8 @@ const mainNav = createMaterialBottomTabNavigator({
 const Main = createAppContainer(mainNav)
 
 export default class extends Component{
+    state
+
     render(){
         return <Main screenProps={{...this.props.screenProps, ...this.props.navigation}}/>
     }

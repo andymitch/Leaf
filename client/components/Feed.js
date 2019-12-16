@@ -184,7 +184,6 @@ export default class Feed extends Component {
         this.setState({ isLoading: true })
         await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/feed?from=${from}&token=${this.props.screenProps.token}`)
             .then(res => {
-                console.log(res)
                 if(res.data.length < 5) this.setState({noMore: true})
                 if (from === 'popular') {
                     if (refresh) this.setState({ popular: res.data, isLoading: false })
@@ -212,7 +211,7 @@ export default class Feed extends Component {
                 }
             }
         }
-        if (gName === swipeDirections.SWIPE_DOWN) {
+        else if (gName === swipeDirections.SWIPE_DOWN) {
             if (this.state.onPopular) {
                 if (this.state.popularIndex > 0) {
                     this._transition.show(this.renderContent(this.state.popularIndex - 1, true), SlideDown)

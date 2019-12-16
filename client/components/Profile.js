@@ -3,7 +3,7 @@ import { View, Image, Text, ActivityIndicator, Dimensions, StatusBar } from 'rea
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
 import { faCog, faBolt, faArrowLeft, faFire } from '@fortawesome/free-solid-svg-icons'
 import { faGem } from '@fortawesome/free-regular-svg-icons'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler'
 import { NavigationEvents } from 'react-navigation'
 import { Video } from 'expo-av'
 import Axios from 'axios'
@@ -129,12 +129,9 @@ export default class Profile extends Component {
         //     })
         // }
         const username = this.props.username === undefined ? "" : this.props.username
-        console.log(username)
-        console.log("AUTH")
-        console.log("TEST" + this.props.screenProps.token)
         await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/profile?username=${username}&token=${this.props.screenProps.token}`)
             .then(res => {
-                console.log(res.data)
+                console.log('got profile data')
                 this.setState({
                     profile: res.data.profilepicture,
                     username: res.data.username,
@@ -147,22 +144,6 @@ export default class Profile extends Component {
                 })
                 following = res.data.following
             }).catch(err => console.log(err.response))
-        /*
-        const username = this.props.username === undefined ? null : this.props.username
-        await Axios.get('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/profile', { params: { username: username, token: this.props.screenProps.token } })
-            .then(res => {
-                this.setState({
-                    profile: res.data.profile,
-                    username: res.data.username,
-                    fullname: res.data.fullname,
-                    points: res.data.points,
-                    streak: res.data.streak,
-                    videos: res.data.videos,
-                    following: res.data.following
-                })
-                following = res.data.following
-            }).catch(err => console.log(err))
-        */  
     }
 
     componentWillUnmount() { this.follow() }
@@ -217,8 +198,8 @@ export default class Profile extends Component {
     renderVideoItem = (video, index) => {
         const boltColor = video.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
         return (
-            <TouchableOpacity key={index} onPress={() => this.setState({ onVideo: index })} style={{ width: (winWidth / 2) - 40, height: (winWidth / 2) - 40, margin: 5, borderRadius: 5 }}>
-                <Video source={{ uri: video.uri }} resizeMode='cover' isLooping isMuted shouldPlay style={{ width: (winWidth / 2) - 40, height: (winWidth / 2) - 40, position: 'absolute', borderRadius: 5 }} />
+            <TouchableOpacity key={index} onPress={() => this.setState({ onVideo: index })} style={{ width: (winWidth / 2) - 30, height: (winWidth / 2) - 40, margin: 5, borderRadius: 5 }}>
+                <Video source={{ uri: video.uri }} resizeMode='cover' isLooping isMuted shouldPlay style={{ width: (winWidth / 2) - 30, height: (winWidth / 2) - 40, position: 'absolute', borderRadius: 5 }} />
                 <View style={{ position: 'absolute', bottom: 0, right: 0, margin: 10, flexDirection: 'row' }}>
                     <Text style={{ color: 'white' }}>{video.life}</Text>
                     <Icon icon={faBolt} style={{ color: boltColor }} />
@@ -231,21 +212,26 @@ export default class Profile extends Component {
         if (this.state.isLoading) {
             return (
                 <View style={[{ alignItems: 'center', justifyContent: 'center', flex: 1 }, this.state.theme.container]}>
-                    <StatusBar hidden={false}/>
+                        <View style={{ position: 'absolute', right: 0, top: 20, margin: 20, zIndex: 1 }}>
+                            <TouchableOpacity onPress={() => { console.log('trying to go to settings '); this.props.screenProps.push('Settings') }}>
+                                <Icon icon={faCog} size={30} style={{color: 'grey'}} />
+                            </TouchableOpacity>
+                        </View>
+                    <StatusBar hidden={false} />
                     <ActivityIndicator size='large' color='blue' animated />
                 </View>
             )
         }
         if (this.state.onVideo + 1) return <FullVideo token={this.props.screenProps.token} index={this.state.onVideo} following={this.state.following} goBack={this.goBack} like={this.like} video={this.state.videos[this.state.onVideo]} />
         return (
-            <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, this.state.theme.container]}>
-                <NavigationEvents onDidBlur={() => this.follow()}/>
+            <View style={[{ flex: 1, padding: 20, paddingTop: 40, paddingBottom: 0 }, this.state.theme.container]}>
+                <NavigationEvents onDidBlur={() => this.follow()} />
                 {this.state.following !== null &&
                     <TouchableOpacity onPress={() => this.props.goBack()}>
-                        <Icon icon={faArrowLeft} size={35} style={[{margin: 10, marginTop: 0}, this.state.theme.icon]}/>
+                        <Icon icon={faArrowLeft} size={35} style={[{ margin: 10, marginTop: 0 }, this.state.theme.icon]} />
                     </TouchableOpacity>
                 }
-                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginBottom: 5 }}>
                     <View style={{ flexDirection: 'row' }}>
                         <Image source={{ uri: this.state.profile }} style={[{ height: 70, width: 70, borderRadius: 35, borderWidth: 1, borderColor: 'black', marginRight: 5 }, this.state.theme.image]} />
                         <View>
@@ -253,7 +239,7 @@ export default class Profile extends Component {
                             <Text style={{ fontSize: 15, fontStyle: 'italic', color: 'grey' }}>{this.state.fullname}</Text>
                             <View style={{ flexDirection: 'row' }}>
                                 {this.renderStreak()}
-                                <Icon icon={faGem} size={20} style={this.state.theme.icon}/>
+                                <Icon icon={faGem} size={20} style={this.state.theme.icon} />
                                 <Text style={this.state.theme.text}>{this.state.points}</Text>
                             </View>
                         </View>
@@ -261,17 +247,17 @@ export default class Profile extends Component {
                     <View>
                         {this.state.following !== null && this.renderFollow()}
                         {this.state.following === null &&
-                            <TouchableOpacity onPress={() => {console.log('trying to go to settings '); this.props.screenProps.push('Settings')}}>
-                                <Icon icon={faCog} size={30} style={this.state.theme.icon}/>
+                            <TouchableOpacity onPress={() => { console.log('trying to go to settings '); this.props.screenProps.push('Settings') }}>
+                                <Icon icon={faCog} size={30} style={this.state.theme.icon} />
                             </TouchableOpacity>
                         }
                     </View>
                 </View>
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                    <View style={{flexWrap: 'wrap', width: winWidth-60, flexDirection: 'row'}}>
+                <ScrollView style={{ height: '100%', borderRadius: 10 }} showsVerticalScrollIndicator={false}>
+                    <View style={{ flexWrap: 'wrap', width: winWidth - 40, justifyContent: 'space-between', height: '100%', flexDirection: 'row' }}>
                         {this.state.videos.map((video, index) => this.renderVideoItem(video, index))}
                     </View>
-                </View>
+                </ScrollView>
             </View>
         )
     }

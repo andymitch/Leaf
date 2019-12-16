@@ -21,7 +21,7 @@ export default deviceStorage = {
     async deleteToken() {
         try {
             await AsyncStorage.removeItem('token').then(() => {
-                if (key === 'token') this.setState({ token: '' })
+                this.setState({ token: '' })
             })
         } catch (error) {
             console.log('AsyncStorage Error: ' + error.message)
