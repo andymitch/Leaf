@@ -3,8 +3,11 @@ Social Media platform that allows users to share original video content with oth
 
 ## Technologies used
 React Native
+
 Node.js
+
 AWS: API Gateway, Lambda, S3 Buckets, IAM 
+
 Expo
 
 ## Features
