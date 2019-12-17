@@ -110,7 +110,7 @@ class FeedContent extends Component {
     renderPlay = () => {
         if (this.state.play) return null
         return <Icon icon={faPlay} size={200} style={{ color: 'rgba(0,0,0,.2)', left: (winWidth / 2) - 80 }} />
-    } 
+    }
 
     render() {
         const boltColor = this.state.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
@@ -147,9 +147,8 @@ class FeedContent extends Component {
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{ color: 'white', fontSize: 18, marginRight: 5 }}>{this.state.likes}</Text>
                         <TouchableOpacity onPress={() => {
-                            if (this.state.liked) this.setState(prev => ({ likes: prev.likes - 1 }))
-                            else this.setState(prev => ({ likes: prev.likes + 1 }))
-                            this.setState(prev => ({ liked: !prev.liked }))
+                            if (this.state.liked) this.setState(prev => ({ likes: prev.likes - 1, liked: !prev.liked }))
+                            else this.setState(prev => ({ likes: prev.likes + 1, liked: !prev.liked }))
                         }}>
                             <Icon icon={faBolt} size={30} style={{ color: boltColor }} />
                         </TouchableOpacity>
@@ -184,7 +183,7 @@ export default class Feed extends Component {
         this.setState({ isLoading: true })
         await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/feed?from=${from}&token=${this.props.screenProps.token}`)
             .then(res => {
-                if(res.data.length < 5) this.setState({noMore: true})
+                if (res.data.length < 5) this.setState({ noMore: true })
                 if (from === 'popular') {
                     if (refresh) this.setState({ popular: res.data, isLoading: false })
                     else this.setState(prev => ({ popular: [...prev.popular, ...res.data], isLoading: false }))
@@ -292,7 +291,7 @@ export default class Feed extends Component {
                     onWillFocus={() => this.setState({ blurred: false })}
                     onDidBlur={() => this.setState({ blurred: true, gotoFollowing: false, gotoLeaderboard: false, gotoProfile: null })}
                 />
-                <Profile  screenProps={{theme: this.props.screenProps.theme, token: this.props.screenProps.token}} username={this.state.gotoProfile} goBack={this.goBack} />
+                <Profile screenProps={{ theme: this.props.screenProps.theme, token: this.props.screenProps.token }} username={this.state.gotoProfile} goBack={this.goBack} />
             </View>
         )
         if (this.state.gotoFollowing) return (

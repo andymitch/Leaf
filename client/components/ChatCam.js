@@ -15,7 +15,7 @@ export default class ChatCam extends Component {
     state = {
         capturing: false,
         hasCameraPermission: null,
-        cameraType: Camera.Constants.Type.back,
+        cameraType: Camera.Constants.Type.front,
         flashMode: Camera.Constants.FlashMode.off,
         blurred: false
     }

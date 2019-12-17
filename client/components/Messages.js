@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, StatusBar, ActivityIndicator } from 'react-native'
+import { View, Text, Image, Alert, ActivityIndicator } from 'react-native'
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { NavigationEvents } from 'react-navigation'
 import Axios from 'axios'
@@ -159,7 +159,12 @@ class ChatItem extends Component {
 
     render() {
         return (
-            <TouchableOpacity onPress={() => this.props.goto(this.props.index)}>
+            <TouchableOpacity onLongPress={() => Alert.alert(
+                'Leave Group Chat',
+                'Are you sure you want to leave this group chat?',
+                [{ text: 'Cancel', onPress: () => console.log('Cancel leave chat.'), style: 'cancel' },
+                { text: 'Leave Chat Group', onPress: () => this.props.leaveChat(this.props.index) }])}
+                onPress={() => this.props.goto(this.props.index)}>
                 {this.renderGroup(this.props.group)}
             </TouchableOpacity>
         )
@@ -175,22 +180,27 @@ class ReqItem extends Component {
         if (this.props.follow) {
             if (this.props.accept) {
                 // follow back
-                this.props.clear(this.props.index)
-                console.log('following')
+                this.props.clear(this.props.index) // TESTING LINE
                 /*
                 await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/follow', { username: this.props.name, follow: true, token: this.props.token })
                     .then(() => this.props.clear(this.props.index))
                     .catch(err => console.log(err))
                 */
+               console.log('following')
             } else {
                 // accept follow
-                this.props.acceptFollow(this.props.index)
+                this.props.acceptFollow(this.props.index) // TESTING LINE
+                /*
+                await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/acceptFollow', { username: this.props.name, token: this.props.token })
+                    .then(() => this.props.clear(this.props.index))
+                    .catch(err => console.log(err))
+                */
                 console.log('accepted follow')
             }
         } else {
             // join chat group
-            this.props.clear(this.props.index)
-            console.log('joined chat group ' + this.props.id)
+            this.props.clear(this.props.index) // TESTING LINE
+            this.props.get() // TESTING LINE
             /*
             await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/join', { id: this.props.id, token: this.props.token })
                 .then(() => {
@@ -198,6 +208,7 @@ class ReqItem extends Component {
                     this.props.get()
                 }).catch(err => console.log(err))
             */
+           console.log('joined chat group ' + this.props.id)
         }
     }
 
@@ -263,6 +274,7 @@ export default class Messages extends Component {
     }
 
     get = async () => {
+        // FOR TESTING PURPOSES
         this.setState({ requests: requests, chats: chats, isLoading: false })
         /*
         //get requests
@@ -281,21 +293,14 @@ export default class Messages extends Component {
         let temp = this.state.requests
         temp[index].accept = true
         this.setState({ requests: temp })
-        /*
-            await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/accept', { username: this.props.name, token: this.props.screenProps.token })
-                .then(() => this.setState({ accepted: true }))
-                .catch(err => console.log(err))
-        */
+        Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/accept', { username: this.props.name, token: this.props.screenProps.token })
     }
 
     clear = async index => {
         let temp = this.state.requests
         temp.splice(index, 1)
         this.setState({ requests: temp })
-        /*
-        await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/requests', { requests: temp, token: this.props.screenProps.token })
-            .catch(err => console.log(err))
-        */
+        Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/requests', { requests: temp, token: this.props.screenProps.token })
     }
 
     goBack = () => { this.setState({ gotoProfile: null }) }
@@ -310,13 +315,20 @@ export default class Messages extends Component {
         }
     }
 
+    leaveChat = index => {
+        Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/leaveChat', chats[index].id)
+        let chats = this.state.chats
+        chats.splice(index,1)
+        this.setState({chats})
+    }
+
     render() {
         if (this.state.isLoading) return (
-            <View style={[{ alignItems: 'center', justifyContent: 'center', flex: 1}, this.state.theme.container]}>
+            <View style={[{ alignItems: 'center', justifyContent: 'center', flex: 1 }, this.state.theme.container]}>
                 <ActivityIndicator size='large' color='blue' animated />
             </View>
         )
-        if (this.state.gotoProfile) return <Profile  screenProps={{theme: this.props.screenProps.theme, token: this.props.screenProps.token}} goBack={this.goBack} username={this.state.gotoProfile} />
+        if (this.state.gotoProfile) return <Profile screenProps={{ theme: this.props.screenProps.theme, token: this.props.screenProps.token }} goBack={this.goBack} username={this.state.gotoProfile} />
         return (
             <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, this.state.theme.container]}>
                 <NavigationEvents onWillFocus={() => this.get()} />
@@ -327,7 +339,7 @@ export default class Messages extends Component {
                 </View>
                 <View>
                     <Text style={[{ fontSize: 30, fontWeight: 'bold' }, this.state.theme.text]}>Chats</Text>
-                    {this.state.chats.map((chat, i) => <ChatItem  theme={this.props.screenProps.theme} key={i} index={i} goto={this.goto} {...chat} />)}
+                    {this.state.chats.map((chat, i) => <ChatItem theme={this.props.screenProps.theme} key={i} index={i} leaveChat={this.leaveChat} goto={this.goto} {...chat} />)}
                 </View>
             </View>
         )

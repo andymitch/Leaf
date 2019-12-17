@@ -63,7 +63,7 @@ export default class Search extends Component {
         return (
             <View style={[{ flex: 1, padding: 20, paddingTop: 40 }, this.state.theme.container]}>
                 <View style={[this.state.theme.container, { flexDirection: 'row', justifyContent: 'center', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 5, elevation: 2, marginBottom: 20, borderRadius: 10 }]}>
-                    <TextInput placeholder='Search' autoCapitalize='none' style={[{ width: winWidth - 50, borderWidth: 0, height: 40, marginBottom: 10, padding: 10, }, this.state.theme.text]} onChangeText={keyphrase => {this.setState({keyphrase}); this.search()}} />
+                    <TextInput placeholderTextColor={this.state.theme.text.color} placeholder='Search' autoCapitalize='none' style={[{ width: winWidth - 50, borderWidth: 0, height: 40, marginBottom: 10, padding: 10, }, this.state.theme.text]} onChangeText={keyphrase => {this.setState({keyphrase}); this.search()}} />
                 </View>
                 <View>
                     {this.renderResults()}

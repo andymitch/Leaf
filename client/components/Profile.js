@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Image, Text, ActivityIndicator, Dimensions, StatusBar } from 'react-native'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-native-fontawesome'
-import { faCog, faBolt, faArrowLeft, faFire } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faBolt, faArrowLeft, faFire, faTrash, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { faGem } from '@fortawesome/free-regular-svg-icons'
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler'
 import { NavigationEvents } from 'react-navigation'
@@ -9,51 +9,7 @@ import { Video } from 'expo-av'
 import Axios from 'axios'
 import { LIGHT, DARK } from '../colorTheme'
 const { height: winHeight, width: winWidth } = Dimensions.get('window')
-let following = null
 
-// FOR TESTING PURPOSES
-const _videos = [
-    {
-        id: 111,
-        liked: null,
-        uri: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
-        caption: 'this is my caption!',
-        life: 3
-    }, {
-        id: 111,
-        liked: null,
-        uri: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
-        caption: 'this is my caption!',
-        life: 3
-    }, {
-        id: 111,
-        liked: null,
-        uri: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
-        caption: 'this is my caption!',
-        life: 3
-    }
-]
-const otherVideos = [
-    {
-        id: 111,
-        liked: false,
-        uri: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
-        caption: 'this is my caption!',
-        life: 3
-    }, {
-        id: 111,
-        liked: false,
-        uri: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
-        caption: 'this is my caption!',
-        life: 3
-    }, {
-        id: 111,
-        liked: false,
-        uri: 'https://diwoaedb40lx7.cloudfront.net/video/HIWTC.mp4',
-        caption: 'this is my caption!',
-        life: 3
-    }
-]
 
 class FullVideo extends Component {
     state = {
@@ -97,37 +53,15 @@ export default class Profile extends Component {
         fullname: '',
         points: 0,
         videos: [],
+        videoAction: [],
         following: null,
+        wasFollowing: null,
         onVideo: -1,
         isLoading: true,
         theme: this.props.screenProps.theme == 'dark' ? DARK : LIGHT
     }
 
     async componentDidMount() {
-        // FOR TESTING PURPOSES
-        // if (this.props.username === undefined) {
-        //     this.setState({
-        //         profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-        //         username: 'andymitch559',
-        //         fullname: 'Andrew Mitchell',
-        //         points: 1056,
-        //         streak: 3,
-        //         videos: _videos,
-        //         isLoading: false,
-        //         following: null
-        //     })
-        // } else {
-        //     this.setState({
-        //         profile: 'https://leaf-video.s3.amazonaws.com/profile-pictures/testProfile.png',
-        //         username: 'BillyBob',
-        //         fullname: 'Billy Bob',
-        //         points: 103,
-        //         videos: otherVideos,
-        //         streak: 1,
-        //         isLoading: false,
-        //         following: false
-        //     })
-        // }
         const username = this.props.username === undefined ? "" : this.props.username
         await Axios.get(`https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/profile?username=${username}&token=${this.props.screenProps.token}`)
             .then(res => {
@@ -139,10 +73,11 @@ export default class Profile extends Component {
                     points: res.data.points,
                     streak: res.data.multiplier,
                     videos: res.data.videos,
+                    videoAction: new Array(res.data.videos.length).fill(false),
                     following: res.data.following,
+                    wasFollowing: res.data.following,
                     isLoading: false
                 })
-                following = res.data.following
             }).catch(err => console.log(err.response))
     }
 
@@ -163,10 +98,10 @@ export default class Profile extends Component {
     }
 
     follow = async () => {
-        if (following !== null && following !== this.state.following) {
+        if (this.state.wasFollowing !== null && this.state.wasFollowing !== this.state.following) {
             await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/follow', { username: this.state.username, follow: this.state.following, token: this.props.screenProps.token })
                 .catch(err => console.log(err))
-            following = this.state.following
+            this.setState({wasFollowing: this.state.following})
         }
     }
 
@@ -195,16 +130,43 @@ export default class Profile extends Component {
         )
     }
 
+    action = index => {
+        if(this.state.following === null){
+            const videoAction = this.state.videoAction
+            videoAction[index] = !videoAction[index]
+            this.setState({videoAction})
+        }
+    }
+
+    deleteVideo = async index => {
+        const videoAction = this.state.videoAction
+        const videos = this.state.videos
+        //await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/deleteVideo', {id: videos[index].id, token: this.props.screenProps.token})
+        videoAction.splice(index,1)
+        videos.splice(index,1)
+        this.setState({videos, videoAction})
+    }
+
     renderVideoItem = (video, index) => {
         const boltColor = video.liked ? 'yellow' : 'rgba(255, 255, 255, .5)'
         return (
-            <TouchableOpacity key={index} onPress={() => this.setState({ onVideo: index })} style={{ width: (winWidth / 2) - 30, height: (winWidth / 2) - 40, margin: 5, borderRadius: 5 }}>
-                <Video source={{ uri: video.uri }} resizeMode='cover' isLooping isMuted shouldPlay style={{ width: (winWidth / 2) - 30, height: (winWidth / 2) - 40, position: 'absolute', borderRadius: 5 }} />
-                <View style={{ position: 'absolute', bottom: 0, right: 0, margin: 10, flexDirection: 'row' }}>
-                    <Text style={{ color: 'white' }}>{video.life}</Text>
-                    <Icon icon={faBolt} style={{ color: boltColor }} />
-                </View>
-            </TouchableOpacity>
+            <View style={{width: (winWidth / 2) - 30, height: (winWidth / 2) - 40, margin: 5, borderRadius: 5}}>
+                {this.state.videoAction[index] && <View style={{width: (winWidth / 2) - 30, height: (winWidth / 2) - 40, margin: 5, borderRadius: 5, zIndex: 1, backgroundColor: 'rgba(128,128,128,.5)', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row'}}>
+                    <TouchableOpacity onPress={() => this.action(index)}>
+                        <Icon icon={faTimesCircle} style={{color: 'dimgrey'}} size={40}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.deleteVideo(index)}>
+                        <Icon icon={faTrash} style={{color: 'dimgrey'}} size={40}/>
+                    </TouchableOpacity>
+                </View>}
+                <TouchableOpacity key={index} onLongPress={() => this.action(index)} onPress={() => this.setState({ onVideo: index })} style={{ width: (winWidth / 2) - 30, height: (winWidth / 2) - 40, margin: 5, borderRadius: 5 }}>
+                    <Video source={{ uri: video.uri }} resizeMode='cover' isLooping isMuted shouldPlay style={{ width: (winWidth / 2) - 30, height: (winWidth / 2) - 40, position: 'absolute', borderRadius: 5 }} />
+                    <View style={{ position: 'absolute', bottom: 0, right: 0, margin: 10, flexDirection: 'row' }}>
+                        <Text style={{ color: 'white' }}>{video.life}</Text>
+                        <Icon icon={faBolt} style={{ color: boltColor }} />
+                    </View>
+                </TouchableOpacity>
+            </View>
         )
     }
 
@@ -225,10 +187,10 @@ export default class Profile extends Component {
         if (this.state.onVideo + 1) return <FullVideo token={this.props.screenProps.token} index={this.state.onVideo} following={this.state.following} goBack={this.goBack} like={this.like} video={this.state.videos[this.state.onVideo]} />
         return (
             <View style={[{ flex: 1, padding: 20, paddingTop: 40, paddingBottom: 0 }, this.state.theme.container]}>
-                <NavigationEvents onDidBlur={() => this.follow()} />
+                <NavigationEvents onDidBlur={() => {this.setState({ videoAction: new Array(this.state.videos.length).fill(false) }); this.follow()}}/>
                 {this.state.following !== null &&
                     <TouchableOpacity onPress={() => this.props.goBack()}>
-                        <Icon icon={faArrowLeft} size={35} style={[{ margin: 10, marginTop: 0 }, this.state.theme.icon]} />
+                        <Icon icon={faArrowLeft} size={35} style={{ margin: 10, marginTop: 0, color: 'grey' }} />
                     </TouchableOpacity>
                 }
                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginBottom: 5 }}>

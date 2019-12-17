@@ -78,8 +78,7 @@ export default class App extends Component {
   }
 
   render() {
-    console.log('auth token: ' + this.state.token)
-    if (this.state.loading) return <View style={{ flex: 1, backgroundColor: 'white' }} />
+    if (this.state.loading) return <View style={{ flex: 1, backgroundColor: this.state.theme === 'dark' ? '#151515' : 'white' }} />
     if (this.state.token === '') {
       console.log('auth...')
       return <AuthContainer screenProps={{token: this.state.token, setToken: this.setToken}} />

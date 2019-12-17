@@ -23,7 +23,7 @@ export const LIGHT = StyleSheet.create({
 export const DARK = StyleSheet.create({
     container: {
         backgroundColor: '#151515',
-        shadowColor: 'black'
+        shadowColor: 'grey'
     },
     text: {
         color: 'white',
