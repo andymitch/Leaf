@@ -316,7 +316,7 @@ export default class Messages extends Component {
     }
 
     leaveChat = index => {
-        Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/leaveChat', chats[index].id)
+        // Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/leaveChat', chats[index].id)
         let chats = this.state.chats
         chats.splice(index,1)
         this.setState({chats})
