@@ -44,8 +44,6 @@ const mainNav = createMaterialBottomTabNavigator({
 const Main = createAppContainer(mainNav)
 
 export default class extends Component{
-    state
-
     render(){
         return <Main screenProps={{...this.props.screenProps, ...this.props.navigation}}/>
     }

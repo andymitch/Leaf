@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { View, StatusBar } from 'react-native'
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 
@@ -81,9 +81,19 @@ export default class App extends Component {
     if (this.state.loading) return <View style={{ flex: 1, backgroundColor: this.state.theme === 'dark' ? '#151515' : 'white' }} />
     if (this.state.token === '') {
       console.log('auth...')
-      return <AuthContainer screenProps={{token: this.state.token, setToken: this.setToken}} />
+      return (
+        <View style={{flex: 1}}>
+          <StatusBar barStyle={this.state.theme === 'dark' ? 'light-content' : 'dark-content'}/>
+          <AuthContainer screenProps={{token: this.state.token, setToken: this.setToken}} />
+        </View>
+      )
     }
     console.log('main...')
-    return <MainContainer screenProps={{token: this.state.token, setToken: this.setToken, deleteToken: this.deleteToken, theme: this.state.theme, setTheme: this.setTheme}}/>
+    return (
+      <View style={{flex: 1}}>
+          <StatusBar barStyle={this.state.theme === 'dark' ? 'light-content' : 'dark-content'}/>
+          <MainContainer screenProps={{token: this.state.token, setToken: this.setToken, deleteToken: this.deleteToken, theme: this.state.theme, setTheme: this.setTheme}}/>
+      </View>
+    )
   }
 }

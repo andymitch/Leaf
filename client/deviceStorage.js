@@ -5,7 +5,7 @@ const validToken = async token => {
     let valid = false
     await Axios.post('https://if6chclj8h.execute-api.us-east-1.amazonaws.com/live/validToken',{token: token})
     .then(res => valid = res.data)
-    .catch(err => {console.log('could not check token: ' + err); valid = true})
+    .catch(err => {console.log('could not check token: ' + err); valid = true} )
     return valid
 }
 

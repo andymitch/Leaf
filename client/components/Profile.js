@@ -33,7 +33,7 @@ class FullVideo extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={{ width: '100%', bottom: 0, justifyContent: 'space-between', position: 'absolute', flexDirection: 'row', padding: 20 }}>
-                    <Text style={{ color: 'white', fontSize: 18 }}>{video.caption}</Text>
+                    <Text style={{ color: 'white', fontSize: 18 }}>{video.description}</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{ color: 'white', fontSize: 18 }}>{video.life}</Text>
                         <TouchableOpacity onPress={() => { if (this.state.liked !== null) { this.setState(prev => ({ liked: !prev.liked })); this.props.like(this.props.index) } }}>
